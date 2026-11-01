@@ -15,7 +15,7 @@ index.html -> src/main.tsx -> App/SplashScreen -> Dashboard -> vista activa -> e
 1. `index.html` aporta el nodo raiz.
 2. `src/main.tsx` registra el service worker PWA y monta React en `#root`.
 3. `App` muestra splash durante 700 ms y despues `Dashboard`.
-4. `Dashboard` mantiene `activeView`, cita, enlaces y formulario con `useState`.
+4. `Dashboard` mantiene `activeView`, cita, enlaces y formulario con `useState`, y sincroniza retos/enlaces mediante el adaptador de persistencia cuando existe `VITE_PERSISTENCE_API_URL`.
 5. `HomeView`, `GoalsView` y `LinksView` renderizan el estado y mutan enlaces localmente.
 6. La cita hace `fetch` directo a Quotable y vuelve al fallback local si falla.
 
@@ -27,6 +27,7 @@ index.html -> src/main.tsx -> App/SplashScreen -> Dashboard -> vista activa -> e
 | App/Dashboard | navegacion y estado local | integraciones desacopladas | `src/App.tsx` |
 | Views | composicion de pantallas y acciones UI | persistencia real | `src/App.tsx` |
 | Styles | layout responsive y apariencia | datos o red | `src/index.css`, `src/App.css` |
+| Persistence adapter | carga y guardado remoto con timeout/fallback | base de datos o red en la UI | `src/infrastructure/persistence.ts`, `docs/arquitectura/persistencia-personal.md` |
 | Integrations future | contratos n8n/Grafana/healthchecks | implementacion actual inexistente | `docs/arquitectura/integrations-n8n-grafana.md` |
 
 ## 4) Reused patterns
@@ -40,7 +41,7 @@ index.html -> src/main.tsx -> App/SplashScreen -> Dashboard -> vista activa -> e
 ## 5) Known risks
 
 - `App.tsx` concentra estado, vistas y datos; el crecimiento puede dificultar pruebas y mantenimiento.
-- Los enlaces y habitos no tienen persistencia; se pierden al recargar.
+- La persistencia inicial existe, pero requiere despliegue de la API y configuración de `VITE_PERSISTENCE_API_URL`; sin ella enlaces y hábitos siguen siendo locales.
 - Healthchecks, n8n y Grafana estan documentados pero no conectados al runtime actual.
 - El drag and drop usa API HTML nativa; `[TODO]` validar experiencia tactil en PWA.
 

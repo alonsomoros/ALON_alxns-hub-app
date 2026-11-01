@@ -11,11 +11,12 @@ Toda funcionalidad nueva debe tener una issue de GitHub y un requisito `REQ-XXX`
 ## Propuestas en debate
 
 - [x] `REQ-008`: separar racha del porcentaje y permitir alta/edición/archivo de retos con título, descripción, categoría y progreso derivado en memoria (`Issues/008-retos-y-progreso.md`).
-- [ ] Persistir retos e historial localmente y añadir tests de caja negra para `REQ-008`.
+- [ ] Añadir tests de caja negra de retos y validar restauración de historial para `REQ-008`.
 - [x] `REQ-009`: corregir drag and drop accesible de enlaces y resolver logos remotos con fallback (`Issues/009-enlaces-drag-y-branding.md`).
 - [x] `REQ-010`: mostrar logos configurados de los sitios y enlaces con favicon compartido y fallback (`Issues/010-sitios-branding.md`).
 - [x] `REQ-013`: consolidar branding real de la app y del icono de instalación PWA con `logo.png` (`Issues/013-branding-asset.md`).
 - [ ] `REQ-011`: definir contrato y transporte de métricas Raspberry mediante push/polling o tiempo real (`Issues/011-telemetria-raspberry.md`).
+- [x] `REQ-018`: implementar persistencia personal multidispositivo sin login visible; queda despliegue y validación en Raspberry (`Issues/018-persistencia-personal-multidispositivo.md`).
 
 - [ ] Adaptador n8n para métricas de Raspberry Pi 5.
 - [ ] Implementar `raspberryPiStatsShowcase: graph` con gráficas ligeras y accesibles.

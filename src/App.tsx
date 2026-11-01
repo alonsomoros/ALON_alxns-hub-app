@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   BookOpen, Check, ChevronRight, CircleCheck,
   Archive, ExternalLink, Gauge, Globe2, Heart, Link2, Plus, Server, Settings2,
@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import logoApp from './assets/logo.png'
+import { loadPersistedState, persistenceEnabled, savePersistedState } from './infrastructure/persistence'
 
 interface Quote { content: string; author: string }
 interface Service { name: string; url: string; state: 'online' | 'offline'; icon: LucideIcon; logoUrl?: string }
@@ -71,6 +72,36 @@ function Dashboard() {
   const [isGoalFormOpen, setIsGoalFormOpen] = useState(false)
   const [isAddLinkOpen, setIsAddLinkOpen] = useState(false)
   const [newLink, setNewLink] = useState({ label: '', url: '' })
+  const [isPersistenceHydrated, setIsPersistenceHydrated] = useState(!persistenceEnabled)
+  const [persistenceStatus, setPersistenceStatus] = useState<'loading' | 'online' | 'offline' | 'local'>(persistenceEnabled ? 'loading' : 'local')
+  const persistenceVersion = useRef(0)
+
+  useEffect(() => {
+    if (!persistenceEnabled) return
+    loadPersistedState().then(({ state, source }) => {
+      setPersistenceStatus(source === 'remote' ? 'online' : 'offline')
+      if (state) {
+        persistenceVersion.current = state.version
+        setGoals(state.goals)
+        setLinks(state.links.map((link) => ({ ...link, icon: Link2 })))
+      }
+    }).catch(() => setPersistenceStatus('offline')).finally(() => setIsPersistenceHydrated(true))
+  }, [])
+
+  useEffect(() => {
+    if (!isPersistenceHydrated || !persistenceEnabled) return
+    savePersistedState({
+      version: persistenceVersion.current,
+      preferences: { ...dashboardConfig },
+      goals,
+      links: links.map((link, position) => ({ id: link.id, label: link.label, url: link.url, logoUrl: link.logoUrl, position, archived: false })),
+    }).then((persistedState) => {
+      if (persistedState) {
+        persistenceVersion.current = persistedState.version
+        setPersistenceStatus('online')
+      }
+    }).catch(() => setPersistenceStatus('offline'))
+  }, [goals, isPersistenceHydrated, links])
 
   useEffect(() => {
     if (dashboardConfig.quote === 'default') return
@@ -116,7 +147,7 @@ function Dashboard() {
     {activeView === 'home' && <HomeView quote={quote} links={links} goals={goals} onOpenGoals={() => setActiveView('goals')} onOpenLinks={() => setActiveView('links')} />}
     {activeView === 'goals' && <GoalsView goals={goals} onBack={() => setActiveView('home')} onAdd={openNewGoal} onEdit={openEditGoal} onArchive={archiveGoal} />}
     {activeView === 'links' && <LinksView links={links} isAddLinkOpen={isAddLinkOpen} newLink={newLink} onBack={() => setActiveView('home')} onAdd={() => setIsAddLinkOpen(true)} onDelete={(id) => setLinks((current) => current.filter((link) => link.id !== id))} onReorder={reorderLinks} onCloseAdd={() => setIsAddLinkOpen(false)} onNewLinkChange={setNewLink} onConfirmAdd={addLink} />}
-    <footer className="site-footer"><span>alXns · tu espacio personal</span><span>hecho para ir a tu ritmo</span></footer>
+    <footer className="site-footer"><span>alXns · tu espacio personal</span><span className="soft-status" aria-live="polite">{persistenceStatus === 'online' ? 'Sincronizado' : persistenceStatus === 'loading' ? 'Conectando' : persistenceStatus === 'local' ? 'Solo local' : 'OFFLINE'}</span><span>hecho para ir a tu ritmo</span></footer>
     {isGoalFormOpen && <GoalForm goal={editingGoal} onClose={() => { setEditingGoal(null); setIsGoalFormOpen(false) }} onSave={saveGoal} />}
   </main>
 }

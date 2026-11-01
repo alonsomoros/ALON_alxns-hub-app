@@ -23,6 +23,7 @@ Cada nota distingue el problema observado, la solución propuesta y la decisión
 - [Centralizar la resolución del logo de enlaces](015-link-logo-resolver.md): unificar la lógica de marcas y fallbacks.
 - [Refactor de arquitectura del archivo principal](016-app-architecture.md): reducir la carga de responsabilidades en `App.tsx`.
 - [Fecha dinámica en la pantalla principal](017-date-dynamic.md): derivar la fecha del sistema en lugar de hardcodearla.
+- [Persistencia personal multidispositivo](018-persistencia-personal-multidispositivo.md): propuesta de API privada, almacenamiento en Raspberry y sincronización sin login visible.
 
 ## Entrega
 

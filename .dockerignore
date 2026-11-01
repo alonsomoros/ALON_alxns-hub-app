@@ -1,0 +1,15 @@
+node_modules
+.git
+.gitignore
+dist
+data
+*.local
+.env
+.env.*
+!/.env.example
+src
+public
+docs
+Issues
+context
+.agents

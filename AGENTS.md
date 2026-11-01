@@ -36,6 +36,7 @@ Si la petición añade o cambia UI, datos, integración, configuración, arquite
 
 ## Commands
 - `npm run dev`: servidor local
+- `npm run persistence`: API de persistencia SQLite
 - `npm run build`: typecheck y build de producción
 - `npm run lint`: lint con Oxlint
 - `npm run preview`: servir `dist`
@@ -54,6 +55,7 @@ La UI vive en `src/`. El dashboard actual usa datos estáticos para validar la e
 /CODE_STANDARD.md       convenciones de código y tests
 /context/               índice, visión y estilo de documentación
 /src/                   aplicación React/Vite
+/server/                API personal de persistencia SQLite
 /docs/                  requisitos, arquitectura y diagramas
 /Issues/                problemas y trazabilidad local
 /.agents/               contexto y skills operativas

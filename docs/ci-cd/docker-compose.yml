@@ -1,9 +1,19 @@
 services:
-  alxns-hub:
-    build: ../..
+  alxns-persistence:
+    build:
+      context: ../..
+      dockerfile: Dockerfile.persistence
     ports:
-      - "4173:4173"
+      - "8787:8787"
     environment:
-      N8N_METRICS_URL: ${N8N_METRICS_URL}
-      GRAFANA_URL: ${GRAFANA_URL}
+      HOST: 0.0.0.0
+      PORT: 8787
+      DB_PATH: /app/data/alon-hub.sqlite
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:?Set ALLOWED_ORIGINS to the PWA origin}
+    volumes:
+      - alxns-persistence-data:/app/data
     restart: unless-stopped
+
+volumes:
+  alxns-persistence-data:
+    name: alxns-persistence-data
