@@ -4,7 +4,7 @@
 - **REQ:** REQ-003
 - **Tipo:** architecture
 - **Área:** `src/data/dashboardData.ts`, `src/types/dashboard.ts`, `docs/arquitectura/ui-preferences.md`
-- **GitHub:** —
+- **GitHub:** [#3](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/3)
 - **Actualizada:** 2026-11-11
 
 ## Problema

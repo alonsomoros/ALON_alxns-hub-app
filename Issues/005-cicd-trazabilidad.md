@@ -4,7 +4,7 @@
 - **REQ:** REQ-005
 - **Tipo:** ci
 - **Área:** `.github/`, `.agents/skills/cicd-github-delivery.md`
-- **GitHub:** —
+- **GitHub:** [#5](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/5)
 - **Actualizada:** 2026-11-11
 
 ## Problema
@@ -20,7 +20,7 @@ Workflow `.github/workflows/ci.yml` (`npm ci`, `npm run lint`, `npm run build` e
 - [x] CI ejecuta install, lint y build.
 - [x] Plantilla de issue con problema, decisión, requisitos, tests y trazabilidad.
 - [x] Commits Conventional con `REQ-XXX`.
-- [ ] CI en verde: [BLOQUEADO] los jobs no arrancan por un problema de facturación de la cuenta de GitHub (no es un fallo del código).
+- [ ] CI en verde: [BLOQUEADO] los jobs no arrancan por un problema de facturación de la cuenta de GitHub; el desarrollador decidió no configurarla, así que la verificación es local.
 
 ## Verificación
 
@@ -32,4 +32,4 @@ CI definido en `main`. Última ejecución correcta: `feat(persistence)` (2026-11
 
 ## Pendientes
 
-- [ ] [BLOQUEADO] Resolver la facturación de la cuenta de GitHub y relanzar la CI (`gh run rerun <id>`).
+- [ ] [BLOQUEADO] CI: no se intenta mientras la facturación esté sin configurar (decisión del desarrollador).

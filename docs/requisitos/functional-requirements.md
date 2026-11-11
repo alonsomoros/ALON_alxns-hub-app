@@ -6,7 +6,7 @@ Dueño de **qué debe hacer el producto**. Cada `FR-xx` enlaza a la nota `REQ-NN
 
 | ID | REQ | Estado |
 |---|---|---|
-| FR-00 Trazabilidad | `REQ-005`, `REQ-007`, `REQ-019` | Implementado (issues de GitHub solo a petición; CI [BLOQUEADO] por facturación) |
+| FR-00 Trazabilidad | `REQ-005`, `REQ-007`, `REQ-019` | Implementado (issues #1 a #20 en GitHub; CI [BLOQUEADO] por facturación (verificación local)) |
 | FR-01 Splash | `REQ-002` | Implementado |
 | FR-02 Inicio | `REQ-002`, `REQ-013`, `REQ-017` | Implementado; la cita no tiene timeout de 1.5 s |
 | FR-03 Infraestructura | `REQ-011` | Parcial: datos de prototipo, sin métricas reales; solo `pbar` |

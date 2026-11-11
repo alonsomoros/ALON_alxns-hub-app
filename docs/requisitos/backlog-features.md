@@ -23,8 +23,7 @@ Reglas: al empezar un ítem se crea su nota `Issues/NNN-slug.md` (siguiente núm
 Prioridad alta (habilitan la entrega autónoma o cierran huecos de la persistencia):
 
 - [ ] Runner de tests y tests de `src/domain/`, `src/utils/` y la API (`REQ-020`).
-- [ ] Resolver la facturación de la cuenta de GitHub: las ejecuciones de CI no arrancan desde 2026-11-11.
-- [ ] Actualizar el remoto `origin` al nombre actual del repositorio (`ALON_alxns-hub-app`).
+- [ ] [BLOQUEADO] CI de GitHub: no arranca por la facturación de la cuenta y el desarrollador decidió no configurarla; reabrir solo si cambia esa decisión.
 - [ ] Corregir `archived: false` fijo al enviar enlaces a la API y decidir si las preferencias se leen de vuelta (`REQ-018`).
 - [ ] Estado vacío en la tarjeta Accesos y en la vista Enlaces.
 

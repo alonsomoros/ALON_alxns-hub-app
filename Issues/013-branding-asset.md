@@ -4,7 +4,7 @@
 - **REQ:** REQ-013
 - **Tipo:** fix
 - **Área:** `src/components/layout/`, `src/assets/logo.png`, `public/icons/`, `vite.config.ts`, `index.html`
-- **GitHub:** —
+- **GitHub:** [#13](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/13)
 - **Actualizada:** 2026-11-11
 
 ## Problema

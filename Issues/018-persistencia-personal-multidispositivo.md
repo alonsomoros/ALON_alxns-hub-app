@@ -4,7 +4,7 @@
 - **REQ:** REQ-018
 - **Tipo:** feat
 - **Área:** `server/index.js`, `src/infrastructure/persistence.ts`, `src/hooks/usePersistedDashboard.ts`, `Dockerfile.persistence`, `docs/ci-cd/docker-compose.yml`
-- **GitHub:** —
+- **GitHub:** [#18](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/18)
 - **Actualizada:** 2026-11-11
 
 ## Problema

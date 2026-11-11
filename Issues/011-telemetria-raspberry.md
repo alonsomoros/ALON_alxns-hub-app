@@ -4,7 +4,7 @@
 - **REQ:** REQ-011
 - **Tipo:** feat
 - **Área:** `docs/arquitectura/integrations-n8n-grafana.md`, futuro adaptador en `src/infrastructure/`
-- **GitHub:** —
+- **GitHub:** [#11](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/11)
 - **Actualizada:** 2026-11-11
 
 ## Problema

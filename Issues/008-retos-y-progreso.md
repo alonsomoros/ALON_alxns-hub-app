@@ -4,7 +4,7 @@
 - **REQ:** REQ-008
 - **Tipo:** feat
 - **Área:** `src/domain/goals.ts`, `src/components/goals/`, `src/types/dashboard.ts`
-- **GitHub:** —
+- **GitHub:** [#8](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/8)
 - **Actualizada:** 2026-11-11
 
 ## Problema

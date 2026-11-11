@@ -4,7 +4,7 @@
 - **REQ:** REQ-017
 - **Tipo:** fix
 - **Área:** `src/utils/date.ts`, `src/components/home/HomeView.tsx`
-- **GitHub:** —
+- **GitHub:** [#17](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/17)
 - **Actualizada:** 2026-11-11
 
 ## Problema

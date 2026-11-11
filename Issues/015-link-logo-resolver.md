@@ -4,7 +4,7 @@
 - **REQ:** REQ-015
 - **Tipo:** refactor
 - **Área:** `src/utils/brandLogo.ts`, `src/components/ui/BrandLogo.tsx`
-- **GitHub:** —
+- **GitHub:** [#15](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/15)
 - **Actualizada:** 2026-11-11
 
 ## Problema

@@ -4,7 +4,7 @@
 - **REQ:** REQ-001
 - **Tipo:** fix
 - **Área:** `src/components/links/`, `src/index.css`
-- **GitHub:** —
+- **GitHub:** [#1](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/1)
 - **Actualizada:** 2026-11-11
 
 ## Problema

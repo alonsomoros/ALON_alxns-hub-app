@@ -4,7 +4,7 @@
 - **REQ:** REQ-002
 - **Tipo:** feat
 - **Área:** `src/components/{home,goals,links}/`, `src/components/Dashboard.tsx`
-- **GitHub:** —
+- **GitHub:** [#2](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/2)
 - **Actualizada:** 2026-11-11
 
 ## Problema

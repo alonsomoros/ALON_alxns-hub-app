@@ -4,7 +4,7 @@
 - **REQ:** REQ-020
 - **Tipo:** chore
 - **Área:** `package.json`, `.github/workflows/ci.yml`, `src/domain/`, `server/`
-- **GitHub:** —
+- **GitHub:** [#20](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/20)
 - **Actualizada:** 2026-11-11
 
 ## Problema

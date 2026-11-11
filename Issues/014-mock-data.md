@@ -4,7 +4,7 @@
 - **REQ:** REQ-014
 - **Tipo:** refactor
 - **Área:** `src/data/dashboardData.ts`
-- **GitHub:** —
+- **GitHub:** [#14](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/14)
 - **Actualizada:** 2026-11-11
 
 ## Problema

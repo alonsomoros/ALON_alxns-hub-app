@@ -4,7 +4,7 @@
 - **REQ:** REQ-009
 - **Tipo:** fix
 - **Área:** `src/components/links/`, `src/domain/links.ts`, `src/utils/brandLogo.ts`
-- **GitHub:** —
+- **GitHub:** [#9](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/9)
 - **Actualizada:** 2026-11-11
 
 ## Problema

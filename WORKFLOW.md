@@ -35,7 +35,7 @@ Después:
 ## 2. Trazabilidad
 
 - **`REQ-NNN` = `Issues/NNN-slug.md`.** El número es el siguiente libre de `Issues/README.md`. Una tarea que continúa trabajo existente reutiliza su nota (si está `Hecho` y cambia el comportamiento, nota nueva que referencia la anterior).
-- **Nota local como fuente de verdad.** `gh` está instalado y autenticado (cuenta `alonsomoros`, ámbitos `repo` y `workflow`), pero puede no estar en el `PATH` de la sesión del agente: usar `C:\Program Files\GitHub CLI\gh.exe` si `gh` no se reconoce. Las issues de GitHub se crean solo si el desarrollador lo pide; mientras tanto no se inventan números. Si existiera una issue real, su número va en el campo `GitHub` de la nota y los commits usan `Refs #N`.
+- **Nota local como fuente de verdad, issue de GitHub como reflejo.** `gh` está instalado y autenticado (cuenta `alonsomoros`, ámbitos `repo` y `workflow`), pero puede no estar en el `PATH` de la sesión del agente: usar `C:\Program Files\GitHub CLI\gh.exe` si `gh` no se reconoce. Al crear la nota se crea su issue (`gh issue create --title "REQ-NNN: <título>" --body-file <archivo>`, con enlace a la nota en el cuerpo) y se anota su número en el campo `GitHub`. Si existiera una issue real, su número va en el campo `GitHub` de la nota y los commits usan `Refs #N`.
 - Crear la nota con `Issues/_TEMPLATE.md` en estado `En curso` **antes de editar código**, con problema, decisión y criterios de aceptación verificables, y añadirla al índice.
 - Antes de editar, el agente debe poder responder: qué problema se cambia, qué no, qué criterio lo da por bueno y qué check puede falsar la hipótesis.
 - Cambios triviales (typo, enlace roto, comentario) no necesitan nota nueva: se anotan en la nota dueña del área o se entregan como `docs`/`chore` con `Sin cambio: sin trazabilidad funcional`.
@@ -95,18 +95,19 @@ El desarrollador es el único propietario del repositorio y autoriza de forma pe
 ```text
 <type>(<scope>): <summary> (REQ-NNN)
 
+Refs #N
 Issue local: Issues/NNN-slug.md
 Requirements: REQ-NNN
 Tests: <comandos ejecutados>
 Docs: <archivos o Sin cambio: motivo>
 ```
 
-  Tipos: `feat`, `fix`, `docs`, `test`, `ci`, `chore`, `refactor`. Con issue de GitHub real, sustituir la línea `Issue local` por `Refs #N`.
+  Tipos: `feat`, `fix`, `docs`, `test`, `ci`, `chore`, `refactor`. `Closes #N` solo en el commit que cierra la tarea (nota `Hecho`).
 - Antes del push: `git diff --stat`, `git status` limpio de lo ajeno y, si el remoto avanzó, `git pull --rebase`.
-- Después del push: comprobar con `git status --short --branch` y `git log origin/main -1`. Estado de CI: leerlo con `gh run list --limit 3` y, si falla, `gh run view <id>` para distinguir un fallo del código de un fallo de la infraestructura (p. ej. cuenta bloqueada por facturación). Si `gh` no está disponible, indicar `CI: no verificable (sin gh)` y la URL https://github.com/alonsomoros/ALON_alxns-hub-app/actions.
+- Después del push: comprobar con `git status --short --branch` y `git log origin/main -1`. Estado de CI: mientras la cuenta de GitHub siga bloqueada por facturación (decisión del desarrollador: no se configura), la CI no arranca; no se intenta relanzar ni se espera. La verificación válida es la local y el informe indica `CI: no disponible (facturación)`. Si la CI vuelve a funcionar, leerla con `gh run list --limit 3` y `gh run view <id>`.
 - Los incrementos de versión usan un commit `release: vX.Y.Z` solo cuando la nota lo requiera; no inventar tags.
 - Si falla autenticación, push o CI: no simular éxito, documentar el bloqueo en la nota y dejarla `En curso` o `Bloqueado`.
 
 ## 7. Cierre
 
-Una tarea está lista cuando: la nota está `Hecho` con criterios marcados y verificación rellena; el índice y el backlog están al día; lint y build pasan; el diff está revisado; el commit y el push están hechos; y el informe de verificación se ha entregado. Una nota pasa a `Hecho` con la validación local en verde y el push hecho; si la CI falla después, se reabre y se corrige con un commit nuevo. Si el cierre depende de algo externo (despliegue, backup), la nota queda `En curso` y los pendientes `[BLOQUEADO]` quedan enumerados con su motivo.
+Una tarea está lista cuando: la nota está `Hecho` con criterios marcados y verificación rellena; el índice y el backlog están al día; lint y build pasan; el diff está revisado; el commit y el push están hechos; la issue de GitHub está cerrada (`gh issue close N --reason completed`); y el informe de verificación se ha entregado. Una nota pasa a `Hecho` con la validación local en verde y el push hecho; si la CI falla después, se reabre y se corrige con un commit nuevo. Si el cierre depende de algo externo (despliegue, backup), la nota queda `En curso` y los pendientes `[BLOQUEADO]` quedan enumerados con su motivo.

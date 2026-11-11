@@ -4,7 +4,7 @@
 - **REQ:** REQ-007
 - **Tipo:** docs
 - **Área:** `AGENTS.md`, `WORKFLOW.md`, `CODE_STANDARD.md`, `context/`
-- **GitHub:** —
+- **GitHub:** [#7](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/7)
 - **Actualizada:** 2026-11-11
 
 ## Problema

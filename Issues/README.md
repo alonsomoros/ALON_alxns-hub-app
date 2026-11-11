@@ -5,7 +5,7 @@ Dueño de la **trazabilidad local**: cada cambio de comportamiento, arquitectura
 ## Reglas
 
 1. **`REQ-NNN` = `Issues/NNN-slug.md`.** El número de la nota es el identificador del requisito. Siguiente número libre: **021**.
-2. **GitHub:** `gh` está autenticado, pero las issues de GitHub se crean solo a petición del desarrollador; la nota local es la fuente de verdad. No se inventan números `#N`; los commits usan `Issue local: Issues/NNN-slug.md`. Si se crea una issue real, anotar su número en el campo `GitHub` de la nota.
+2. **GitHub:** Cada nota tiene su issue de GitHub (`gh issue create`, título `REQ-NNN: <título>`, cuerpo que enlaza a la nota); el número va en el campo `GitHub` de la nota y los commits usan `Refs #N`. Hasta ahora `#N` coincide con `NNN`, pero no se da por supuesto: se anota el número que devuelve `gh`. La nota local es la fuente de verdad; la issue la refleja y se cierra (`gh issue close N --reason completed`) cuando la nota pasa a `Hecho`.
 3. **Estados:** `Propuesta` (sin decisión) → `En curso` (decidida, en implementación) → `Hecho` (validada, commit y push hechos) · `Bloqueado` (depende de algo externo) · `Descartado`. El estado de la nota y la tabla de abajo deben coincidir.
 4. **Plantilla:** copiar [`_TEMPLATE.md`](_TEMPLATE.md). Toda nota tiene cabecera, criterios de aceptación con casillas, tabla de verificación e impacto documental.
 5. **Pendientes:** cada pendiente apunta a su destino (otra nota, backlog o `[BLOQUEADO] motivo`). No se dejan pendientes sueltos en texto histórico.

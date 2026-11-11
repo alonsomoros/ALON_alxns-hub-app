@@ -4,7 +4,7 @@
 - **REQ:** REQ-006
 - **Tipo:** docs
 - **Área:** `.agents/skills/diagrams.md`, `docs/diagramas/`, `docs/codebase/`
-- **GitHub:** —
+- **GitHub:** [#6](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/6)
 - **Actualizada:** 2026-11-11
 
 ## Problema

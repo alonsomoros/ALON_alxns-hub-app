@@ -4,7 +4,7 @@
 - **REQ:** REQ-016
 - **Tipo:** refactor
 - **Área:** `src/`
-- **GitHub:** —
+- **GitHub:** [#16](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/16)
 - **Actualizada:** 2026-11-11
 
 ## Problema

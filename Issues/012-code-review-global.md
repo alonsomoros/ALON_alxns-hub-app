@@ -4,7 +4,7 @@
 - **REQ:** REQ-012
 - **Tipo:** chore
 - **Área:** transversal
-- **GitHub:** —
+- **GitHub:** [#12](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/12)
 - **Actualizada:** 2026-11-11
 
 ## Problema

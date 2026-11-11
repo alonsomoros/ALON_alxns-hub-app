@@ -4,7 +4,7 @@
 - **REQ:** REQ-019
 - **Tipo:** docs
 - **Área:** `AGENTS.md`, `WORKFLOW.md`, `Issues/`, `docs/`, `.agents/`
-- **GitHub:** —
+- **GitHub:** [#19](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/19)
 - **Actualizada:** 2026-11-11
 
 ## Problema
@@ -53,7 +53,7 @@ Actualizados: `AGENTS.md`, `WORKFLOW.md`, `CODE_STANDARD.md`, `context/INDEX.md`
 
 ## Pendientes
 
-- [ ] [BLOQUEADO] Resolver la facturación de GitHub para que la CI arranque → `REQ-005`.
-- [ ] [BLOQUEADO] Cambiar el remoto `origin` a `https://github.com/alonsomoros/ALON_alxns-hub-app.git` (el repositorio se renombró; el nombre antiguo redirige).
+- [ ] [BLOQUEADO] CI: la facturación de GitHub no se configura por decisión del desarrollador; la verificación es local → `REQ-005`.
+- [x] Remoto `origin` actualizado a `ALON_alxns-hub-app` y issues de GitHub creadas para `REQ-001` a `REQ-020`.
 - [ ] Runner de tests → `REQ-020`.
 - [ ] Decidir si se elimina `pnpm-lock.yaml`: CI usa `npm ci` y `package-lock.json`.

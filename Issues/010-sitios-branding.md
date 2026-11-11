@@ -4,7 +4,7 @@
 - **REQ:** REQ-010
 - **Tipo:** feat
 - **Área:** `src/components/ui/BrandLogo.tsx`, `src/components/home/HomeView.tsx`
-- **GitHub:** —
+- **GitHub:** [#10](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/10)
 - **Actualizada:** 2026-11-11
 
 ## Problema

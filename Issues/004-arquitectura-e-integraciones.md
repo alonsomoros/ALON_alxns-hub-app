@@ -4,7 +4,7 @@
 - **REQ:** REQ-004
 - **Tipo:** architecture
 - **Área:** `docs/arquitectura/`, `src/hooks/`, `src/infrastructure/`
-- **GitHub:** —
+- **GitHub:** [#4](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/4)
 - **Actualizada:** 2026-11-11
 
 ## Problema
