@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { defaultPreferences, moveCard, newerPreferences, parsePreferences, setCardVisible } from '../src/domain/preferences.ts'
+import { defaultPreferences, greetingFor, moveCard, newerPreferences, parsePreferences, setCardVisible } from '../src/domain/preferences.ts'
 import { shouldAdoptRemote } from '../src/domain/persistedState.ts'
 import { readStoredPreferences, storePreferences } from '../src/infrastructure/preferencesStore.ts'
 
@@ -8,7 +8,7 @@ const ids = (cards: { id: string }[]) => cards.map((card) => card.id)
 
 test('REQ-003 defaults: soft theme, bars, 60 s and four visible cards in order', () => {
   assert.deepEqual(defaultPreferences, {
-    schemaVersion: 1, theme: 'soft', statsView: 'bars', piRefreshSeconds: 60, updatedAt: '',
+    schemaVersion: 1, theme: 'soft', statsView: 'bars', piRefreshSeconds: 60, displayName: 'Alonso', updatedAt: '',
     homeCards: [{ id: 'pi', visible: true }, { id: 'goals', visible: true }, { id: 'services', visible: true }, { id: 'links', visible: true }],
   })
 })
@@ -104,4 +104,22 @@ test('REQ-003 newerPreferences: missing, invalid or legacy remote preferences ne
     assert.equal(result.preferences, local)
     assert.equal(result.fromRemote, false)
   }
+})
+
+test('REQ-003 parsePreferences: displayName is trimmed, limited to 40 characters and falls back to the default for non-strings', () => {
+  assert.equal(parsePreferences({ displayName: '  Ana María ' }).displayName, 'Ana María')
+  assert.equal(parsePreferences({ displayName: 'x'.repeat(60) }).displayName, 'x'.repeat(40))
+  for (const value of [undefined, null, 5, [], {}]) assert.equal(parsePreferences({ displayName: value }).displayName, 'Alonso')
+})
+
+test('REQ-003 parsePreferences: an empty displayName is a valid choice (no name in the greeting)', () => {
+  assert.equal(parsePreferences({ displayName: '' }).displayName, '')
+  assert.equal(parsePreferences({ displayName: '   ' }).displayName, '')
+})
+
+test('REQ-003 greetingFor: builds the greeting with the trimmed name or none', () => {
+  assert.equal(greetingFor('Alonso'), 'Hola, Alonso.')
+  assert.equal(greetingFor('  Ana '), 'Hola, Ana.')
+  assert.equal(greetingFor(''), 'Hola.')
+  assert.equal(greetingFor('   '), 'Hola.')
 })

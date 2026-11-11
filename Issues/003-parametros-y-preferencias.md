@@ -25,6 +25,7 @@ interface UiPreferences {
   theme: ThemeId                    // por defecto 'soft'
   statsView: StatsView              // por defecto 'bars'
   piRefreshSeconds: 30 | 60 | 120   // por defecto 60
+  displayName: string               // nombre del saludo de Inicio (máx. 40; vacío = «Hola.»; por defecto «Alonso»)
   updatedAt: string                 // ISO del último cambio del usuario ('' si se desconoce); decide qué copia gana al sincronizar
   homeCards: { id: 'pi' | 'goals' | 'services' | 'links'; visible: boolean }[]  // el orden del array es el orden en pantalla
 }
@@ -52,6 +53,8 @@ interface UiPreferences {
 **Refresco:** `usePiMetrics` recibe el intervalo de `piRefreshSeconds`; se mantienen la pausa con la pestaña oculta y el último dato válido.
 
 **Desviaciones de implementación (fase 1):** 12 variables base (`bg, surface, text, textMuted, border, accent, accent2, accentStrong, onAccentStrong, warn, danger, info`) y el resto derivado en CSS con `color-mix()`; `soft` oscurece `textMuted` a `#5f6f65` para cumplir AA; cada tema define el par de colores de su cuadrado (`swatch`), y el del tema `dark` es negro y blanco porque sus acentos son claros; `npm test` usa `node:test` con `--experimental-strip-types` (Node 22.6 o superior).
+
+**Ampliación (2026-11-11):** el saludo es editable. `displayName` (recortado a 40 caracteres, `parsePreferences` lo valida) se edita en la sección «Personal» de Ajustes con vista previa y se sincroniza como el resto; `greetingFor` construye «Hola, Nombre.» o «Hola.» si está vacío (`tests/preferences.test.ts`; comprobado en Chrome: cambio en vivo, persistencia tras recargar y vacío).
 
 **Corrección posterior (`REQ-020`):** el servidor sustituía `preferences.updatedAt` por su hora de guardado al leer el estado; ahora conserva el `updatedAt` fijado por el cliente y expone la hora de guardado como `savedAt` (prueba en `tests/api.test.ts`).
 
@@ -92,6 +95,7 @@ Actualizados: `docs/arquitectura/ui-preferences.md`, `docs/requisitos/functional
 
 - [x] Implementadas las dos fases (ver Decisión).
 - [ ] Modo claro/oscuro automático según el sistema → backlog.
-- [ ] Saludo y cita editables → backlog.
+- [x] Saludo editable (`displayName`).
+- [ ] Cita editable (modo `fav`) → backlog.
 - [x] Tests de preferencias (`tests/preferences.test.ts`, `themes`, `css-tokens`, `saveQueue`, `persistedState`).
 - [ ] Menores aplazados tras la revisión: guardado pendiente al cerrar la pestaña (flush en `pagehide`); cancelación de la hidratación en StrictMode; validar la forma de `goals` y `links` en `shouldAdoptRemote`; `aria-labelledby` y teclas Inicio/Fin en el selector de temas; foco del teclado al llegar al extremo en el editor de tarjetas; el anillo y el medidor dibujan un punto con valor 0; contraste no textual del interruptor oscuro y del trazo `accent-2`; cabecera de `ui-preferences.md` obsoleta.

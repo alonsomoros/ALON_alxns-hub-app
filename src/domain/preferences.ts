@@ -11,8 +11,14 @@ export const defaultPreferences: UiPreferences = {
   statsView: 'bars',
   piRefreshSeconds: 60,
   homeCards: cardIds.map((id) => ({ id, visible: true })),
+  displayName: 'Alonso',
   updatedAt: '',
 }
+
+export const maxDisplayNameLength = 40
+
+/** Saludo de Inicio con el nombre (recortado); sin nombre, solo «Hola.». */
+export const greetingFor = (displayName: string): string => displayName.trim() ? `Hola, ${displayName.trim()}.` : 'Hola.'
 
 const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value)
 
@@ -37,6 +43,7 @@ export function parsePreferences(raw: unknown): UiPreferences {
     statsView: statsViews.includes(source.statsView as StatsView) ? source.statsView as StatsView : defaultPreferences.statsView,
     piRefreshSeconds: refreshOptions.includes(source.piRefreshSeconds as PiRefreshSeconds) ? source.piRefreshSeconds as PiRefreshSeconds : defaultPreferences.piRefreshSeconds,
     homeCards: parseCards(source.homeCards),
+    displayName: typeof source.displayName === 'string' ? source.displayName.trim().slice(0, maxDisplayNameLength) : defaultPreferences.displayName,
     updatedAt: typeof source.updatedAt === 'string' ? source.updatedAt : '',
   }
 }

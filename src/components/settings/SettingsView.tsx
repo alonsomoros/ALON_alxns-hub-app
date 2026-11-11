@@ -1,4 +1,4 @@
-import { refreshOptions } from '../../domain/preferences'
+import { greetingFor, maxDisplayNameLength, refreshOptions } from '../../domain/preferences'
 import type { PiRefreshSeconds, StatsView, UiPreferences } from '../../types/dashboard'
 import { BackButton } from '../ui/BackButton'
 import { HomeCardsEditor } from './HomeCardsEditor'
@@ -28,6 +28,14 @@ export function SettingsView({ preferences, onChange, onReset, onBack }: { prefe
         <select value={preferences.statsView} onChange={(event) => onChange({ ...preferences, statsView: event.target.value as StatsView })}>
           {statsViewOptions.map((option) => <option value={option.value} key={option.value}>{option.label}</option>)}
         </select>
+      </label>
+    </article>
+    <article className="card settings-card">
+      <h2>Personal</h2>
+      <label className="settings-field">
+        <span>Tu nombre en el saludo</span>
+        <input type="text" value={preferences.displayName} maxLength={maxDisplayNameLength} autoComplete="off" onChange={(event) => onChange({ ...preferences, displayName: event.target.value })} />
+        <small className="settings-hint">Vista previa: {greetingFor(preferences.displayName)}</small>
       </label>
     </article>
     <article className="card settings-card">

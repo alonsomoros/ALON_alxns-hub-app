@@ -54,7 +54,7 @@ Actualizados: `docs/requisitos/` (FR-10 a FR-13, RNF-01 a RNF-10), `docs/arquite
 - [x] Desplegado en la Raspberry (contenedor `healthy`) y accesible desde la PWA de Vercel en PC y móvil.
 - [ ] [BLOQUEADO] ACL, backup con retención y restauración verificada (hay una copia manual del 2026-11-11 en `~/backups`).
 - [x] Tests de contrato de la API y de conflicto `409` (`tests/api.test.ts`).
-- [ ] Corregir `archived: false` fijo al enviar enlaces y decidir si se leen las preferencias → backlog.
+- [x] `archived: false` fijo al enviar enlaces: no es un fallo con el modelo actual. Cada guardado reemplaza todos los enlaces, `GET /api/state` solo devuelve los no archivados y la interfaz no archiva enlaces (borrar es físico). Si algún día se archivan, habrá que añadir `archived` a `QuickLink`. Las preferencias ya se leen de vuelta (`REQ-003`).
 - [ ] Migraciones futuras del esquema → backlog.
 
 La nota pasa a `Hecho` cuando el despliegue y el backup estén verificados.

@@ -13,6 +13,7 @@ interface UiPreferences {
   statsView: StatsView;            // por defecto 'bars'
   piRefreshSeconds: 30 | 60 | 120; // por defecto 60
   homeCards: { id: HomeCardId; visible: boolean }[]; // el orden del array es el de pantalla
+  displayName: string;             // nombre del saludo de Inicio (máx. 40; vacío = «Hola.»; por defecto «Alonso»)
   updatedAt: string;               // ISO del último cambio del usuario; gana la copia más reciente al sincronizar (la API lo conserva y añade `savedAt` con su hora de guardado)
 }
 ```

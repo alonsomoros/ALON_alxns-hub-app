@@ -16,7 +16,7 @@ Dueño de **qué debe hacer el producto**. Cada `FR-xx` enlaza a la nota `REQ-NN
 | FR-07 PWA | `REQ-013` | Implementado |
 | FR-08 Diagramas | `REQ-006`, `REQ-019` | Implementado |
 | FR-09 Retos | `REQ-008` | Implementado |
-| FR-10 Persistencia personal | `REQ-018`, `REQ-003` | Parcial: retos, enlaces y preferencias se guardan y se leen; `archived` fijo a `false` |
+| FR-10 Persistencia personal | `REQ-018`, `REQ-003` | Implementado: retos, enlaces y preferencias se guardan y se leen |
 | FR-11 Sincronización multidispositivo | `REQ-018` | Parcial: API desplegada en la Pi (HTTPS por `tailscale serve`); ACL de Tailscale y E2E de persistencia pendientes |
 | FR-12 Operación degradada | `REQ-018` | Implementado (caché y estado `OFFLINE` en el pie) |
 | FR-13 Integridad de dominio | `REQ-008`, `REQ-018` | Implementado y probado (`tests/goals.test.ts`, `tests/api.test.ts`) |
@@ -40,7 +40,7 @@ Dueño de **qué debe hacer el producto**. Cada `FR-xx` enlaza a la nota `REQ-NN
 - **FR-10 Persistencia personal:** guardar y recuperar preferencias, retos, historial de progreso y enlaces mediante un adaptador de persistencia, manteniendo el orden de los enlaces y el estado archivado.
 - **FR-11 Sincronización multidispositivo:** sincronizar los datos del propietario entre dispositivos mediante una API personal protegida por red privada o un perímetro equivalente, sin introducir cuentas ni login en la interfaz.
 - **FR-12 Operación degradada:** iniciar la PWA con la última caché válida, reflejar cambios confirmados localmente y mostrar `OFFLINE` o `UNREACHABLE` cuando la persistencia remota no esté disponible; nunca bloquear el shell por la red.
-- **FR-14 Preferencias de interfaz:** pantalla de Ajustes accesible desde la cabecera para elegir tema, vista de las estadísticas de la Raspberry, orden y visibilidad de las tarjetas de Inicio e intervalo de refresco; se aplican al instante, se validan con valores por defecto y se sincronizan entre dispositivos sin bloquear el render.
+- **FR-14 Preferencias de interfaz:** pantalla de Ajustes accesible desde la cabecera para elegir tema, vista de las estadísticas de la Raspberry, orden y visibilidad de las tarjetas de Inicio, intervalo de refresco y nombre del saludo; se aplican al instante, se validan con valores por defecto y se sincronizan entre dispositivos sin bloquear el render.
 - **FR-13 Integridad de dominio:** derivar el progreso de retos desde `current / target`, validar límites y conservar snapshots de edición en el historial; el cliente no puede imponer un porcentaje incoherente.
 
 ## Requisitos no funcionales

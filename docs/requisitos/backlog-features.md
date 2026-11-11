@@ -22,7 +22,6 @@ Prioridad alta (habilitan la entrega autónoma o cierran huecos de la persistenc
 
 - [ ] Tests de componentes React (hooks y vistas) y E2E de la PWA en móvil; hoy se comprueban a mano en Chrome.
 - [ ] [BLOQUEADO] CI de GitHub: no arranca por la facturación de la cuenta y el desarrollador decidió no configurarla; reabrir solo si cambia esa decisión.
-- [ ] Corregir `archived: false` fijo al enviar enlaces a la API (`REQ-018`).
 
 Prioridad media (producto):
 
@@ -31,7 +30,7 @@ Prioridad media (producto):
 - [ ] cAdvisor en Prometheus para CPU/RAM por contenedor.
 - [ ] Alertas: Alertmanager → webhook de n8n → notificación.
 - [ ] Enlace configurable a Grafana.
-- [ ] Preferencias pendientes: modo claro/oscuro automático según el sistema, saludo y cita editables y orden de los servicios (`REQ-003`).
+- [ ] Preferencias pendientes: modo claro/oscuro automático según el sistema, cita editable y orden de los servicios (`REQ-003`).
 - [ ] Racha derivada de registros diarios consecutivos.
 
 Prioridad baja:

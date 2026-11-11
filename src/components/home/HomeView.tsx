@@ -3,6 +3,7 @@ import { useToday } from '../../hooks/useToday'
 import { ChevronDown, ChevronRight, CircleCheck, ExternalLink, Server, TriangleAlert, Trophy, Wifi, Zap } from 'lucide-react'
 import { prototypePiMetrics, services } from '../../data/dashboardData'
 import { goalCategoryConfig, goalProgress } from '../../domain/goals'
+import { greetingFor } from '../../domain/preferences'
 import type { ContainerInfo, HabitGoal, HomeCardPref, PiMetrics, PiMetricsStatus, QuickLink, Quote, StatsView } from '../../types/dashboard'
 import { BrandLogo } from '../ui/BrandLogo'
 import { CardTitle } from '../ui/CardTitle'
@@ -11,12 +12,12 @@ import { ProgressBar } from '../ui/ProgressBar'
 
 interface PiState { pi: PiMetrics | null; status: PiMetricsStatus; ageMinutes: number }
 
-export function HomeView({ quote, links, goals, piState, statsView, cards, onOpenGoals, onOpenLinks }: { quote: Quote; links: QuickLink[]; goals: HabitGoal[]; piState: PiState; statsView: StatsView; cards: HomeCardPref[]; onOpenGoals: () => void; onOpenLinks: () => void }) {
+export function HomeView({ quote, links, goals, piState, statsView, cards, displayName, onOpenGoals, onOpenLinks }: { quote: Quote; links: QuickLink[]; goals: HabitGoal[]; piState: PiState; statsView: StatsView; cards: HomeCardPref[]; displayName: string; onOpenGoals: () => void; onOpenLinks: () => void }) {
   const today = useToday()
   return <>
     <section className="welcome">
       <p className="date-label">{today}</p>
-      <h1>Hola, Alonso.</h1>
+      <h1>{greetingFor(displayName)}</h1>
       <blockquote>“{quote.content}”<cite>— {quote.author}</cite></blockquote>
     </section>
     <section className="home-grid">
