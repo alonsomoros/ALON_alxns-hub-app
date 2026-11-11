@@ -7,8 +7,8 @@
 | `src/` | Entry point, React views, CSS y assets de la UI | `src/main.tsx`, `src/App.tsx`, `src/index.css` |
 | `src/components/` | Dashboard orquestador y vistas por feature (`home/`, `goals/`, `links/`, `layout/`, `ui/`) | `src/components/Dashboard.tsx` |
 | `src/types/`, `src/domain/`, `src/data/` | Modelos, logica pura de retos/enlaces y datos de prototipo | `src/types/dashboard.ts`, `src/domain/goals.ts` |
-| `src/hooks/`, `src/utils/`, `src/infrastructure/` | Estado con efectos (cita, persistencia), helpers y adaptadores | `src/hooks/usePersistedDashboard.ts` |
-| `server/` | API de persistencia SQLite (`REQ-018`); imagen en `Dockerfile.persistence` | `server/index.js` |
+| `src/hooks/`, `src/utils/`, `src/infrastructure/` | Estado con efectos (cita, persistencia, métricas Pi), helpers y adaptadores | `src/hooks/usePersistedDashboard.ts` |
+| `server/` | API de persistencia SQLite (`REQ-018`) y métricas de la Raspberry (`REQ-011`); imagen en `Dockerfile.persistence` | `server/index.js`, `server/metrics.js` |
 | `public/` | Assets publicos de la PWA | `public/favicon.svg`, `public/icons/` |
 | `docs/` | Requisitos, arquitectura, mapa del codigo, CI/CD y diagramas | `docs/arquitectura/`, `docs/requisitos/` |
 | `Issues/` | Notas `REQ-NNN`, indice y plantilla | `Issues/README.md`, `Issues/_TEMPLATE.md` |

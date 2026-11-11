@@ -9,13 +9,13 @@ Reglas: al empezar un ítem se crea su nota `Issues/NNN-slug.md` (siguiente núm
 | REQ | Qué falta | Bloqueo |
 |---|---|---|
 | [`REQ-018`](../../Issues/018-persistencia-personal-multidispositivo.md) | Desplegar la API en la Raspberry, ACL de Tailscale, HTTPS, backup y restauración, E2E desde dos dispositivos | [BLOQUEADO] requiere acceso a la Raspberry |
+| [`REQ-011`](../../Issues/011-telemetria-raspberry.md) | Desplegar en la Raspberry y verificar `GET /api/pi/metrics` y el estado de contenedores | Aprobación del despliegue |
 | [`REQ-004`](../../Issues/004-arquitectura-e-integraciones.md) | Adaptadores tipados de cita, métricas, healthchecks y Grafana | Cada uno abre su propia nota |
 
 ## Propuestas pendientes de decisión
 
 | REQ | Propuesta | Falta |
 |---|---|---|
-| [`REQ-011`](../../Issues/011-telemetria-raspberry.md) | Contrato y transporte de métricas Raspberry | Responder las preguntas abiertas y aprobar |
 | [`REQ-020`](../../Issues/020-runner-de-tests.md) | Runner de tests para dominio y API | Aprobar la dependencia |
 
 ## Pendiente priorizado
@@ -30,8 +30,9 @@ Prioridad alta (habilitan la entrega autónoma o cierran huecos de la persistenc
 Prioridad media (producto):
 
 - [ ] Adaptador de cita con timeout de 1.5 s y modos `default`, `random` y `fav`.
-- [ ] Adaptador n8n para métricas de Raspberry Pi 5 (`REQ-011`).
-- [ ] Healthchecks reales con timeout y fallback `OFFLINE`/`UNREACHABLE`.
+- [ ] Healthchecks reales con timeout y fallback `OFFLINE`/`UNREACHABLE` (propuesta: `blackbox-exporter` en Prometheus).
+- [ ] cAdvisor en Prometheus para CPU/RAM por contenedor.
+- [ ] Alertas: Alertmanager → webhook de n8n → notificación.
 - [ ] Implementar `raspberryPiStatsShowcase: graph` con gráficas ligeras y accesibles.
 - [ ] Enlace configurable a Grafana.
 - [ ] Menú de preferencias: tema, modo, cita, orden de servicios y widgets.
@@ -43,6 +44,8 @@ Prioridad baja:
 - [ ] Refrescar la fecha de Inicio al cambiar de día con la app abierta.
 - [ ] Tarjeta Raspberry sin espacio en blanco en escritorio.
 - [ ] Notificaciones de degradación de servicios.
+- [ ] Limitar Prometheus, node-exporter, Grafana y Portainer a Tailscale/localhost (hoy escuchan en toda la LAN).
+- [ ] Revisar `watchtower` en la Pi: aparece en `Restarting (1)`.
 - [ ] Pruebas de accesibilidad y flujos PWA en móvil.
 - [ ] Migraciones futuras del esquema SQLite.
 - [ ] Decidir si se elimina `pnpm-lock.yaml` (CI usa `npm ci`).

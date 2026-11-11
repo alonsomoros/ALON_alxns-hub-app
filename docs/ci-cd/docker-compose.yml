@@ -10,8 +10,24 @@ services:
       PORT: 8787
       DB_PATH: /app/data/alon-hub.sqlite
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:?Set ALLOWED_ORIGINS to the PWA origin}
+      PROMETHEUS_URL: ${PROMETHEUS_URL:-http://host.docker.internal:9090}
+      DOCKER_PROXY_URL: http://docker-proxy:2375
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - docker-proxy
     volumes:
       - alxns-persistence-data:/app/data
+    restart: unless-stopped
+
+  # Proxy de solo lectura del socket de Docker (REQ-011): solo GET /containers, sin puertos publicados.
+  docker-proxy:
+    image: tecnativa/docker-socket-proxy:0.3.0
+    environment:
+      CONTAINERS: 1
+      POST: 0
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     restart: unless-stopped
 
 volumes:

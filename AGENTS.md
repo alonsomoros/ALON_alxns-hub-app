@@ -98,4 +98,4 @@ No añadir carpetas de primer nivel sin justificarlo en la nota y actualizar est
 
 ## Contexto de producto
 
-La primera iteración prioriza una experiencia personal sencilla y responsive con Inicio, Retos y Enlaces. Los enlaces admiten hasta 10 elementos y se reordenan por arrastre o teclado. La configuración de tema, citas, orden de servicios y métricas está preparada, pero la pantalla de preferencias queda pospuesta. Métricas reales, healthchecks y despliegue de la persistencia en la Raspberry siguen pendientes (`.agents/context/system-status.md`).
+La primera iteración prioriza una experiencia personal sencilla y responsive con Inicio, Retos y Enlaces. Los enlaces admiten hasta 10 elementos y se reordenan por arrastre o teclado. La configuración de tema, citas, orden de servicios y métricas está preparada, pero la pantalla de preferencias queda pospuesta. Healthchecks y el despliegue en la Raspberry de la persistencia y de las métricas reales (`REQ-011`, `REQ-018`) siguen pendientes (`.agents/context/system-status.md`).

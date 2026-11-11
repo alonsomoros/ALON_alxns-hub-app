@@ -9,7 +9,7 @@ Dueño de **qué debe hacer el producto**. Cada `FR-xx` enlaza a la nota `REQ-NN
 | FR-00 Trazabilidad | `REQ-005`, `REQ-007`, `REQ-019` | Implementado (issues #1 a #20 en GitHub; CI [BLOQUEADO] por facturación (verificación local)) |
 | FR-01 Splash | `REQ-002` | Implementado |
 | FR-02 Inicio | `REQ-002`, `REQ-013`, `REQ-017` | Implementado; la cita no tiene timeout de 1.5 s |
-| FR-03 Infraestructura | `REQ-011` | Parcial: datos de prototipo, sin métricas reales; solo `pbar` |
+| FR-03 Infraestructura | `REQ-011` | Implementado en código (métricas reales cada 60 s y resumen de contenedores); despliegue en la Pi pendiente; solo `pbar` |
 | FR-04 Servicios | `REQ-010`, `REQ-015` | Parcial: logos y fallback; el estado `online`/`offline` es de prototipo |
 | FR-05 Hábitos | `REQ-008` | Implementado |
 | FR-06 Enlaces | `REQ-001`, `REQ-009` | Implementado (falta estado vacío) |
@@ -30,7 +30,7 @@ Dueño de **qué debe hacer el producto**. Cada `FR-xx` enlaza a la nota `REQ-NN
 
 - **FR-01 Splash:** mostrar una pantalla de bienvenida breve y pasar al dashboard sin bloquear por red.
 - **FR-02 Inicio:** mostrar logo, nombre, fecha y una cita personalizada responsive con autor y fallback local.
-- **FR-03 Infraestructura:** presentar Raspberry Pi 5 con indicador discreto y CPU, memoria y temperatura en un componente visual configurable (`graph` o `pbar`).
+- **FR-03 Infraestructura:** presentar Raspberry Pi 5 con indicador discreto y CPU, memoria, disco y temperatura reales (actualizados cada 60 s) y un resumen de contenedores, en un componente visual configurable (`graph` o `pbar`).
 - **FR-04 Servicios:** mostrar logos clicables, priorizando `logoUrl` o favicon del dominio con fallback Lucide, y un halo/indicador de health `online` u `offline` independiente.
 - **FR-05 Hábitos:** mostrar logros de forma visual y rewarding, con progreso por color y navegación a una vista de retos escalable.
 - **FR-06 Enlaces:** permitir añadir, borrar, abrir y reordenar accesos desde una vista dedicada.

@@ -1,15 +1,17 @@
 import { useState } from 'react'
-import { ChevronRight, CircleCheck, ExternalLink, Server, Trophy, Wifi, Zap } from 'lucide-react'
-import { services } from '../../data/dashboardData'
+import { ChevronRight, CircleCheck, ExternalLink, Server, TriangleAlert, Trophy, Wifi, Zap } from 'lucide-react'
+import { prototypePiMetrics, services } from '../../data/dashboardData'
 import { goalCategoryConfig, goalProgress } from '../../domain/goals'
-import type { HabitGoal, QuickLink, Quote } from '../../types/dashboard'
+import type { HabitGoal, PiMetrics, PiMetricsStatus, QuickLink, Quote } from '../../types/dashboard'
 import { formatLongDate } from '../../utils/date'
 import { BrandLogo } from '../ui/BrandLogo'
 import { CardTitle } from '../ui/CardTitle'
 import { Metric } from '../ui/Metric'
 import { ProgressBar } from '../ui/ProgressBar'
 
-export function HomeView({ quote, links, goals, onOpenGoals, onOpenLinks }: { quote: Quote; links: QuickLink[]; goals: HabitGoal[]; onOpenGoals: () => void; onOpenLinks: () => void }) {
+interface PiState { pi: PiMetrics | null; status: PiMetricsStatus; ageMinutes: number }
+
+export function HomeView({ quote, links, goals, piState, onOpenGoals, onOpenLinks }: { quote: Quote; links: QuickLink[]; goals: HabitGoal[]; piState: PiState; onOpenGoals: () => void; onOpenLinks: () => void }) {
   const [today] = useState(() => formatLongDate(Date.now()))
   return <>
     <section className="welcome">
@@ -18,7 +20,7 @@ export function HomeView({ quote, links, goals, onOpenGoals, onOpenLinks }: { qu
       <blockquote>“{quote.content}”<cite>— {quote.author}</cite></blockquote>
     </section>
     <section className="home-grid">
-      <PiCard />
+      <PiCard {...piState} />
       <GoalsSummaryCard goals={goals} onOpenGoals={onOpenGoals} />
       <ServicesCard />
       <LinksSummaryCard links={links} onOpenLinks={onOpenLinks} />
@@ -26,15 +28,45 @@ export function HomeView({ quote, links, goals, onOpenGoals, onOpenLinks }: { qu
   </>
 }
 
-function PiCard() {
+const metricValue = (value: number | null | undefined, loading: boolean) => loading ? '…' : value === null || value === undefined ? '—' : value.toFixed(value % 1 === 0 ? 0 : 1)
+const metricProgress = (value: number | null | undefined) => value === null || value === undefined ? 0 : Math.min(100, Math.max(0, value))
+
+/** Resumen de contenedores: cuántos activos y cuántos con incidencias (parados, reiniciando o `unhealthy`). */
+function containersSummary(pi: PiMetrics) {
+  if (!pi.containers) return null
+  const issues = pi.containers.items.filter((item) => item.state !== 'running' || item.health === 'unhealthy').length
+  return { text: `${pi.containers.running}/${pi.containers.total} contenedores activos`, issues }
+}
+
+function piFootNote(pi: PiMetrics | null, status: PiMetricsStatus, ageMinutes: number) {
+  if (status === 'prototype') return { text: 'Datos de ejemplo', warn: false }
+  if (status === 'loading') return { text: 'Conectando…', warn: false }
+  if (status === 'offline') return { text: 'OFFLINE · sin conexión con la API', warn: true }
+  if (status === 'stale') return { text: `Último dato hace ${ageMinutes} min`, warn: true }
+  if (!pi) return { text: 'Sin datos', warn: true }
+  if (pi.sources.prometheus === 'unreachable') return { text: 'Sin datos de Prometheus', warn: true }
+  const containers = containersSummary(pi)
+  if (!containers) return { text: 'Métricas al día', warn: false }
+  return containers.issues > 0 ? { text: `${containers.text} · ${containers.issues} con incidencias`, warn: true } : { text: containers.text, warn: false }
+}
+
+function PiCard({ pi, status, ageMinutes }: PiState) {
+  const loading = status === 'loading'
+  const metrics = status === 'prototype' ? prototypePiMetrics : pi?.metrics
+  const titleStatus = status === 'online' || status === 'degraded' ? 'online' : status === 'stale' || status === 'offline' ? 'offline' : undefined
+  const note = piFootNote(pi, status, ageMinutes)
+  const rows = [
+    { label: 'CPU', value: metrics?.cpuBusyPercent, unit: '%' },
+    { label: 'Memoria', value: metrics?.ramUsedPercent, unit: '%' },
+    { label: 'Disco', value: metrics?.storageUsedPercent, unit: '%' },
+    { label: 'Temperatura', value: metrics?.temperatureCelsius, unit: '°C' },
+  ]
   return <article className="card pi-card">
-    <CardTitle icon={<Server size={18} />} title="Raspberry Pi 5" meta="Tu pequeño nodo" status="online" />
+    <CardTitle icon={<Server size={18} />} title="Raspberry Pi 5" meta="Tu pequeño nodo" status={titleStatus} />
     <div className="pi-metrics">
-      <Metric label="CPU" value="24" unit="%" progress={24} />
-      <Metric label="Memoria" value="61" unit="%" progress={61} />
-      <Metric label="Temperatura" value="47" unit="°C" progress={47} />
+      {rows.map((row) => <Metric key={row.label} label={row.label} value={metricValue(row.value, loading)} unit={row.value === null || row.value === undefined ? '' : row.unit} progress={metricProgress(row.value)} />)}
     </div>
-    <div className="card-foot"><span className="soft-status"><CircleCheck size={14} /> Todo bien</span><button type="button">Ver detalle <ChevronRight size={14} /></button></div>
+    <div className="card-foot"><span className="soft-status" aria-live="polite">{note.warn ? <TriangleAlert size={14} /> : <CircleCheck size={14} />} {note.text}</span><button type="button">Ver detalle <ChevronRight size={14} /></button></div>
   </article>
 }
 

@@ -2,7 +2,22 @@
 
 ## Métricas Pi 5
 
-El webhook de n8n debe devolver JSON con `cpuBusyPercent`, `ramUsedPercent`, `storageUsedPercent` y `temperatureCelsius`. El cliente cancela la petición después de 1500 ms y presenta `OFFLINE / UNREACHABLE` sin bloquear otros widgets.
+Las métricas **no pasan por n8n** (`REQ-011`). La API personal (`server/metrics.js`) las agrega desde Prometheus (node-exporter) y, para contenedores, desde un docker-socket-proxy de solo lectura, y las sirve en `GET /api/pi/metrics`. La PWA sondea cada 60 s con timeout de 1.5 s.
+
+```json
+{ "schemaVersion": 1, "deviceId": "raspberry-pi-5", "observedAt": "ISO-8601",
+  "metrics": { "cpuBusyPercent": 1.2, "ramUsedPercent": 29.6, "storageUsedPercent": 36.3,
+               "temperatureCelsius": 49.6, "uptimeSeconds": 8962388, "load1": 0.1 },
+  "containers": { "running": 11, "total": 13, "unhealthy": 0,
+                  "items": [{ "name": "grafana", "state": "running", "health": "none" }] },
+  "sources": { "prometheus": "ok", "docker": "ok" } }
+```
+
+- Cada fuente falla por separado: HTTP 200 con valores `null` y `sources.<fuente>` en `unreachable` (o `disabled` sin `DOCKER_PROXY_URL`).
+- Caché de 15 s en el servidor (igual que el scrape de Prometheus); consultas con timeout de 1 s.
+- Estados en la PWA: `loading`, `online`, `degraded`, `stale` (último dato válido y su edad), `offline` y `prototype` (sin API configurada).
+- Consultas PromQL y variables (`PROMETHEUS_URL`, `PROMETHEUS_JOB`, `DOCKER_PROXY_URL`, `DEVICE_ID`) en `server/metrics.js` y `.agents/context/environment-vars.md`.
+- n8n queda para automatizaciones futuras (alertas desde Alertmanager).
 
 ## Healthchecks
 

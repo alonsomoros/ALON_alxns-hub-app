@@ -2,6 +2,7 @@ import { mkdirSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { createServer } from 'node:http'
 import { DatabaseSync } from 'node:sqlite'
+import { getPiMetrics } from './metrics.js'
 
 const host = process.env.HOST ?? '0.0.0.0'
 const port = Number(process.env.PORT ?? 8787)
@@ -172,6 +173,7 @@ const server = createServer(async (request, response) => {
     const url = new URL(request.url ?? '/', `http://${request.headers.host ?? 'localhost'}`)
     if (request.method === 'GET' && url.pathname === '/health') return sendJson(request, response, 200, { status: 'ok', database: databasePath })
     if (request.method === 'GET' && url.pathname === '/api/state') return sendJson(request, response, 200, getState())
+    if (request.method === 'GET' && url.pathname === '/api/pi/metrics') return sendJson(request, response, 200, await getPiMetrics())
     if (request.method === 'PUT' && url.pathname === '/api/state') {
       saveState(await readBody(request))
       return sendJson(request, response, 200, getState())

@@ -10,3 +10,9 @@ export interface HabitGoal { id: string; title: string; description: string; cat
 export interface DashboardConfig { theme: 'soft'; mode: 'light'; quote: 'default' | 'random' | 'fav'; orderServices: string[]; raspberryPiStatsShowcase: 'graph' | 'pbar' }
 export type DashboardView = 'home' | 'goals' | 'links'
 export type PersistenceStatus = 'loading' | 'online' | 'offline' | 'local'
+
+export type PiMetricsStatus = 'loading' | 'online' | 'degraded' | 'stale' | 'offline' | 'prototype'
+export interface PiMetricValues { cpuBusyPercent: number | null; ramUsedPercent: number | null; storageUsedPercent: number | null; temperatureCelsius: number | null; uptimeSeconds: number | null; load1: number | null }
+export interface ContainerInfo { name: string; state: string; health: 'healthy' | 'unhealthy' | 'starting' | 'none' }
+export interface ContainerSummary { running: number; total: number; unhealthy: number; items: ContainerInfo[] }
+export interface PiMetrics { schemaVersion: 1; deviceId: string; observedAt: string; metrics: PiMetricValues; containers: ContainerSummary | null; sources: { prometheus: 'ok' | 'unreachable'; docker: 'ok' | 'unreachable' | 'disabled' } }

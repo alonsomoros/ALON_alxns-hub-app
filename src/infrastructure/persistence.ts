@@ -4,7 +4,7 @@ export interface PersistedLink { id: string; label: string; url: string; logoUrl
 export interface PersistedState { version: number; preferences: Record<string, unknown> | null; goals: PersistedGoal[]; links: PersistedLink[] }
 export interface PersistenceLoadResult { state: PersistedState | null; source: 'remote' | 'cache' | 'empty' }
 
-const persistenceUrl = (import.meta.env.VITE_PERSISTENCE_API_URL as string | undefined)?.replace(/\/$/, '')
+export const persistenceUrl = (import.meta.env.VITE_PERSISTENCE_API_URL as string | undefined)?.replace(/\/$/, '')
 const requestTimeoutMs = 1500
 const cacheKey = 'alxns:persistence-state'
 

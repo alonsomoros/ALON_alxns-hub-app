@@ -1,6 +1,6 @@
 # Arquitectura del sistema
 
-El cliente React renderiza un shell PWA inmediato orientado a una primera impresión simple. Los widgets consumen adaptadores tipados que aislan la red y exponen estados `loading`, `online`, `degraded` y `offline`. n8n actúa como orquestador para consultar la Raspberry Pi y normalizar métricas; Grafana conserva la observabilidad detallada. La configuración de presentación debe mantenerse separada de los datos y permitir intercambiar componentes sin rehacer el dashboard.
+El cliente React renderiza un shell PWA inmediato orientado a una primera impresión simple. Los widgets consumen adaptadores tipados que aislan la red y exponen estados `loading`, `online`, `degraded` y `offline`. La API personal consulta Prometheus y un proxy de solo lectura de Docker en la Raspberry y normaliza las métricas (`REQ-011`); n8n queda para automatizaciones futuras; Grafana conserva la observabilidad detallada. La configuración de presentación debe mantenerse separada de los datos y permitir intercambiar componentes sin rehacer el dashboard.
 
 ## Capas
 
@@ -16,7 +16,7 @@ El cliente React renderiza un shell PWA inmediato orientado a una primera impres
 
 ## Estado verificado
 
-- Implementado: shell PWA, splash, navegacion Inicio/Retos/Enlaces, estado React, fallback de cita, adaptador de persistencia con timeout de 1.5 s y cache, API SQLite y Docker Compose (`REQ-018`).
+- Implementado: shell PWA, splash, navegacion Inicio/Retos/Enlaces, estado React, fallback de cita, adaptador de persistencia con timeout de 1.5 s y cache, API SQLite y Docker Compose (`REQ-018`); métricas de la Raspberry con polling de 60 s mediante `GET /api/pi/metrics` (`REQ-011`, despliegue pendiente).
 - Preparado: manifest/service worker PWA y contratos/documentacion para preferencias.
 - Pendiente: despliegue de la API en la Raspberry, backups, HTTPS, adaptadores n8n/Grafana, healthchecks reales y tests E2E.
 

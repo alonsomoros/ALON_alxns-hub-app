@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { archiveGoalById, upsertGoal } from '../domain/goals'
 import { createLink, reorderLinks } from '../domain/links'
 import { usePersistedDashboard } from '../hooks/usePersistedDashboard'
+import { usePiMetrics } from '../hooks/usePiMetrics'
 import { useQuote } from '../hooks/useQuote'
 import type { DashboardView, HabitGoal, NewLinkDraft } from '../types/dashboard'
 import { GoalForm } from './goals/GoalForm'
@@ -16,6 +17,7 @@ const emptyLinkDraft: NewLinkDraft = { label: '', url: '' }
 export function Dashboard() {
   const [activeView, setActiveView] = useState<DashboardView>('home')
   const quote = useQuote()
+  const { snapshot: pi, status: piStatus, ageMinutes: piAgeMinutes } = usePiMetrics(activeView === 'home')
   const { links, setLinks, goals, setGoals, status } = usePersistedDashboard()
   const [editingGoal, setEditingGoal] = useState<HabitGoal | null>(null)
   const [isGoalFormOpen, setIsGoalFormOpen] = useState(false)
@@ -35,7 +37,7 @@ export function Dashboard() {
 
   return <main className="app-shell">
     <SiteHeader activeView={activeView} onNavigate={setActiveView} />
-    {activeView === 'home' && <HomeView quote={quote} links={links} goals={goals} onOpenGoals={() => setActiveView('goals')} onOpenLinks={() => setActiveView('links')} />}
+    {activeView === 'home' && <HomeView quote={quote} links={links} goals={goals} piState={{ pi, status: piStatus, ageMinutes: piAgeMinutes }} onOpenGoals={() => setActiveView('goals')} onOpenLinks={() => setActiveView('links')} />}
     {activeView === 'goals' && <GoalsView goals={goals} onBack={goHome} onAdd={() => openGoalForm(null)} onEdit={openGoalForm} onArchive={(id) => setGoals((current) => archiveGoalById(current, id))} />}
     {activeView === 'links' && <LinksView links={links} isAddLinkOpen={isAddLinkOpen} newLink={newLink} onBack={goHome} onAdd={() => setIsAddLinkOpen(true)} onDelete={(id) => setLinks((current) => current.filter((link) => link.id !== id))} onReorder={(sourceId, targetId) => setLinks((current) => reorderLinks(current, sourceId, targetId))} onCloseAdd={() => setIsAddLinkOpen(false)} onNewLinkChange={setNewLink} onConfirmAdd={addLink} />}
     <SiteFooter persistenceStatus={status} />

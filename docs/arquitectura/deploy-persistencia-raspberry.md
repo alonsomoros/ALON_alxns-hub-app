@@ -55,6 +55,21 @@ curl http://100.x.x.x:8787/health
 
 La respuesta esperada es JSON con `status: "ok"`. Después se debe abrir la PWA, crear un reto y un enlace, recargar y comprobar que siguen disponibles desde el dispositivo cliente `100.y.y.y`.
 
+## Métricas de la Raspberry (`REQ-011`)
+
+La API sirve `GET /api/pi/metrics` leyendo Prometheus (ya desplegado en la Pi con `node-exporter`) y un `docker-proxy` de solo lectura incluido en el mismo Compose. No requiere cambios en el stack `monitorizacion`: la API llega a Prometheus por `host.docker.internal` (`extra_hosts: host-gateway`) porque `:9090` está publicado en el host.
+
+```bash
+# En la Raspberry, tras git pull:
+docker compose -f docs/ci-cd/docker-compose.yml up -d --build
+docker compose -f docs/ci-cd/docker-compose.yml ps
+curl http://100.x.x.x:8787/api/pi/metrics
+```
+
+Contrastar el resultado con `vcgencmd measure_temp`, `free -m`, `df -h /` y `docker ps`. Para probar la degradación, parar `prometheus` unos segundos: `sources.prometheus` pasa a `unreachable` y los contenedores siguen apareciendo.
+
+Seguridad: el proxy solo permite `GET /containers` (`CONTAINERS=1`, `POST=0`), no publica puertos y monta `docker.sock` en solo lectura. Endurecimiento opcional posterior: unir la API a la red `monitorizacion_monitor-net` y dejar de publicar `:9090` en la LAN.
+
 ## Pendientes antes de producción
 
 - [x] Ejecutar el backend como contenedor Docker con reinicio automático.
