@@ -35,7 +35,7 @@ Después:
 ## 2. Trazabilidad
 
 - **`REQ-NNN` = `Issues/NNN-slug.md`.** El número es el siguiente libre de `Issues/README.md`. Una tarea que continúa trabajo existente reutiliza su nota (si está `Hecho` y cambia el comportamiento, nota nueva que referencia la anterior).
-- **Nota local como fuente de verdad.** `gh` está instalado (`C:\Program Files\GitHub CLI\gh.exe`) pero sin autenticar (`gh auth login`) y puede no estar en el `PATH` de la sesión del agente, así que no se crean issues de GitHub ni se inventan números hasta que `gh auth status` sea correcto. Si existiera una issue real, su número va en el campo `GitHub` de la nota y los commits usan `Refs #N`.
+- **Nota local como fuente de verdad.** `gh` está instalado y autenticado (cuenta `alonsomoros`, ámbitos `repo` y `workflow`), pero puede no estar en el `PATH` de la sesión del agente: usar `C:\Program Files\GitHub CLI\gh.exe` si `gh` no se reconoce. Las issues de GitHub se crean solo si el desarrollador lo pide; mientras tanto no se inventan números. Si existiera una issue real, su número va en el campo `GitHub` de la nota y los commits usan `Refs #N`.
 - Crear la nota con `Issues/_TEMPLATE.md` en estado `En curso` **antes de editar código**, con problema, decisión y criterios de aceptación verificables, y añadirla al índice.
 - Antes de editar, el agente debe poder responder: qué problema se cambia, qué no, qué criterio lo da por bueno y qué check puede falsar la hipótesis.
 - Cambios triviales (typo, enlace roto, comentario) no necesitan nota nueva: se anotan en la nota dueña del área o se entregan como `docs`/`chore` con `Sin cambio: sin trazabilidad funcional`.
@@ -103,7 +103,7 @@ Docs: <archivos o Sin cambio: motivo>
 
   Tipos: `feat`, `fix`, `docs`, `test`, `ci`, `chore`, `refactor`. Con issue de GitHub real, sustituir la línea `Issue local` por `Refs #N`.
 - Antes del push: `git diff --stat`, `git status` limpio de lo ajeno y, si el remoto avanzó, `git pull --rebase`.
-- Después del push: comprobar con `git status --short --branch` y `git log origin/main -1`. Estado de CI: leerlo con `gh run list` si `gh auth status` es correcto (probar la ruta completa si no está en el `PATH`); si no, indicar `CI: no verificable (sin gh)` y la URL https://github.com/alonsomoros/alon-hub/actions.
+- Después del push: comprobar con `git status --short --branch` y `git log origin/main -1`. Estado de CI: leerlo con `gh run list --limit 3` y, si falla, `gh run view <id>` para distinguir un fallo del código de un fallo de la infraestructura (p. ej. cuenta bloqueada por facturación). Si `gh` no está disponible, indicar `CI: no verificable (sin gh)` y la URL https://github.com/alonsomoros/ALON_alxns-hub-app/actions.
 - Los incrementos de versión usan un commit `release: vX.Y.Z` solo cuando la nota lo requiera; no inventar tags.
 - Si falla autenticación, push o CI: no simular éxito, documentar el bloqueo en la nota y dejarla `En curso` o `Bloqueado`.
 

@@ -10,7 +10,7 @@
 ## Identificadores
 
 - Requisitos: `REQ-NNN`, igual al número de su nota `Issues/NNN-slug.md`, que es el registro único (índice en `Issues/README.md`). Los requisitos funcionales de producto son `FR-xx` y enlazan a su `REQ`.
-- Issues: número real de GitHub solo si existe; con `gh` no disponible, la nota local es la fuente de verdad y no se inventa `#N`.
+- Issues: número real de GitHub solo si existe; la nota local es la fuente de verdad y no se inventa `#N`.
 - Estados de nota: `Propuesta`, `En curso`, `Hecho`, `Bloqueado`, `Descartado`.
 - Decisiones de arquitectura: solo ADR aprobado; una propuesta va a `Issues/` hasta aprobarse.
 

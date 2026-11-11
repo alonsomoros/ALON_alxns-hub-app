@@ -53,6 +53,7 @@ Actualizados: `AGENTS.md`, `WORKFLOW.md`, `CODE_STANDARD.md`, `context/INDEX.md`
 
 ## Pendientes
 
-- [ ] [BLOQUEADO] Autenticar `gh` (`gh auth login`) para issues reales y lectura de CI → `REQ-005`.
+- [ ] [BLOQUEADO] Resolver la facturación de GitHub para que la CI arranque → `REQ-005`.
+- [ ] [BLOQUEADO] Cambiar el remoto `origin` a `https://github.com/alonsomoros/ALON_alxns-hub-app.git` (el repositorio se renombró; el nombre antiguo redirige).
 - [ ] Runner de tests → `REQ-020`.
 - [ ] Decidir si se elimina `pnpm-lock.yaml`: CI usa `npm ci` y `package-lock.json`.

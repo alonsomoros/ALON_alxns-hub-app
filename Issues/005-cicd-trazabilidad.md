@@ -20,11 +20,11 @@ Workflow `.github/workflows/ci.yml` (`npm ci`, `npm run lint`, `npm run build` e
 - [x] CI ejecuta install, lint y build.
 - [x] Plantilla de issue con problema, decisión, requisitos, tests y trazabilidad.
 - [x] Commits Conventional con `REQ-XXX`.
-- [ ] Issues reales en GitHub: [BLOQUEADO] `gh` está instalado pero sin autenticar (`gh auth login`).
+- [ ] CI en verde: [BLOQUEADO] los jobs no arrancan por un problema de facturación de la cuenta de GitHub (no es un fallo del código).
 
 ## Verificación
 
-CI definido y activo en `main`. El estado de la última ejecución se consulta en la pestaña Actions del repositorio; sin `gh` el agente no puede leerlo desde el terminal.
+CI definido en `main`. Última ejecución correcta: `feat(persistence)` (2026-11-01). Las cuatro siguientes terminan en 2-4 s con la anotación "account is locked due to a billing issue". Se consulta con `gh run list` y `gh run view <id>`.
 
 ## Impacto documental
 
@@ -32,4 +32,4 @@ CI definido y activo en `main`. El estado de la última ejecución se consulta e
 
 ## Pendientes
 
-- [ ] [BLOQUEADO] Ejecutar `gh auth login` para crear issues y leer el estado de CI.
+- [ ] [BLOQUEADO] Resolver la facturación de la cuenta de GitHub y relanzar la CI (`gh run rerun <id>`).
