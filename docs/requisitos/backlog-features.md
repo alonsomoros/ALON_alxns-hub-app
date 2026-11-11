@@ -26,6 +26,7 @@ Prioridad alta (habilitan la entrega autónoma o cierran huecos de la persistenc
 - [ ] [BLOQUEADO] CI de GitHub: no arranca por la facturación de la cuenta y el desarrollador decidió no configurarla; reabrir solo si cambia esa decisión.
 - [ ] Corregir `archived: false` fijo al enviar enlaces a la API y decidir si las preferencias se leen de vuelta (`REQ-018`).
 - [ ] Estado vacío en la tarjeta Accesos y en la vista Enlaces.
+- [ ] Primera ejecución con una base de datos vacía: la app sustituye los datos de ejemplo por listas vacías (retos y enlaces) al hidratar desde la API (`REQ-018`).
 
 Prioridad media (producto):
 

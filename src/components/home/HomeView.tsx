@@ -31,10 +31,10 @@ export function HomeView({ quote, links, goals, piState, onOpenGoals, onOpenLink
 const metricValue = (value: number | null | undefined, loading: boolean) => loading ? '…' : value === null || value === undefined ? '—' : value.toFixed(value % 1 === 0 ? 0 : 1)
 const metricProgress = (value: number | null | undefined) => value === null || value === undefined ? 0 : Math.min(100, Math.max(0, value))
 
-/** Resumen de contenedores: cuántos activos y cuántos con incidencias (parados, reiniciando o `unhealthy`). */
+/** Resumen de contenedores: cuántos activos y cuántos con incidencias (reiniciando, muertos o `unhealthy`; los parados a propósito no cuentan). */
 function containersSummary(pi: PiMetrics) {
   if (!pi.containers) return null
-  const issues = pi.containers.items.filter((item) => item.state !== 'running' || item.health === 'unhealthy').length
+  const issues = pi.containers.items.filter((item) => item.state === 'restarting' || item.state === 'dead' || item.health === 'unhealthy').length
   return { text: `${pi.containers.running}/${pi.containers.total} contenedores activos`, issues }
 }
 

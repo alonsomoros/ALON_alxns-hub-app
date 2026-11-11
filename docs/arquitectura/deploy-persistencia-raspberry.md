@@ -60,9 +60,10 @@ La respuesta esperada es JSON con `status: "ok"`. Después se debe abrir la PWA,
 La API sirve `GET /api/pi/metrics` leyendo Prometheus (ya desplegado en la Pi con `node-exporter`) y un `docker-proxy` de solo lectura incluido en el mismo Compose. No requiere cambios en el stack `monitorizacion`: la API llega a Prometheus por `host.docker.internal` (`extra_hosts: host-gateway`) porque `:9090` está publicado en el host.
 
 ```bash
-# En la Raspberry, tras git pull:
-docker compose -f docs/ci-cd/docker-compose.yml up -d --build
-docker compose -f docs/ci-cd/docker-compose.yml ps
+# En la Raspberry, tras git pull (mismo --env-file con el que se creó el contenedor):
+docker cp ci-cd-alxns-persistence-1:/app/data ~/backups/alxns-data-$(date +%Y%m%d-%H%M%S)
+docker compose --env-file .env -f docs/ci-cd/docker-compose.yml up -d --build
+docker compose --env-file .env -f docs/ci-cd/docker-compose.yml ps
 curl http://100.x.x.x:8787/api/pi/metrics
 ```
 
