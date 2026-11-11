@@ -18,7 +18,7 @@ Dueño de la **trazabilidad local**: cada cambio de comportamiento, arquitectura
 |---|---|---|---|
 | [001](001-enlaces-responsive.md) | Hecho | UI | Fila compacta de enlaces sin overflow, ordenación por arrastre. |
 | [002](002-paginas-y-vistas.md) | Hecho | UI | Shell con Inicio, Retos y Enlaces. |
-| [003](003-parametros-y-preferencias.md) | Hecho | Config | `DashboardConfig` tipado; pantalla de preferencias pospuesta. |
+| [003](003-parametros-y-preferencias.md) | En curso | Config | Pantalla de Ajustes: temas, vista de stats, tarjetas de Inicio y refresco; sincronizada con la API. |
 | [004](004-arquitectura-e-integraciones.md) | En curso | Arquitectura | Marco: adaptadores tipados con timeout 1.5 s; integraciones n8n/Grafana pendientes. |
 | [005](005-cicd-trazabilidad.md) | Hecho | CI | Workflow CI, plantilla de issue y skill de entrega. |
 | [006](006-diagrams.md) | Hecho | Docs | Skill `/diagrams` y SVG de arquitectura, pantallas, datos y entrega. |
