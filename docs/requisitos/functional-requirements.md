@@ -19,10 +19,10 @@ Dueño de **qué debe hacer el producto**. Cada `FR-xx` enlaza a la nota `REQ-NN
 | FR-10 Persistencia personal | `REQ-018`, `REQ-003` | Parcial: retos, enlaces y preferencias se guardan y se leen; `archived` fijo a `false` |
 | FR-11 Sincronización multidispositivo | `REQ-018` | Parcial: API desplegada en la Pi (HTTPS por `tailscale serve`); ACL de Tailscale y E2E de persistencia pendientes |
 | FR-12 Operación degradada | `REQ-018` | Implementado (caché y estado `OFFLINE` en el pie) |
-| FR-13 Integridad de dominio | `REQ-008`, `REQ-018` | Implementado; sin tests (`REQ-020`) |
+| FR-13 Integridad de dominio | `REQ-008`, `REQ-018` | Implementado y probado (`tests/goals.test.ts`, `tests/api.test.ts`) |
 | FR-14 Preferencias de interfaz | `REQ-003` | Implementado (seis temas, vista de stats, tarjetas de Inicio y refresco; sincronizadas con la API) |
 | RNF-01 a RNF-09 | `REQ-018` | RNF-03 y RNF-05 implementados; RNF-02, RNF-07 y RNF-09 pendientes de despliegue |
-| RNF-10 Pruebas | `REQ-020` | Pendiente: no existe runner |
+| RNF-10 Pruebas | `REQ-020` | Implementado: `npm test` (`node:test`) cubre dominio, API, preferencias, cita y SVG; faltan componentes React y E2E |
 
 ## Trazabilidad y entrega
 

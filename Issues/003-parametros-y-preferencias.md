@@ -53,6 +53,8 @@ interface UiPreferences {
 
 **Desviaciones de implementación (fase 1):** 12 variables base (`bg, surface, text, textMuted, border, accent, accent2, accentStrong, onAccentStrong, warn, danger, info`) y el resto derivado en CSS con `color-mix()`; `soft` oscurece `textMuted` a `#5f6f65` para cumplir AA; cada tema define el par de colores de su cuadrado (`swatch`), y el del tema `dark` es negro y blanco porque sus acentos son claros; `npm test` usa `node:test` con `--experimental-strip-types` (Node 22.6 o superior).
 
+**Corrección posterior (`REQ-020`):** el servidor sustituía `preferences.updatedAt` por su hora de guardado al leer el estado; ahora conserva el `updatedAt` fijado por el cliente y expone la hora de guardado como `savedAt` (prueba en `tests/api.test.ts`).
+
 **Cambios tras la revisión final:** `updatedAt` en las preferencias; cola de guardado de un solo vuelo (`src/domain/saveQueue.ts`); fusión tras un `409` en una función pura (`mergeAfterConflict`); el grid de Inicio no fija columnas (`pi` ocupa 3 filas y `grid-auto-flow: dense`) para que reordenar no deje huecos.
 
 **Fases (un commit por fase):** (1) tokens CSS, `themes.ts`, Ajustes con temas y vista de stats; (2) tarjetas de Inicio, refresco y sincronización.
@@ -91,5 +93,5 @@ Actualizados: `docs/arquitectura/ui-preferences.md`, `docs/requisitos/functional
 - [x] Implementadas las dos fases (ver Decisión).
 - [ ] Modo claro/oscuro automático según el sistema → backlog.
 - [ ] Saludo y cita editables → backlog.
-- [ ] Tests de preferencias → `REQ-020`.
+- [x] Tests de preferencias (`tests/preferences.test.ts`, `themes`, `css-tokens`, `saveQueue`, `persistedState`).
 - [ ] Menores aplazados tras la revisión: guardado pendiente al cerrar la pestaña (flush en `pagehide`); cancelación de la hidratación en StrictMode; validar la forma de `goals` y `links` en `shouldAdoptRemote`; `aria-labelledby` y teclas Inicio/Fin en el selector de temas; foco del teclado al llegar al extremo en el editor de tarjetas; el anillo y el medidor dibujan un punto con valor 0; contraste no textual del interruptor oscuro y del trazo `accent-2`; cabecera de `ui-preferences.md` obsoleta.

@@ -36,7 +36,7 @@ Dueño de la **trazabilidad local**: cada cambio de comportamiento, arquitectura
 | [018](018-persistencia-personal-multidispositivo.md) | En curso | Persistencia | API SQLite + caché; despliegue, backups y E2E bloqueados. |
 | [019](019-flujo-agentes-v2.md) | Hecho | Proceso | Rediseño del flujo agéntico para entrega autónoma verificable. |
 | [021](021-cita-via-api.md) | Hecho | Integración | Cita del día en español: `GET /api/quote` en la API personal, con caché y frase de reserva. Desplegada en la Pi. |
-| [020](020-runner-de-tests.md) | Propuesta | Tests | Elegir runner y cubrir `src/domain/` y la API con `REQ-NNN`. |
+| [020](020-runner-de-tests.md) | Hecho | Tests | `npm test` con `node:test` (sin dependencias): dominio, API, preferencias, cita y SVG; nombres con `REQ-NNN`. |
 
 ## Entrega
 

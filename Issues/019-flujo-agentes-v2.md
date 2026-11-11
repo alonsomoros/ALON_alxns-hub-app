@@ -55,5 +55,5 @@ Actualizados: `AGENTS.md`, `WORKFLOW.md`, `CODE_STANDARD.md`, `context/INDEX.md`
 
 - [ ] [BLOQUEADO] CI: la facturación de GitHub no se configura por decisión del desarrollador; la verificación es local → `REQ-005`.
 - [x] Remoto `origin` actualizado a `ALON_alxns-hub-app` y issues de GitHub creadas para `REQ-001` a `REQ-020`.
-- [ ] Runner de tests → `REQ-020`.
+- [x] Runner de tests: `npm test` con `node:test` (`REQ-020`).
 - [ ] Decidir si se elimina `pnpm-lock.yaml`: CI usa `npm ci` y `package-lock.json`.

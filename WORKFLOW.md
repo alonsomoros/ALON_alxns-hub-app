@@ -57,7 +57,7 @@ Siempre al cerrar: marcar el estado de la nota y del índice de `Issues/README.m
 ## 4. Implementación
 
 - Cambio mínimo, preservando APIs y patrones existentes (`CODE_STANDARD.md`).
-- Cada comportamiento nuevo o corregido declara su test. Mientras no exista runner (`REQ-020`) se registra `Omitido: no existe runner` y se compensa con una comprobación manual descrita en la nota (comando o paso de UI reproducible).
+- Cada comportamiento nuevo o corregido declara su test (`npm test`, `node:test`, nombre con `REQ-NNN`). Para lo que el runner no cubre (componentes React, navegador, PWA móvil) se registra `Omitido: no cubierto por el runner` y se compensa con una comprobación en Chrome descrita en la nota (paso reproducible).
 - Documentación y código van en el mismo cambio.
 - Una decisión de alto impacto se documenta como `Propuesta` en `Issues/` y se espera aprobación; no se crea ADR por iniciativa propia.
 
@@ -67,6 +67,7 @@ Primero el check más estrecho; antes del commit, siempre:
 
 ```bash
 npm run lint
+npm test
 npm run build
 ```
 
@@ -77,7 +78,7 @@ Al terminar, el agente entrega este informe en el chat (y su contenido resumido 
 ```text
 ## Verificación — REQ-NNN
 - Criterios de aceptación: ✅ <criterio> / ❌ <criterio> (con motivo)
-- Checks: `npm run lint` ✅ · `npm run build` ✅ · <otros> ✅/❌/Omitido (motivo)
+- Checks: `npm run lint` ✅ · `npm test` ✅ · `npm run build` ✅ · <otros> ✅/❌/Omitido (motivo)
 - Documentación: <archivos actualizados> · Sin cambio: <archivo> (<motivo>)
 - Git: commit <hash> en main · push ✅/❌ · CI: ✅ / pendiente / no verificable (sin gh)
 - Pendientes y bloqueos: <lista o "ninguno">

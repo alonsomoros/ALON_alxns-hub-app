@@ -17,10 +17,10 @@
 ## Tests
 
 - Cada cambio de comportamiento debe declarar el test que lo verifica.
-- Tests de caja negra deben cubrir el flujo observable y contener `REQ-XXX` en el nombre cuando exista runner.
+- Tests de caja negra deben cubrir el flujo observable y contener `REQ-XXX` en el nombre (`npm test`, `node:test` con `--experimental-strip-types`; los módulos que se prueban importan con extensión `.ts` y no usan `import.meta.env` ni el DOM en el nivel superior).
 - Para UI: cubrir estados iniciales, interacción principal, error/fallback y viewport relevante.
 - Para integraciones: cubrir timeout, respuesta válida, respuesta inválida y estado no disponible.
-- Si no existe runner aplicable (estado actual, `REQ-020`), registrar `Omitido: no existe runner`, ejecutar lint/build y describir una comprobación manual reproducible en la nota.
+- Si el runner no cubre el cambio (componentes React, navegador, PWA móvil), registrar `Omitido: no cubierto por el runner`, ejecutar lint, tests y build y describir una comprobación en Chrome reproducible en la nota.
 - Cambios en `server/`: ejecutar además `node --check server/index.js`.
 
 ## Calidad

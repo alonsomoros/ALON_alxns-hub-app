@@ -53,7 +53,7 @@ Actualizados: `docs/requisitos/` (FR-10 a FR-13, RNF-01 a RNF-10), `docs/arquite
 
 - [x] Desplegado en la Raspberry (contenedor `healthy`) y accesible desde la PWA de Vercel en PC y móvil.
 - [ ] [BLOQUEADO] ACL, backup con retención y restauración verificada (hay una copia manual del 2026-11-11 en `~/backups`).
-- [ ] Tests de contrato de la API y de conflicto → `REQ-020`.
+- [x] Tests de contrato de la API y de conflicto `409` (`tests/api.test.ts`).
 - [ ] Corregir `archived: false` fijo al enviar enlaces y decidir si se leen las preferencias → backlog.
 - [ ] Migraciones futuras del esquema → backlog.
 

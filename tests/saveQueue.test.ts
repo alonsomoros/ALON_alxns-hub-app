@@ -4,7 +4,7 @@ import { createSaveQueue } from '../src/domain/saveQueue.ts'
 
 const tick = () => new Promise<void>((resolve) => setTimeout(resolve, 0))
 
-test('saveQueue: requests made while a save is running collapse into exactly one more run, never overlapping', async () => {
+test('REQ-003 saveQueue: requests made while a save is running collapse into exactly one more run, never overlapping', async () => {
   let running = 0
   let maxRunning = 0
   let runs = 0
@@ -29,7 +29,7 @@ test('saveQueue: requests made while a save is running collapse into exactly one
   assert.equal(maxRunning, 1)
 })
 
-test('saveQueue: a request after the queue went idle runs again', async () => {
+test('REQ-003 saveQueue: a request after the queue went idle runs again', async () => {
   let runs = 0
   const queue = createSaveQueue(async () => { runs += 1 })
   await queue.request()
@@ -37,7 +37,7 @@ test('saveQueue: a request after the queue went idle runs again', async () => {
   assert.equal(runs, 2)
 })
 
-test('saveQueue: a failing run does not wedge the queue', async () => {
+test('REQ-003 saveQueue: a failing run does not wedge the queue', async () => {
   let runs = 0
   const queue = createSaveQueue(async () => {
     runs += 1

@@ -23,7 +23,7 @@
 
 1. Extraer adaptadores tipados con timeout/fallback.
 2. Desplegar y validar la persistencia (`REQ-018`).
-3. Configurar runner y tests de UI/E2E (`REQ-020`).
+3. Añadir tests de componentes React y E2E de la PWA (el runner `node:test` ya cubre dominio, API y SVG, `REQ-020`).
 4. Hecho (`REQ-016`): `App.tsx` separado por vistas y dominio.
 5. Validar drag and drop tactil y accesibilidad.
 

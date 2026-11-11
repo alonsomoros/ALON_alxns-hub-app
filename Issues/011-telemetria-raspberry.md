@@ -39,7 +39,7 @@ PWA --(poll 60 s, timeout 1.5 s)--> GET /api/pi/metrics
 - [x] Desplegado en la Raspberry y contrastado con `vcgencmd`, `free`, `df` y `docker ps`.
 - [x] Resumen de contenedores correcto con la lista real de la Pi (leída por SSH en solo lectura y servida por un proxy simulado).
 - [x] Estado de contenedores real a través del `docker-proxy` desplegado (13 activos de 17; `watchtower` reiniciándose).
-- [ ] Tests `REQ-011 ...` de contrato, timeout y degradación → `REQ-020`.
+- [x] Tests `REQ-011` de contrato, normalización y degradación del endpoint (`tests/api.test.ts`); el timeout de 1 s por fuente no tiene prueba.
 
 ## Verificación
 

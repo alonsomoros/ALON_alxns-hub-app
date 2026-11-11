@@ -28,7 +28,7 @@ Solución elegida y alternativas descartadas (una línea cada una). Una propuest
 | `npm run build` | |
 | Test/manual: <qué se comprobó> | |
 
-Tests de caja negra: `REQ-NNN ...` o `Omitido: no existe runner` (ver `REQ-020`).
+Tests de caja negra: `REQ-NNN ...` (`npm test`) u `Omitido: no cubierto por el runner` con la comprobación manual (ver `REQ-020`).
 
 ## Impacto documental
 

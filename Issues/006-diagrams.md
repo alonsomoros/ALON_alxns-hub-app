@@ -31,4 +31,4 @@ XML de los SVG, `npm run lint` y `npm run build` OK en la entrega original.
 
 ## Pendientes
 
-- [ ] Automatizar la validación XML de los SVG → `REQ-020`.
+- [x] Validación XML de los SVG automatizada en `npm test` (`tests/svg.test.ts`).

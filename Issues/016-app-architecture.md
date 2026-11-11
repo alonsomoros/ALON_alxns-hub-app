@@ -50,4 +50,4 @@ Actualizado: `docs/codebase/{STRUCTURE,ARCHITECTURE,CONVENTIONS,CONCERNS,INTEGRA
 
 - [x] Estado vacío en la tarjeta Accesos («Aún no tienes accesos», botón «Añadir accesos») y en la vista Enlaces («Añadir tu primer enlace»); comprobado en Chrome (2026-11-11).
 - [ ] La tarjeta Raspberry se estira en escritorio dejando espacio en blanco → backlog.
-- [ ] Tests de `src/domain/` con `REQ-016` → `REQ-020`.
+- [x] Tests de `src/domain/` (`tests/goals.test.ts`, `tests/links.test.ts`).

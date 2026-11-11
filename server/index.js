@@ -119,7 +119,8 @@ const getState = () => {
   const preferenceRow = database.prepare('SELECT payload, version, updated_at AS updatedAt FROM preferences WHERE id = 1').get()
   return {
     version: preferenceRow?.version ?? 0,
-    preferences: preferenceRow ? { ...JSON.parse(preferenceRow.payload), updatedAt: preferenceRow.updatedAt } : null,
+    // `updatedAt` es el instante del cambio que fijó el cliente (decide qué copia gana al sincronizar); `savedAt` es la hora de guardado del servidor.
+    preferences: preferenceRow ? { savedAt: preferenceRow.updatedAt, ...JSON.parse(preferenceRow.payload) } : null,
   goals: database.prepare('SELECT * FROM goals ORDER BY updated_at DESC').all().map(toGoal),
   links: database.prepare('SELECT id, label, url, logo_url AS logoUrl, position, archived, updated_at AS updatedAt FROM links WHERE archived = 0 ORDER BY position').all().map((link) => ({ ...link, archived: Boolean(link.archived) })),
   }

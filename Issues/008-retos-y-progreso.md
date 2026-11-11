@@ -40,5 +40,5 @@ En Inicio la racha aparecía junto a un porcentaje, aunque una racha es una magn
 
 ## Pendientes
 
-- [ ] Tests de `src/domain/goals.ts` con `REQ-008` en el nombre → `REQ-020`.
+- [x] Tests de `src/domain/goals.ts` con `REQ-008` en el nombre (`tests/goals.test.ts`).
 - [ ] Racha derivada de registros diarios → backlog.

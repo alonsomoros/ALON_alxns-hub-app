@@ -1,6 +1,6 @@
 # Runner de tests para dominio y API
 
-- **Estado:** Propuesta
+- **Estado:** Hecho
 - **REQ:** REQ-020
 - **Tipo:** chore
 - **Área:** `package.json`, `.github/workflows/ci.yml`, `src/domain/`, `server/`
@@ -22,23 +22,31 @@ Añadir un runner con el menor coste de dependencias y ejecutarlo en `npm test` 
 
 Alcance inicial: lógica pura de `src/domain/{goals,links}.ts`, `src/utils/{brandLogo,date}.ts` y contrato de `server/index.js` (lectura, escritura, `409`). Los nombres de test incluyen `REQ-XXX`.
 
-Añadir una dependencia requiere aprobación (`CODE_STANDARD.md`): esta nota queda en `Propuesta` hasta que el desarrollador elija.
+**Decisión (2026-11-11):** `node:test` con `--experimental-strip-types`, sin dependencias nuevas (el desarrollador aprobó la base de tests). Vitest con jsdom queda como candidato para probar componentes y hooks de React cuando haga falta.
 
 ## Criterios de aceptación
 
-- [ ] `npm test` existe y pasa en local y en CI. Avance (`REQ-003`): `npm test` ya existe con `node:test` y `--experimental-strip-types` y cubre los módulos puros de preferencias y temas; faltan los tests de `REQ-008`, `REQ-015` a `REQ-018` y el CI.
-- [ ] Tests con `REQ-008`, `REQ-015`, `REQ-016`, `REQ-017` y `REQ-018` en el nombre.
-- [ ] `docs/codebase/TESTING.md` y `CODE_STANDARD.md` actualizados; el checklist de `WORKFLOW.md` §4 incluye `npm test`.
-- [ ] Validación XML de los SVG automatizada (`REQ-006`).
+- [x] `npm test` existe y pasa en local; el paso `Test` está añadido a `.github/workflows/ci.yml` (el CI no arranca por la facturación, así que su ejecución sigue siendo local).
+- [x] Tests con `REQ-NNN` en el nombre: `REQ-003`, `REQ-006`, `REQ-008`, `REQ-009`, `REQ-011`, `REQ-015`, `REQ-017`, `REQ-018` y `REQ-021` (`REQ-016` es una reorganización sin comportamiento propio; sus módulos los cubren los tests de dominio).
+- [x] `docs/codebase/TESTING.md`, `CODE_STANDARD.md`, `WORKFLOW.md` y la plantilla de notas actualizados; el checklist incluye `npm test`.
+- [x] Validación XML de los SVG automatizada (`tests/svg.test.ts`).
 
 ## Verificación
 
-No aplica: sin implementación.
+| Check | Resultado |
+|---|---|
+| `npm test` | OK: 89 pruebas (dominio, API real con dobles, preferencias, cita, fecha, SVG) |
+| Mutación deliberada (quitar el límite 0-100 de `goalProgress` y la comprobación de igualdad de `reorderLinks`) | OK: 2 tests fallan y pasan al restaurar |
+| `npm run lint` / `npm run build` | OK |
 
-## Impacto documental (al implementar)
+Hallazgo durante la implementación: `tests/api.test.ts` detectó que el servidor sustituía `preferences.updatedAt` (el instante del cambio fijado por el cliente) por su propia hora de guardado, lo que podía hacer ganar la copia equivocada al sincronizar entre dispositivos (`REQ-003`). Corregido: el servidor conserva el `updatedAt` del cliente y expone su hora de guardado como `savedAt`. Requiere redesplegar la API.
 
-`docs/codebase/TESTING.md`, `CODE_STANDARD.md`, `WORKFLOW.md` §4, `.github/workflows/ci.yml`.
+## Impacto documental
+
+Actualizados: `docs/codebase/{TESTING,CONCERNS}.md`, `CODE_STANDARD.md`, `WORKFLOW.md`, `Issues/_TEMPLATE.md`, `.github/workflows/ci.yml`, `docs/requisitos/`, `.agents/context/system-status.md` y las notas que apuntaban a `REQ-020`.
 
 ## Pendientes
 
-- [ ] Aprobación del runner por el desarrollador.
+- [x] Runner aprobado y adoptado (`node:test`).
+- [ ] Tests de componentes React y hooks (Vitest con jsdom) y E2E de la PWA en móvil → backlog.
+- [ ] Probar el timeout de 1 s por fuente de `server/metrics.js` → backlog.

@@ -15,13 +15,12 @@ Reglas: al empezar un ítem se crea su nota `Issues/NNN-slug.md` (siguiente núm
 
 | REQ | Propuesta | Falta |
 |---|---|---|
-| [`REQ-020`](../../Issues/020-runner-de-tests.md) | Runner de tests para dominio y API | Aprobar la dependencia |
 
 ## Pendiente priorizado
 
 Prioridad alta (habilitan la entrega autónoma o cierran huecos de la persistencia):
 
-- [ ] Runner de tests y tests de `src/domain/`, `src/utils/` y la API (`REQ-020`).
+- [ ] Tests de componentes React (hooks y vistas) y E2E de la PWA en móvil; hoy se comprueban a mano en Chrome.
 - [ ] [BLOQUEADO] CI de GitHub: no arranca por la facturación de la cuenta y el desarrollador decidió no configurarla; reabrir solo si cambia esa decisión.
 - [ ] Corregir `archived: false` fijo al enviar enlaces a la API (`REQ-018`).
 

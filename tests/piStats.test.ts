@@ -2,7 +2,7 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { formatMetric, metricPercent } from '../src/domain/piStats.ts'
 
-test('metricPercent: clamps to 0-100 and treats missing or invalid values as 0', () => {
+test('REQ-003 metricPercent: clamps to 0-100 and treats missing or invalid values as 0', () => {
   assert.equal(metricPercent(NaN), 0)
   assert.equal(metricPercent(null), 0)
   assert.equal(metricPercent(undefined), 0)
@@ -12,7 +12,7 @@ test('metricPercent: clamps to 0-100 and treats missing or invalid values as 0',
   assert.equal(metricPercent(Infinity), 0)
 })
 
-test('formatMetric: loading, missing, integer and decimal values', () => {
+test('REQ-003 formatMetric: loading, missing, integer and decimal values', () => {
   assert.equal(formatMetric(5, true), '…')
   assert.equal(formatMetric(null, false), '—')
   assert.equal(formatMetric(undefined, false), '—')
