@@ -4,7 +4,11 @@ import { readStoredPreferences, storePreferences } from '../infrastructure/prefe
 import { applyTheme } from '../themes'
 import type { UiPreferences } from '../types/dashboard'
 
-/** Preferencias de interfaz (REQ-003): lectura local síncrona, persistencia local y aplicación del tema en cada cambio. */
+/**
+ * Preferencias de interfaz (REQ-003): lectura local síncrona, persistencia local y aplicación del tema en cada cambio.
+ * - `updatePreferences` y `resetPreferences` son cambios del usuario y marcan `updatedAt`.
+ * - `applyRemotePreferences` adopta las preferencias de la API tal cual (conservan su `updatedAt`).
+ */
 export function usePreferences() {
   const [preferences, setPreferences] = useState<UiPreferences>(readStoredPreferences)
 
@@ -13,7 +17,8 @@ export function usePreferences() {
     applyTheme(preferences.theme)
   }, [preferences])
 
-  const resetPreferences = useCallback(() => setPreferences(defaultPreferences), [])
+  const updatePreferences = useCallback((next: UiPreferences) => setPreferences({ ...next, updatedAt: new Date().toISOString() }), [])
+  const resetPreferences = useCallback(() => setPreferences({ ...defaultPreferences, updatedAt: new Date().toISOString() }), [])
 
-  return { preferences, setPreferences, resetPreferences }
+  return { preferences, updatePreferences, applyRemotePreferences: setPreferences, resetPreferences }
 }

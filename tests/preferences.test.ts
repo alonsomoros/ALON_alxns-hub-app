@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { defaultPreferences, moveCard, parsePreferences, setCardVisible } from '../src/domain/preferences.ts'
+import { defaultPreferences, moveCard, newerPreferences, parsePreferences, setCardVisible } from '../src/domain/preferences.ts'
 import { shouldAdoptRemote } from '../src/domain/persistedState.ts'
 import { readStoredPreferences, storePreferences } from '../src/infrastructure/preferencesStore.ts'
 
@@ -8,7 +8,7 @@ const ids = (cards: { id: string }[]) => cards.map((card) => card.id)
 
 test('defaults: soft theme, bars, 60 s and four visible cards in order', () => {
   assert.deepEqual(defaultPreferences, {
-    schemaVersion: 1, theme: 'soft', statsView: 'bars', piRefreshSeconds: 60,
+    schemaVersion: 1, theme: 'soft', statsView: 'bars', piRefreshSeconds: 60, updatedAt: '',
     homeCards: [{ id: 'pi', visible: true }, { id: 'goals', visible: true }, { id: 'services', visible: true }, { id: 'links', visible: true }],
   })
 })
@@ -81,4 +81,27 @@ test('readStoredPreferences: reads what storePreferences wrote', () => {
 
 test('storePreferences: a full or blocked storage does not throw', () => {
   assert.doesNotThrow(() => storePreferences(defaultPreferences, { setItem() { throw new Error('quota') } }))
+})
+
+test('parsePreferences: keeps a string updatedAt and ignores other types', () => {
+  assert.equal(parsePreferences({ updatedAt: '2026-11-11T10:00:00.000Z' }).updatedAt, '2026-11-11T10:00:00.000Z')
+  assert.equal(parsePreferences({ updatedAt: 123 }).updatedAt, '')
+})
+
+test('newerPreferences: the strictly newer copy wins and ties keep the local one', () => {
+  const local = { ...defaultPreferences, theme: 'dark' as const, updatedAt: '2026-11-11T10:00:00.000Z' }
+  const older = { ...defaultPreferences, theme: 'ocean' as const, updatedAt: '2026-11-11T09:00:00.000Z' }
+  const newer = { ...older, updatedAt: '2026-11-11T11:00:00.000Z' }
+  assert.deepEqual([newerPreferences(local, older).preferences.theme, newerPreferences(local, older).fromRemote], ['dark', false])
+  assert.deepEqual([newerPreferences(local, newer).preferences.theme, newerPreferences(local, newer).fromRemote], ['ocean', true])
+  assert.equal(newerPreferences(local, { ...older, updatedAt: local.updatedAt }).fromRemote, false)
+})
+
+test('newerPreferences: missing, invalid or legacy remote preferences never override local ones', () => {
+  const local = { ...defaultPreferences, theme: 'dark' as const, updatedAt: '2026-11-11T10:00:00.000Z' }
+  for (const remote of [null, undefined, 5, [], { theme: 'soft', mode: 'light', raspberryPiStatsShowcase: 'pbar' }]) {
+    const result = newerPreferences(local, remote)
+    assert.equal(result.preferences, local)
+    assert.equal(result.fromRemote, false)
+  }
 })

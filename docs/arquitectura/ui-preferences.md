@@ -13,6 +13,7 @@ interface UiPreferences {
   statsView: StatsView;            // por defecto 'bars'
   piRefreshSeconds: 30 | 60 | 120; // por defecto 60
   homeCards: { id: HomeCardId; visible: boolean }[]; // el orden del array es el de pantalla
+  updatedAt: string;               // ISO del último cambio del usuario; gana la copia más reciente al sincronizar
 }
 ```
 
@@ -24,7 +25,7 @@ interface UiPreferences {
 - `orderServices` debe aceptar ids estables y permitir reordenación sin acoplarse al nombre visible.
 - La cita usa `{ content, author }`, timeout y fallback local.
 - Ajustes es una vista a la que se entra con un icono de engranaje en la cabecera; no es una pestaña de la navegación principal y no pesa en la primera impresión.
-- Persistencia: `localStorage` síncrono antes de pintar, hidratación desde `GET /api/state` y guardado con debounce dentro de `PUT /api/state` (ante `409`, recarga y reaplica; gana el último cambio). Nunca bloquea el render.
+- Persistencia: `localStorage` síncrono antes de pintar, hidratación desde `GET /api/state` y guardado con debounce dentro de `PUT /api/state` (guardados de un solo vuelo y solo de lo que el usuario cambió tras hidratar; ante `409` ganan los retos, enlaces y versión del servidor y solo se fusionan las preferencias, con la copia de `updatedAt` más reciente). Nunca bloquea el render.
 - Los temas son datos en `src/themes.ts` que se aplican como variables CSS en `<html>`; `index.css` no debe contener colores fijos.
 - Las vistas de retos y enlaces deben usar componentes reutilizables, estados vacíos, navegación por teclado y layout responsive.
 

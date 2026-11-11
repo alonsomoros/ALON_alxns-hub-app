@@ -25,6 +25,7 @@ interface UiPreferences {
   theme: ThemeId                    // por defecto 'soft'
   statsView: StatsView              // por defecto 'bars'
   piRefreshSeconds: 30 | 60 | 120   // por defecto 60
+  updatedAt: string                 // ISO del último cambio del usuario ('' si se desconoce); decide qué copia gana al sincronizar
   homeCards: { id: 'pi' | 'goals' | 'services' | 'links'; visible: boolean }[]  // el orden del array es el orden en pantalla
 }
 ```
@@ -46,11 +47,13 @@ interface UiPreferences {
 
 **Stats** (`PiStats`): tres renderizadores SVG sin librerías (`bars`, `rings`, `gauges`) sobre los mismos datos (CPU, memoria, disco, temperatura), con `aria-label` con el valor y los mismos estados de carga y sin dato que ahora.
 
-**Persistencia (local + sincronizada):** `usePreferences` lee `localStorage` de forma síncrona antes de pintar (sin parpadeo de tema: `applyTheme` se ejecuta en `main.tsx` antes de React), después hidrata desde `GET /api/state` y guarda con debounce dentro del mismo `PUT /api/state`, que ya lleva `version`. Ante `409` se recarga el estado y se reaplican las preferencias locales (gana el último cambio). Una base vacía o sin `preferences` no debe vaciar retos ni enlaces (corrige el fallo de primera ejecución de `REQ-018`). Nunca bloquea el render; sin API se usa solo el almacenamiento local.
+**Persistencia (local + sincronizada):** `usePreferences` lee `localStorage` de forma síncrona antes de pintar (sin parpadeo de tema: `applyTheme` se ejecuta en `main.tsx` antes de React), después hidrata desde `GET /api/state` y guarda con debounce dentro del mismo `PUT /api/state`, que ya lleva `version`. Los guardados son de un solo vuelo (siempre envían el estado más reciente) y solo se guarda lo que el usuario cambió tras hidratar. Ante `409` se recarga el estado: ganan los retos, enlaces y versión del servidor y solo se fusionan las preferencias, con la copia de `updatedAt` más reciente (en empate, la local). Una base vacía o sin `preferences` no debe vaciar retos ni enlaces (corrige el fallo de primera ejecución de `REQ-018`). Nunca bloquea el render; sin API se usa solo el almacenamiento local.
 
 **Refresco:** `usePiMetrics` recibe el intervalo de `piRefreshSeconds`; se mantienen la pausa con la pestaña oculta y el último dato válido.
 
 **Desviaciones de implementación (fase 1):** 12 variables base (`bg, surface, text, textMuted, border, accent, accent2, accentStrong, onAccentStrong, warn, danger, info`) y el resto derivado en CSS con `color-mix()`; `soft` oscurece `textMuted` a `#5f6f65` para cumplir AA; cada tema define el par de colores de su cuadrado (`swatch`), y el del tema `dark` es negro y blanco porque sus acentos son claros; `npm test` usa `node:test` con `--experimental-strip-types` (Node 22.6 o superior).
+
+**Cambios tras la revisión final:** `updatedAt` en las preferencias; cola de guardado de un solo vuelo (`src/domain/saveQueue.ts`); fusión tras un `409` en una función pura (`mergeAfterConflict`); el grid de Inicio no fija columnas (`pi` ocupa 3 filas y `grid-auto-flow: dense`) para que reordenar no deje huecos.
 
 **Fases (un commit por fase):** (1) tokens CSS, `themes.ts`, Ajustes con temas y vista de stats; (2) tarjetas de Inicio, refresco y sincronización.
 
@@ -70,12 +73,13 @@ interface UiPreferences {
 
 | Check | Resultado |
 |---|---|
-| `npm test` (`node:test`) | OK: 27 pruebas (temas y contraste AA de los seis temas, preferencias, estadísticas, CSS sin colores fijos) |
+| `npm test` (`node:test`) | OK: 36 pruebas (temas y contraste AA de los seis temas, preferencias y `newerPreferences`, estadísticas, CSS sin colores fijos, cola de guardado, fusión tras conflicto) |
 | `npm run lint` / `npm run build` / `tsc -b` | OK |
 | Chrome, fase 1 (datos de ejemplo) | OK: engranaje abre Ajustes; los seis temas cambian al instante y se guardan; flechas del teclado recorren los temas con vuelta al principio; barras, anillos y medidores se ven en `ocean` y `dark`; la vista elegida sobrevive a la recarga; «Restablecer» vuelve a los valores por defecto; sin errores de consola |
 | Ancho de móvil | No verificado visualmente (el redimensionado de ventana no cambió el viewport) |
 
 | Chrome, fase 2 (API local con base nueva y proxy de Docker simulado) | OK: ocultar y reordenar tarjetas persiste tras recargar y la última visible no se puede ocultar; con 30 s las peticiones a `/api/pi/metrics` salen a los ~30 y ~60 s y con 120 s no sale ninguna en 40 s; base vacía (`version: 0`) conserva los retos y enlaces de ejemplo y los guarda (3 y 3); el tema se recupera de la API tras borrar `localStorage`; con dos pestañas desfasadas ambos `PUT` devuelven `409` y luego `200` (gana el último cambio) y el pie sigue en «Sincronizado»; con la API parada el tema se aplica y se guarda en local y el pie muestra `OFFLINE` |
+| Revisión final (revisor independiente) | 1 crítico y 3 importantes, corregidos con TDD: el reintento tras `409` podía pisar retos y enlaces reales con datos de ejemplo o de caché; un guardado antiguo en vuelo podía sobrescribir uno nuevo; las preferencias remotas pisaban las locales más recientes; reordenar tarjetas dejaba huecos en el grid. Comprobado en Chrome: cargar no modifica el servidor (versión 1 antes y después); con una pestaña desfasada y otro dispositivo que añade un reto, el cambio de tema da `409` y luego `200`, el servidor conserva ambos retos y el tema nuevo, y la pestaña adopta el reto ajeno; con la Raspberry ocultada o movida el grid no deja huecos. Ocho menores aplazados (ver abajo) |
 | Producción (Vercel) | Ver el comentario de cierre de la issue #3 |
 
 ## Impacto documental
@@ -88,3 +92,4 @@ Actualizados: `docs/arquitectura/ui-preferences.md`, `docs/requisitos/functional
 - [ ] Modo claro/oscuro automático según el sistema → backlog.
 - [ ] Saludo y cita editables → backlog.
 - [ ] Tests de preferencias → `REQ-020`.
+- [ ] Menores aplazados tras la revisión: guardado pendiente al cerrar la pestaña (flush en `pagehide`); cancelación de la hidratación en StrictMode; validar la forma de `goals` y `links` en `shouldAdoptRemote`; `aria-labelledby` y teclas Inicio/Fin en el selector de temas; foco del teclado al llegar al extremo en el editor de tarjetas; el anillo y el medidor dibujan un punto con valor 0; contraste no textual del interruptor oscuro y del trazo `accent-2`; cabecera de `ui-preferences.md` obsoleta.

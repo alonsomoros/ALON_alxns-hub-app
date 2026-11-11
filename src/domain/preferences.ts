@@ -11,6 +11,7 @@ export const defaultPreferences: UiPreferences = {
   statsView: 'bars',
   piRefreshSeconds: 60,
   homeCards: cardIds.map((id) => ({ id, visible: true })),
+  updatedAt: '',
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -36,7 +37,15 @@ export function parsePreferences(raw: unknown): UiPreferences {
     statsView: statsViews.includes(source.statsView as StatsView) ? source.statsView as StatsView : defaultPreferences.statsView,
     piRefreshSeconds: refreshOptions.includes(source.piRefreshSeconds as PiRefreshSeconds) ? source.piRefreshSeconds as PiRefreshSeconds : defaultPreferences.piRefreshSeconds,
     homeCards: parseCards(source.homeCards),
+    updatedAt: typeof source.updatedAt === 'string' ? source.updatedAt : '',
   }
+}
+
+/** Elige entre las preferencias locales y las remotas: gana la copia estrictamente más reciente (`updatedAt`); en empate o si la remota no es válida, la local. */
+export function newerPreferences(local: UiPreferences, remoteRaw: unknown): { preferences: UiPreferences; fromRemote: boolean } {
+  if (!isRecord(remoteRaw)) return { preferences: local, fromRemote: false }
+  const remote = parsePreferences(remoteRaw)
+  return remote.updatedAt > local.updatedAt ? { preferences: remote, fromRemote: true } : { preferences: local, fromRemote: false }
 }
 
 /** Mueve una tarjeta una posición; en los extremos devuelve el mismo orden. */

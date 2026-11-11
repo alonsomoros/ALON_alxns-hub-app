@@ -14,7 +14,8 @@ export type HomeCardId = 'pi' | 'goals' | 'services' | 'links'
 export interface HomeCardPref { id: HomeCardId; visible: boolean }
 export type PiRefreshSeconds = 30 | 60 | 120
 /** Preferencias de interfaz (REQ-003): se guardan en local y se sincronizan con la API de persistencia. */
-export interface UiPreferences { schemaVersion: 1; theme: ThemeId; statsView: StatsView; piRefreshSeconds: PiRefreshSeconds; homeCards: HomeCardPref[] }
+/** `updatedAt`: instante ISO del último cambio hecho por el usuario (`''` si se desconoce); decide qué copia gana al sincronizar. */
+export interface UiPreferences { schemaVersion: 1; theme: ThemeId; statsView: StatsView; piRefreshSeconds: PiRefreshSeconds; homeCards: HomeCardPref[]; updatedAt: string }
 export type DashboardView = 'home' | 'goals' | 'links' | 'settings'
 export type PersistenceStatus = 'loading' | 'online' | 'offline' | 'local'
 
