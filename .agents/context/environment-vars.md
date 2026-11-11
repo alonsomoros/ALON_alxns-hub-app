@@ -10,5 +10,6 @@ Backend de persistencia (`server/`, REQ-011), leídas solo por el servidor, nunc
 - `PROMETHEUS_JOB`: `job` del node-exporter en Prometheus (por defecto `raspberrypi_host`).
 - `DOCKER_PROXY_URL`: docker-socket-proxy de solo lectura; si falta, la API informa `containers: null` y `sources.docker: "disabled"`.
 - `DEVICE_ID`: identificador del dispositivo en el contrato de métricas (por defecto `raspberry-pi-5`).
+- `QUOTE_URL`: origen de la cita del día para `GET /api/quote` (`REQ-021`; por defecto `https://frasedeldia.azurewebsites.net/api/phrase`).
 
 No incluir tokens, contraseñas ni URLs con credenciales en este archivo ni en el bundle frontend.

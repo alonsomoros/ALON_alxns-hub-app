@@ -29,7 +29,7 @@ Prioridad alta (habilitan la entrega autónoma o cierran huecos de la persistenc
 
 Prioridad media (producto):
 
-- [ ] Adaptador de cita con timeout de 1.5 s y modos `default`, `random` y `fav`.
+- [ ] Modo `fav` de la cita (los modos `default` y `random` y el timeout de 1.5 s ya existen, `REQ-021`).
 - [ ] Healthchecks reales con timeout y fallback `OFFLINE`/`UNREACHABLE` (propuesta: `blackbox-exporter` en Prometheus).
 - [ ] cAdvisor en Prometheus para CPU/RAM por contenedor.
 - [ ] Alertas: Alertmanager → webhook de n8n → notificación.

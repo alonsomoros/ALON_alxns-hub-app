@@ -29,4 +29,4 @@ El dashboard enlaza a Grafana para detalle histórico; las credenciales y URLs v
 
 ## Citas
 
-La primera frase usa un adaptador de citas con timeout y fallback local. El contrato mínimo es `{ content, author }`; los modos previstos son `default`, `random` y `fav`. La cita no debe impedir el render inicial.
+La primera frase (`REQ-021`) sale de `GET /api/quote` de la API personal, que pide la frase del día en español a un origen externo sin CORS (`QUOTE_URL`, por defecto `frasedeldia.azurewebsites.net`), la valida y la guarda en caché; el contrato es `{ content, author }` y la PWA lo inyecta en el `blockquote` de Inicio con timeout de 1.5 s y frase de reserva local. Los modos `default` y `random` están implementados; `fav` queda en el backlog. La cita no debe impedir el render inicial.
