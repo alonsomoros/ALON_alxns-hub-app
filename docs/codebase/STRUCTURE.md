@@ -5,6 +5,9 @@
 | Path | Purpose | Evidence |
 |---|---|---|
 | `src/` | Entry point, React views, CSS y assets de la UI | `src/main.tsx`, `src/App.tsx`, `src/index.css` |
+| `src/components/` | Dashboard orquestador y vistas por feature (`home/`, `goals/`, `links/`, `layout/`, `ui/`) | `src/components/Dashboard.tsx` |
+| `src/types/`, `src/domain/`, `src/data/` | Modelos, logica pura de retos/enlaces y datos de prototipo | `src/types/dashboard.ts`, `src/domain/goals.ts` |
+| `src/hooks/`, `src/utils/`, `src/infrastructure/` | Estado con efectos (cita, persistencia), helpers y adaptadores | `src/hooks/usePersistedDashboard.ts` |
 | `public/` | Assets publicos de la PWA | `public/favicon.svg`, `public/icons.svg` |
 | `docs/` | Arquitectura, requisitos, CI/CD y diagramas | `docs/arquitectura/`, `docs/requisitos/` |
 | `Issues/` | Trazabilidad de decisiones y problemas | `Issues/README.md` |
@@ -21,7 +24,7 @@
 
 | Boundary | Pertenece | No debe contener |
 |---|---|---|
-| Presentacion | `App.tsx`, `App.css`, `index.css` y componentes visuales | Credenciales o logica de infraestructura futura |
+| Presentacion | `App.tsx`, `src/components/`, `App.css`, `index.css` | Credenciales o logica de infraestructura futura |
 | Integracion futura | Adaptadores previstos en arquitectura | Acoplamiento directo de widgets a endpoints |
 | Documentacion | `docs/`, `Issues/`, `.agents/` | Estado runtime de la aplicacion |
 

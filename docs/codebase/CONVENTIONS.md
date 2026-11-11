@@ -5,7 +5,7 @@
 - Componentes y tipos: PascalCase (`Dashboard`, `QuickLink`).
 - Variables, funciones y handlers: camelCase (`activeView`, `reorderLinks`).
 - Archivos de documentacion y skills: kebab-case.
-- La UI actual esta agrupada por vistas dentro de `src/App.tsx`, no por carpetas de feature.
+- La UI se organiza por feature en `src/components/` (`home/`, `goals/`, `links/`, `layout/`, `ui/`); tipos en `src/types/`, logica pura en `src/domain/`, datos de prototipo en `src/data/`, hooks de estado/red en `src/hooks/` y helpers en `src/utils/` (`REQ-016`).
 
 ## TypeScript
 
@@ -21,7 +21,7 @@ La cita captura fallos de `fetch` y usa `fallbackQuote`. No hay logger estructur
 
 ## Evidence
 
-- `src/App.tsx`
+- `src/components/Dashboard.tsx`
 - `src/index.css`
 - `tsconfig.app.json`
 - `.oxlintrc.json`

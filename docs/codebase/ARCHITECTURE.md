@@ -3,7 +3,7 @@
 ## 1) Architectural style
 
 - Estilo primario: SPA React monolitica de presentacion, con separacion conceptual por capas y adaptadores futuros.
-- Motivo: `src/main.tsx` monta una sola aplicacion; `src/App.tsx` contiene estado, vistas y datos estaticos; `docs/arquitectura/system-architecture.md` define presentacion, dominio, preferencias, integracion e infraestructura como objetivo.
+- Motivo: `src/main.tsx` monta una sola aplicacion; `src/App.tsx` alterna splash y `src/components/Dashboard.tsx`, que orquesta estado de alto nivel; vistas, datos, dominio y hooks estan separados (`REQ-016`); `docs/arquitectura/system-architecture.md` define presentacion, dominio, preferencias, integracion e infraestructura como objetivo.
 - Restricciones: render inicial no debe bloquearse por red; la UI debe ser responsive; las integraciones reales deben quedar detras de adaptadores tipados.
 
 ## 2) System flow
@@ -24,8 +24,8 @@ index.html -> src/main.tsx -> App/SplashScreen -> Dashboard -> vista activa -> e
 | Layer/module | Owns | Must not own | Evidence |
 |---|---|---|---|
 | Bootstrap PWA | registro SW y montaje React | estado de negocio | `src/main.tsx` |
-| App/Dashboard | navegacion y estado local | integraciones desacopladas | `src/App.tsx` |
-| Views | composicion de pantallas y acciones UI | persistencia real | `src/App.tsx` |
+| App/Dashboard | navegacion y estado local | integraciones desacopladas | `src/App.tsx`, `src/components/Dashboard.tsx` |
+| Views | composicion de pantallas y acciones UI | persistencia real | `src/components/{home,goals,links}/` |
 | Styles | layout responsive y apariencia | datos o red | `src/index.css`, `src/App.css` |
 | Persistence adapter | carga y guardado remoto con timeout/fallback | base de datos o red en la UI | `src/infrastructure/persistence.ts`, `docs/arquitectura/persistencia-personal.md` |
 | Integrations future | contratos n8n/Grafana/healthchecks | implementacion actual inexistente | `docs/arquitectura/integrations-n8n-grafana.md` |
@@ -34,13 +34,13 @@ index.html -> src/main.tsx -> App/SplashScreen -> Dashboard -> vista activa -> e
 
 | Pattern | Where | Why |
 |---|---|---|
-| Typed model interfaces | `src/App.tsx` | delimitar Quote, Service, QuickLink y config |
+| Typed model interfaces | `src/types/dashboard.ts` | delimitar Quote, Service, QuickLink y config |
 | Local fallback | `fallbackQuote` y `catch` | mantener render aunque falle la red |
 | Adapter boundary planned | arquitectura y skills | aislar futuras fuentes externas |
 
 ## 5) Known risks
 
-- `App.tsx` concentra estado, vistas y datos; el crecimiento puede dificultar pruebas y mantenimiento.
+- Mitigado (`REQ-016`): la logica pura de retos/enlaces vive en `src/domain/` y es testeable sin React.
 - La persistencia inicial existe, pero requiere despliegue de la API y configuración de `VITE_PERSISTENCE_API_URL`; sin ella enlaces y hábitos siguen siendo locales.
 - Healthchecks, n8n y Grafana estan documentados pero no conectados al runtime actual.
 - El drag and drop usa API HTML nativa; `[TODO]` validar experiencia tactil en PWA.

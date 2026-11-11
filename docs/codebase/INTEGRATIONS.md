@@ -4,10 +4,10 @@
 
 | System | Type | Purpose | Auth | Criticality | Evidence |
 |---|---|---|---|---|---|
-| Quotable | HTTPS API | Cita aleatoria | No configurada en codigo | Baja; tiene fallback | `src/App.tsx` |
+| Quotable | HTTPS API | Cita aleatoria | No configurada en codigo | Baja; tiene fallback | `src/hooks/useQuote.ts` |
 | n8n | HTTPS webhook | Metricas Pi y healthchecks futuros | `[TODO]` | Media; no implementado | `docs/arquitectura/integrations-n8n-grafana.md` |
 | Grafana | Dashboard externo | Detalle historico futuro | URL/config futura | Baja para shell actual | `docs/arquitectura/integrations-n8n-grafana.md` |
-| Servicios publicados | HTTPS links | Sitios clicables y healthchecks futuros | No configurada | Baja para shell actual | `src/App.tsx` |
+| Servicios publicados | HTTPS links | Sitios clicables y healthchecks futuros | No configurada | Baja para shell actual | `src/data/dashboardData.ts` |
 
 ## Data stores
 
@@ -27,6 +27,7 @@ No hay logging, metricas ni tracing de integraciones. `[TODO]` definir visibilid
 
 ## Evidence
 
-- `src/App.tsx`
+- `src/hooks/useQuote.ts`
+- `src/data/dashboardData.ts`
 - `.agents/context/environment-vars.md`
 - `docs/arquitectura/integrations-n8n-grafana.md`
