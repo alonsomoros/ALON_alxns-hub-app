@@ -24,8 +24,6 @@ Prioridad alta (habilitan la entrega autónoma o cierran huecos de la persistenc
 - [ ] Runner de tests y tests de `src/domain/`, `src/utils/` y la API (`REQ-020`).
 - [ ] [BLOQUEADO] CI de GitHub: no arranca por la facturación de la cuenta y el desarrollador decidió no configurarla; reabrir solo si cambia esa decisión.
 - [ ] Corregir `archived: false` fijo al enviar enlaces a la API (`REQ-018`).
-- [ ] Estado vacío en la tarjeta Accesos y en la vista Enlaces.
-- [ ] Primera ejecución con una base de datos vacía: la app sustituye los datos de ejemplo por listas vacías (retos y enlaces) al hidratar desde la API (`REQ-018`).
 
 Prioridad media (producto):
 
@@ -33,7 +31,6 @@ Prioridad media (producto):
 - [ ] Healthchecks reales con timeout y fallback `OFFLINE`/`UNREACHABLE` (propuesta: `blackbox-exporter` en Prometheus).
 - [ ] cAdvisor en Prometheus para CPU/RAM por contenedor.
 - [ ] Alertas: Alertmanager → webhook de n8n → notificación.
-- [ ] Implementar `raspberryPiStatsShowcase: graph` con gráficas ligeras y accesibles.
 - [ ] Enlace configurable a Grafana.
 - [ ] Preferencias pendientes: modo claro/oscuro automático según el sistema, saludo y cita editables y orden de los servicios (`REQ-003`).
 - [ ] Racha derivada de registros diarios consecutivos.
@@ -41,7 +38,6 @@ Prioridad media (producto):
 Prioridad baja:
 
 - [ ] Override manual de `logoUrl` desde la UI y decisión de privacidad sobre el proveedor de favicons.
-- [ ] Refrescar la fecha de Inicio al cambiar de día con la app abierta.
 - [ ] Tarjeta Raspberry sin espacio en blanco en escritorio.
 - [ ] Notificaciones de degradación de servicios.
 - [ ] Limitar Prometheus, node-exporter, Grafana y Portainer a Tailscale/localhost (hoy escuchan en toda la LAN).

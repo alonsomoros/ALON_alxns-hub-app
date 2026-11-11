@@ -36,4 +36,4 @@ Sin cambio: requisitos funcionales y diagramas, porque solo cambia el origen del
 
 ## Pendientes
 
-- [ ] La fecha no se refresca sola si la app queda abierta al cambiar de día; se actualiza al volver a montar Inicio → backlog.
+- [x] La fecha se refresca sola en la medianoche local y al volver a la pestaña (`useToday`, `msUntilNextDay` con `tests/date.test.ts`); comprobado en Chrome adelantando el reloj 36 h (2026-11-11).

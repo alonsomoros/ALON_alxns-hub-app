@@ -2,3 +2,9 @@ const longDateFormatter = new Intl.DateTimeFormat('es-ES', { day: 'numeric', mon
 
 /** Fecha larga en español en la zona horaria local, p. ej. "11 de noviembre de 2026" (REQ-017). */
 export const formatLongDate = (timestamp: number = Date.now()) => longDateFormatter.format(timestamp)
+
+/** Milisegundos hasta la próxima medianoche local (siempre > 0), para refrescar la fecha al cambiar de día. */
+export const msUntilNextDay = (timestamp: number = Date.now()): number => {
+  const now = new Date(timestamp)
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime() - timestamp
+}

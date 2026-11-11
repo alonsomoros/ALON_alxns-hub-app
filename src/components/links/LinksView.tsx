@@ -34,6 +34,7 @@ export function LinksView({ links, isAddLinkOpen, newLink, onBack, onAdd, onDele
       <div><p className="date-label">Tu colección</p><h1>Enlaces</h1></div>
       <button className="primary-button" type="button" onClick={onAdd}><Plus size={16} /> Añadir enlace</button>
     </div>
+    {links.length === 0 && !isAddLinkOpen && <div className="empty-state empty-state-large"><p>Todavía no hay enlaces.</p><button className="primary-button" type="button" onClick={onAdd}><Plus size={16} /> Añadir tu primer enlace</button></div>}
     <div className="editable-links">
       {links.map((link, index) => <EditableLinkRow
         link={link}

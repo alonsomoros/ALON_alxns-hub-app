@@ -1,9 +1,9 @@
 import { useState } from 'react'
+import { useToday } from '../../hooks/useToday'
 import { ChevronDown, ChevronRight, CircleCheck, ExternalLink, Server, TriangleAlert, Trophy, Wifi, Zap } from 'lucide-react'
 import { prototypePiMetrics, services } from '../../data/dashboardData'
 import { goalCategoryConfig, goalProgress } from '../../domain/goals'
 import type { ContainerInfo, HabitGoal, HomeCardPref, PiMetrics, PiMetricsStatus, QuickLink, Quote, StatsView } from '../../types/dashboard'
-import { formatLongDate } from '../../utils/date'
 import { BrandLogo } from '../ui/BrandLogo'
 import { CardTitle } from '../ui/CardTitle'
 import { PiStats } from '../ui/PiStats'
@@ -12,7 +12,7 @@ import { ProgressBar } from '../ui/ProgressBar'
 interface PiState { pi: PiMetrics | null; status: PiMetricsStatus; ageMinutes: number }
 
 export function HomeView({ quote, links, goals, piState, statsView, cards, onOpenGoals, onOpenLinks }: { quote: Quote; links: QuickLink[]; goals: HabitGoal[]; piState: PiState; statsView: StatsView; cards: HomeCardPref[]; onOpenGoals: () => void; onOpenLinks: () => void }) {
-  const [today] = useState(() => formatLongDate(Date.now()))
+  const today = useToday()
   return <>
     <section className="welcome">
       <p className="date-label">{today}</p>
@@ -100,7 +100,8 @@ function ServicesCard() {
 function LinksSummaryCard({ links, onOpenLinks }: { links: QuickLink[]; onOpenLinks: () => void }) {
   return <article className="card links-card">
     <CardTitle icon={<Zap size={18} />} title="Accesos" meta="Tus enlaces" />
+    {links.length === 0 && <p className="empty-state">Aún no tienes accesos. Añade los enlaces que más usas.</p>}
     <div className="link-buttons">{links.slice(0, 3).map((link) => <a className="link-button" href={link.url} target="_blank" rel="noreferrer" key={link.id}><BrandLogo url={link.url} explicitUrl={link.logoUrl} fallback={link.icon} className="link-button-logo" /><span>{link.label}</span><ExternalLink size={13} /></a>)}</div>
-    <button className="card-action" type="button" onClick={onOpenLinks}>Editar accesos <ChevronRight size={15} /></button>
+    <button className="card-action" type="button" onClick={onOpenLinks}>{links.length === 0 ? 'Añadir accesos' : 'Editar accesos'} <ChevronRight size={15} /></button>
   </article>
 }
