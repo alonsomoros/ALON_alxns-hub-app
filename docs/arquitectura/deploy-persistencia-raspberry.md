@@ -90,5 +90,5 @@ Seguridad: el proxy solo permite `GET /containers` (`CONTAINERS=1`, `POST=0`), n
 - [x] Ejecutar el backend como contenedor Docker con reinicio automático.
 - [BLOQUEADO] Configurar ACL de Tailscale para permitir solo los dispositivos necesarios.
 - [BLOQUEADO] Definir backup, retención y prueba de restauración de SQLite.
-- [ ] Igualar `ALLOWED_ORIGINS` del `.env` de la Pi con el del contenedor en marcha (`https://alxns-hub.vercel.app`).
+- [x] `ALLOWED_ORIGINS` del `.env` de la Pi igualado con el del contenedor (`https://alxns-hub.vercel.app,http://localhost:5173`), verificado el 2026-11-11.
 - [BLOQUEADO] Añadir autenticación técnica adicional si la tailnet deja de ser el único perímetro.

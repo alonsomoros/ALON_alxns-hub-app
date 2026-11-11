@@ -1,6 +1,6 @@
 # Estado real de los sitios (healthchecks) vía la API personal
 
-- **Estado:** En curso (implementado y probado en local; despliegue en la Raspberry pendiente)
+- **Estado:** Hecho
 - **REQ:** REQ-022
 - **Tipo:** feat
 - **Área:** `server/health.js`, `server/index.js`, `src/domain/siteHealth.ts`, `src/infrastructure/siteHealth.ts`, `src/hooks/useSiteHealth.ts`, `src/components/home/HomeView.tsx`, `.env.example`
@@ -31,7 +31,7 @@ PWA --(poll 60 s, timeout 1.5 s)--> GET /api/sites/health --> caché 60 s --> HE
 - [x] 2xx y 3xx cuentan como arriba; 4xx, 5xx, timeout y error de red, como caído; un sitio no afecta a los demás.
 - [x] La API ignora las URLs recibidas del cliente.
 - [x] La tarjeta «Tus sitios» muestra el estado real (`online`, `offline`, `unknown`) y conserva los datos de ejemplo sin API.
-- [ ] Desplegado en la Raspberry y comprobado desde `https://alxns-hub.vercel.app`.
+- [x] Desplegado en la Raspberry y comprobado por Tailscale con el origen de Vercel.
 
 ## Verificación
 
@@ -41,7 +41,10 @@ PWA --(poll 60 s, timeout 1.5 s)--> GET /api/sites/health --> caché 60 s --> HE
 | `npm run lint` / `npm run build` / `tsc -b` / `node --check server/*.js` | OK |
 | API local contra los tres sitios reales | OK: `200` en ~6 ms desde caché; los tres arriba (el más lento, `hipoglifo.es`, 1,9 s) |
 | Chrome contra la API local | OK: tres sitios `online`; con una respuesta simulada, uno `offline` (punto rojo) y otro `unknown` (punto gris); sin errores de consola |
-| Despliegue en la Pi | [BLOQUEADO] los comandos de escritura por SSH los ejecuta el desarrollador (ver Pendientes) |
+| Despliegue en la Pi (ejecutado por el desarrollador) | OK: `3bf31b3`, `ci-cd-alxns-persistence-1` `healthy` |
+| `GET https://raspberrypi.tail6f4cba.ts.net/api/sites/health` con `Origin: https://alxns-hub.vercel.app` | OK: `200`, CORS correcto y los tres sitios arriba (`hipoglifo.es` 2,8 s, `el-negredo` 0,3 s, `alonsomoros.github.io` 0,2 s); la segunda llamada sale de caché (~30 ms) |
+| `?url=http://169.254.169.254/` en la petición | OK: se ignora; devuelve solo los sitios configurados |
+| `GET /api/quote`, `GET /api/pi/metrics` y `GET /api/state` tras el despliegue | OK; las preferencias incluyen `updatedAt` (del cliente) y `savedAt` (del servidor) |
 
 ## Impacto documental
 
@@ -49,6 +52,7 @@ Actualizados: `docs/arquitectura/{integrations-n8n-grafana,system-architecture}.
 
 ## Pendientes
 
-- [ ] Desplegar en la Raspberry (`git pull --ff-only` y `docker compose --env-file .env -f docs/ci-cd/docker-compose.yml up -d --build` en `~/ALON_alxns-hub-app`); comprobar `GET /api/sites/health` y la tarjeta; la nota pasa a `Hecho` y se cierra #22. Este despliegue incluye también la corrección de `preferences.updatedAt`/`savedAt` (`REQ-020`).
+- [x] Desplegada y verificada en la Raspberry (2026-11-11), junto con la corrección de `preferences.updatedAt`/`savedAt` (`REQ-020`).
+- [ ] `hipoglifo.es` tarda ~2,8 s desde la Pi, cerca del límite de 4 s: si empieza a marcarse caído sin estarlo, subir el timeout o investigar el sitio.
 - [ ] La lista de sitios vive en dos sitios (datos de ejemplo del cliente y `HEALTHCHECK_URLS` del servidor): unificarla cuando los sitios dejen de ser datos de prototipo (`REQ-014`).
 - [ ] Histórico de disponibilidad y alertas de caída → backlog (Alertmanager → n8n).
