@@ -1,6 +1,6 @@
 # Telemetría de Raspberry Pi
 
-- **Estado:** En curso (implementado y probado en local; despliegue en la Raspberry pendiente)
+- **Estado:** Hecho
 - **REQ:** REQ-011
 - **Tipo:** feat
 - **Área:** `server/metrics.js`, `server/index.js`, `src/infrastructure/piMetrics.ts`, `src/hooks/usePiMetrics.ts`, `src/components/home/HomeView.tsx`, `docs/ci-cd/docker-compose.yml`
@@ -35,9 +35,9 @@ PWA --(poll 60 s, timeout 1.5 s)--> GET /api/pi/metrics
 - [x] Polling de 60 s con pausa si la pestaña está oculta y `stale` con la edad del último dato.
 - [x] La tarjeta muestra CPU, memoria, disco y temperatura reales, y el resumen de contenedores; solo cuentan como incidencia los `restarting`, `dead` y `unhealthy` (un contenedor parado a propósito no es una incidencia).
 - [x] Compose con `docker-proxy` de solo lectura y sin puertos publicados.
-- [ ] Desplegado en la Raspberry y contrastado con `vcgencmd`, `free`, `df` y `docker ps`.
+- [x] Desplegado en la Raspberry y contrastado con `vcgencmd`, `free`, `df` y `docker ps`.
 - [x] Resumen de contenedores correcto con la lista real de la Pi (leída por SSH en solo lectura y servida por un proxy simulado).
-- [ ] Estado de contenedores real a través del `docker-proxy` desplegado (requiere el despliegue).
+- [x] Estado de contenedores real a través del `docker-proxy` desplegado (13 activos de 17; `watchtower` reiniciándose).
 - [ ] Tests `REQ-011 ...` de contrato, timeout y degradación → `REQ-020`.
 
 ## Verificación
@@ -53,7 +53,10 @@ PWA --(poll 60 s, timeout 1.5 s)--> GET /api/pi/metrics
 | API parada y refresco forzado | OK: conserva valores, "No disponible" y "Último dato hace 1 min"; se recupera al volver la API |
 | Lista real de la Pi (16 contenedores) con proxy simulado, PWA en Chrome | OK: "12/16 contenedores activos · 1 con incidencias" (`watchtower` en `restarting`; `inazuma-*` y `waha-run` parados no cuentan); datos de host reales; sin errores de consola |
 | Imagen `tecnativa/docker-socket-proxy:0.3.0` | OK: publica `arm64` (Docker Hub) |
-| Despliegue en la Pi (`docker compose up`) | [BLOQUEADO] el entorno bloqueó las escrituras remotas por SSH; pendiente de ejecutar |
+| Despliegue en la Pi (`docker compose up`) | OK: `ci-cd-alxns-persistence-1` healthy y `ci-cd-docker-proxy-1` arriba |
+| `GET /api/pi/metrics` en la Pi frente al host | OK: RAM 30.4 % (`free` 30.7 %), disco 36.6 % (`df` 34 %, reserva ext4), temp 49.6 °C (`vcgencmd` 52.1 °C un instante después), contenedores 13/17 = `docker ps -a` (4 no activos: 3 `exited`, `watchtower` `restarting`) |
+| Seguridad del proxy | OK: `docker-proxy` sin puertos publicados, `docker.sock` en `:ro`, `POST /containers/create` → 403 |
+| Degradación en la Pi (Prometheus inexistente, aislado) | OK: `sources.prometheus = unreachable`, métricas `null`, contenedores 13/17 |
 | Tests automáticos (`REQ-011 ...`) | Omitido: no existe runner (`REQ-020`) |
 
 ## Impacto documental
@@ -62,7 +65,7 @@ Actualizados: `docs/arquitectura/{integrations-n8n-grafana,system-architecture,d
 
 ## Pendientes
 
-- [ ] Desplegar en la Raspberry y verificar; la nota pasa a `Hecho` y se cierra #11 tras ello. El contenedor actual se creó con `docker compose --env-file .env -f docs/ci-cd/docker-compose.yml` (proyecto `ci-cd`, `ALLOWED_ORIGINS` en el `.env` de la raíz del repo): recrearlo con ese mismo `--env-file`, tras copiar `/app/data` como respaldo.
+- [x] Desplegado y verificado en la Raspberry (2026-11-11). El contenedor actual se creó con `docker compose --env-file .env -f docs/ci-cd/docker-compose.yml` (proyecto `ci-cd`, `ALLOWED_ORIGINS` en el `.env` de la raíz del repo): recrearlo con ese mismo `--env-file`, tras copiar `/app/data` como respaldo.
 - [ ] Healthchecks de los sitios con `blackbox-exporter` en Prometheus → backlog.
 - [ ] cAdvisor para CPU/RAM por contenedor → backlog.
 - [ ] Alertas Alertmanager → n8n → notificación → backlog.

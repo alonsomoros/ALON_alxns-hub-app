@@ -26,7 +26,7 @@ Dueño de la **trazabilidad local**: cada cambio de comportamiento, arquitectura
 | [008](008-retos-y-progreso.md) | Hecho | UI/Dominio | Retos con progreso derivado, edición, archivo e historial. |
 | [009](009-enlaces-drag-y-branding.md) | Hecho | UI | Reordenado estable por `id` y con teclado; logo con fallback. |
 | [010](010-sitios-branding.md) | Hecho | UI | Logos de servicios con estado independiente. |
-| [011](011-telemetria-raspberry.md) | En curso | Integración | Métricas reales de la Raspberry: la API lee Prometheus y Docker, la PWA sondea cada 60 s. Despliegue pendiente. |
+| [011](011-telemetria-raspberry.md) | Hecho | Integración | Métricas reales de la Raspberry: la API lee Prometheus y Docker, la PWA sondea cada 60 s. Desplegado en la Pi. |
 | [012](012-code-review-global.md) | Hecho | Calidad | Revisión global; hallazgos resueltos en 013-017. |
 | [013](013-branding-asset.md) | Hecho | UI/PWA | Logo oficial en splash, cabecera, favicon y manifest. |
 | [014](014-mock-data.md) | Hecho | Datos | Datos de prototipo aislados en `src/data/`. |
