@@ -43,7 +43,21 @@ VITE_PERSISTENCE_API_URL=http://100.x.x.x:8787
 npm run build
 ```
 
-En producción se recomienda HTTPS aunque el tráfico vaya dentro de Tailscale. No se deben incluir credenciales de base de datos en `VITE_*`.
+En producción se usa HTTPS dentro de Tailscale con `tailscale serve` (certificado de `ts.net`, solo accesible desde la tailnet, sin `funnel`):
+
+```bash
+# Una vez, en la Pi (con "HTTPS Certificates" activo en la consola de Tailscale):
+sudo tailscale set --operator=$USER
+tailscale serve --bg 8787        # https://raspberrypi.tail6f4cba.ts.net -> 127.0.0.1:8787
+tailscale serve status
+```
+
+- Vercel: `VITE_PERSISTENCE_API_URL=https://raspberrypi.tail6f4cba.ts.net` (se incrusta en el build; tras cambiarla, redeploy).
+- Pi: `ALLOWED_ORIGINS=https://alxns-hub.vercel.app,http://localhost:5173` en el `.env` de la raíz del repo y recrear el contenedor con `--env-file .env`.
+- Cada dispositivo (PC, móvil) necesita Tailscale activo: el navegador es quien llama a la API, no Vercel.
+- Desde la propia Pi no se puede probar ese dominio (`nginx-proxy-manager` ocupa el `:443` local); probarlo desde otro dispositivo de la tailnet.
+
+No se deben incluir credenciales de base de datos en `VITE_*`.
 
 ## Verificación inicial
 
@@ -76,5 +90,5 @@ Seguridad: el proxy solo permite `GET /containers` (`CONTAINERS=1`, `POST=0`), n
 - [x] Ejecutar el backend como contenedor Docker con reinicio automático.
 - [BLOQUEADO] Configurar ACL de Tailscale para permitir solo los dispositivos necesarios.
 - [BLOQUEADO] Definir backup, retención y prueba de restauración de SQLite.
-- [BLOQUEADO] Servir la PWA por HTTPS y revisar el origen CORS final.
+- [ ] Igualar `ALLOWED_ORIGINS` del `.env` de la Pi con el del contenedor en marcha (`https://alxns-hub.vercel.app`).
 - [BLOQUEADO] Añadir autenticación técnica adicional si la tailnet deja de ser el único perímetro.

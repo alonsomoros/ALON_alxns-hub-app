@@ -29,9 +29,10 @@ Alternativas descartadas: PostgreSQL en la Raspberry (operación innecesaria), S
 - [x] Adaptador con timeout de 1.5 s y fallback.
 - [x] Caché local del último estado y control optimista de conflictos.
 - [x] Backend en Docker Compose con volumen y reinicio automático.
-- [ ] [BLOQUEADO] ACL de Tailscale, HTTPS y URL interna definitiva.
+- [x] HTTPS y URL definitiva: `tailscale serve` en `https://raspberrypi.tail6f4cba.ts.net` con CORS para `https://alxns-hub.vercel.app` (2026-11-11).
+- [ ] [BLOQUEADO] ACL de Tailscale.
 - [ ] [BLOQUEADO] Backup, retención y restauración verificada del volumen.
-- [ ] [BLOQUEADO] E2E desde dos dispositivos.
+- [ ] E2E de persistencia desde dos dispositivos (PC y móvil ya tienen Tailscale; falta ejecutarlo y documentarlo).
 
 ## Verificación
 
@@ -50,8 +51,8 @@ Actualizados: `docs/requisitos/` (FR-10 a FR-13, RNF-01 a RNF-10), `docs/arquite
 
 ## Pendientes
 
-- [ ] [BLOQUEADO] Desplegar en la Raspberry y validar desde el móvil.
-- [ ] [BLOQUEADO] ACL, HTTPS, backup y restauración.
+- [x] Desplegado en la Raspberry (contenedor `healthy`) y accesible desde la PWA de Vercel en PC y móvil.
+- [ ] [BLOQUEADO] ACL, backup con retención y restauración verificada (hay una copia manual del 2026-11-11 en `~/backups`).
 - [ ] Tests de contrato de la API y de conflicto → `REQ-020`.
 - [ ] Corregir `archived: false` fijo al enviar enlaces y decidir si se leen las preferencias → backlog.
 - [ ] Migraciones futuras del esquema → backlog.

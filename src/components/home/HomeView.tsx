@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { ChevronRight, CircleCheck, ExternalLink, Server, TriangleAlert, Trophy, Wifi, Zap } from 'lucide-react'
+import { ChevronDown, ChevronRight, CircleCheck, ExternalLink, Server, TriangleAlert, Trophy, Wifi, Zap } from 'lucide-react'
 import { prototypePiMetrics, services } from '../../data/dashboardData'
 import { goalCategoryConfig, goalProgress } from '../../domain/goals'
-import type { HabitGoal, PiMetrics, PiMetricsStatus, QuickLink, Quote } from '../../types/dashboard'
+import type { ContainerInfo, HabitGoal, PiMetrics, PiMetricsStatus, QuickLink, Quote } from '../../types/dashboard'
 import { formatLongDate } from '../../utils/date'
 import { BrandLogo } from '../ui/BrandLogo'
 import { CardTitle } from '../ui/CardTitle'
@@ -50,11 +50,23 @@ function piFootNote(pi: PiMetrics | null, status: PiMetricsStatus, ageMinutes: n
   return containers.issues > 0 ? { text: `${containers.text} · ${containers.issues} con incidencias`, warn: true } : { text: containers.text, warn: false }
 }
 
+const containerStateLabel: Record<string, string> = { running: 'Activo', restarting: 'Reiniciando', exited: 'Parado', dead: 'Caído', paused: 'Pausado', created: 'Creado' }
+
+/** Estado legible de un contenedor y su tono visual (`ok`, `warn` o `off`). */
+function containerBadge(item: ContainerInfo) {
+  if (item.health === 'unhealthy') return { label: 'No saludable', tone: 'warn' }
+  const label = containerStateLabel[item.state] ?? item.state
+  const tone = item.state === 'restarting' || item.state === 'dead' ? 'warn' : item.state === 'running' ? 'ok' : 'off'
+  return { label: item.health === 'starting' ? `${label} · iniciando` : label, tone }
+}
+
 function PiCard({ pi, status, ageMinutes }: PiState) {
+  const [detailOpen, setDetailOpen] = useState(false)
   const loading = status === 'loading'
   const metrics = status === 'prototype' ? prototypePiMetrics : pi?.metrics
   const titleStatus = status === 'online' || status === 'degraded' ? 'online' : status === 'stale' || status === 'offline' ? 'offline' : undefined
   const note = piFootNote(pi, status, ageMinutes)
+  const items = pi?.containers?.items ?? []
   const rows = [
     { label: 'CPU', value: metrics?.cpuBusyPercent, unit: '%' },
     { label: 'Memoria', value: metrics?.ramUsedPercent, unit: '%' },
@@ -66,7 +78,10 @@ function PiCard({ pi, status, ageMinutes }: PiState) {
     <div className="pi-metrics">
       {rows.map((row) => <Metric key={row.label} label={row.label} value={metricValue(row.value, loading)} unit={row.value === null || row.value === undefined ? '' : row.unit} progress={metricProgress(row.value)} />)}
     </div>
-    <div className="card-foot"><span className="soft-status" aria-live="polite">{note.warn ? <TriangleAlert size={14} /> : <CircleCheck size={14} />} {note.text}</span><button type="button">Ver detalle <ChevronRight size={14} /></button></div>
+    {detailOpen && items.length > 0 && <ul className="container-list" id="pi-containers" aria-label="Contenedores de la Raspberry">
+      {items.map((item) => { const badge = containerBadge(item); return <li key={item.name}><span className="container-name">{item.name}</span><span className={`container-state ${badge.tone}`}>{badge.label}</span></li> })}
+    </ul>}
+    <div className="card-foot"><span className="soft-status" aria-live="polite">{note.warn ? <TriangleAlert size={14} /> : <CircleCheck size={14} />} {note.text}</span>{items.length > 0 && <button type="button" aria-expanded={detailOpen} aria-controls="pi-containers" onClick={() => setDetailOpen((open) => !open)}>{detailOpen ? 'Ocultar detalle' : 'Ver detalle'} {detailOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}</button>}</div>
   </article>
 }
 

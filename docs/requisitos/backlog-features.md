@@ -8,7 +8,7 @@ Reglas: al empezar un ítem se crea su nota `Issues/NNN-slug.md` (siguiente núm
 
 | REQ | Qué falta | Bloqueo |
 |---|---|---|
-| [`REQ-018`](../../Issues/018-persistencia-personal-multidispositivo.md) | Desplegar la API en la Raspberry, ACL de Tailscale, HTTPS, backup y restauración, E2E desde dos dispositivos | [BLOQUEADO] requiere acceso a la Raspberry |
+| [`REQ-018`](../../Issues/018-persistencia-personal-multidispositivo.md) | ACL de Tailscale, backup con retención y restauración, E2E de persistencia desde dos dispositivos | [BLOQUEADO] ACL y backup requieren decisión y acceso a la Raspberry |
 | [`REQ-004`](../../Issues/004-arquitectura-e-integraciones.md) | Adaptadores tipados de cita, métricas, healthchecks y Grafana | Cada uno abre su propia nota |
 
 ## Propuestas pendientes de decisión

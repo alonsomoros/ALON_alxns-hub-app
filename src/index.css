@@ -26,3 +26,10 @@
 @media (max-width: 420px) { .service-icons { grid-template-columns: repeat(auto-fit, minmax(88px, 1fr)); } .service-tile { min-height: 88px; } }
 .link-button > .link-button-logo { width: 22px; height: 22px; flex: 0 0 22px; }
 .link-button > .link-button-logo img { width: 18px; height: 18px; max-width: 18px; max-height: 18px; }
+.container-list { display: grid; gap: 2px; max-height: 240px; margin: 17px 0 0; padding: 0; overflow-y: auto; list-style: none; }
+.container-list li { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 7px 2px; border-bottom: 1px solid #edf1ed; font-size: 12px; }
+.container-name { min-width: 0; overflow: hidden; color: #344b42; text-overflow: ellipsis; white-space: nowrap; }
+.container-state { flex: none; border-radius: 999px; padding: 2px 8px; font-size: 11px; }
+.container-state.ok { color: #52645a; background: #eef5df; }
+.container-state.warn { color: #9a5b1f; background: #fff2dd; }
+.container-state.off { color: #7e8d82; background: #f5f7f4; }

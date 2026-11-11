@@ -35,6 +35,7 @@ PWA --(poll 60 s, timeout 1.5 s)--> GET /api/pi/metrics
 - [x] Polling de 60 s con pausa si la pestaña está oculta y `stale` con la edad del último dato.
 - [x] La tarjeta muestra CPU, memoria, disco y temperatura reales, y el resumen de contenedores; solo cuentan como incidencia los `restarting`, `dead` y `unhealthy` (un contenedor parado a propósito no es una incidencia).
 - [x] Compose con `docker-proxy` de solo lectura y sin puertos publicados.
+- [x] El botón «Ver detalle» despliega la lista de contenedores con su estado y salud (`aria-expanded`); no se muestra si no hay lista (modo ejemplo o Docker no disponible). Antes era un botón sin acción.
 - [x] Desplegado en la Raspberry y contrastado con `vcgencmd`, `free`, `df` y `docker ps`.
 - [x] Resumen de contenedores correcto con la lista real de la Pi (leída por SSH en solo lectura y servida por un proxy simulado).
 - [x] Estado de contenedores real a través del `docker-proxy` desplegado (13 activos de 17; `watchtower` reiniciándose).
@@ -53,6 +54,7 @@ PWA --(poll 60 s, timeout 1.5 s)--> GET /api/pi/metrics
 | API parada y refresco forzado | OK: conserva valores, "No disponible" y "Último dato hace 1 min"; se recupera al volver la API |
 | Lista real de la Pi (16 contenedores) con proxy simulado, PWA en Chrome | OK: "12/16 contenedores activos · 1 con incidencias" (`watchtower` en `restarting`; `inazuma-*` y `waha-run` parados no cuentan); datos de host reales; sin errores de consola |
 | Imagen `tecnativa/docker-socket-proxy:0.3.0` | OK: publica `arm64` (Docker Hub) |
+| «Ver detalle» en Chrome (API local + lista real de 16 contenedores) | OK: despliega 16 filas (`watchtower` «Reiniciando», `inazuma-*` y `waha-run` «Parado»), cambia a «Ocultar detalle» y vuelve a plegarse; sin errores de consola. Ancho de móvil: no verificable visualmente aquí (el redimensionado no cambió el viewport) |
 | Despliegue en la Pi (`docker compose up`) | OK: `ci-cd-alxns-persistence-1` healthy y `ci-cd-docker-proxy-1` arriba |
 | `GET /api/pi/metrics` en la Pi frente al host | OK: RAM 30.4 % (`free` 30.7 %), disco 36.6 % (`df` 34 %, reserva ext4), temp 49.6 °C (`vcgencmd` 52.1 °C un instante después), contenedores 13/17 = `docker ps -a` (4 no activos: 3 `exited`, `watchtower` `restarting`) |
 | Seguridad del proxy | OK: `docker-proxy` sin puertos publicados, `docker.sock` en `:ro`, `POST /containers/create` → 403 |
@@ -66,6 +68,7 @@ Actualizados: `docs/arquitectura/{integrations-n8n-grafana,system-architecture,d
 ## Pendientes
 
 - [x] Desplegado y verificado en la Raspberry (2026-11-11). El contenedor actual se creó con `docker compose --env-file .env -f docs/ci-cd/docker-compose.yml` (proyecto `ci-cd`, `ALLOWED_ORIGINS` en el `.env` de la raíz del repo): recrearlo con ese mismo `--env-file`, tras copiar `/app/data` como respaldo.
+- [ ] El `.env` de la Pi conserva `ALLOWED_ORIGINS` antiguo mientras el contenedor ya acepta `https://alxns-hub.vercel.app`: igualarlo para que un `docker compose up` futuro no rompa el CORS en producción → backlog.
 - [ ] Healthchecks de los sitios con `blackbox-exporter` en Prometheus → backlog.
 - [ ] cAdvisor para CPU/RAM por contenedor → backlog.
 - [ ] Alertas Alertmanager → n8n → notificación → backlog.
