@@ -1,36 +1,35 @@
 # Branding con asset real en la app
 
+- **Estado:** Hecho
+- **REQ:** REQ-013
+- **Tipo:** fix
+- **Área:** `src/components/layout/`, `src/assets/logo.png`, `public/icons/`, `vite.config.ts`, `index.html`
+- **GitHub:** —
+- **Actualizada:** 2026-11-11
+
 ## Problema
 
-La marca principal de la UI estaba usando texto o un símbolo provisional (`AX`) en lugar del asset real del producto disponible en `src/assets/logo.png`.
+La marca usaba un texto provisional (`AX`) en lugar del logo real, y el manifest PWA apuntaba a un icono anterior, por lo que la instalación móvil mostraba una identidad distinta de la app.
 
-Además, el manifest PWA seguía apuntando a un icono anterior (`/favicon.svg` con branding morado y tipo rayo), por lo que en la instalación móvil seguía apareciendo el icono incorrecto aunque la app ya mostrase el nuevo logo en las vistas.
+## Decisión
 
-La incorporación de `public/icons/logo-*.png` requiere que el manifest generado por Vite use esas rutas públicas, no un PNG único en la raíz.
-
-Esto genera inconsistencias visuales entre la carga, la cabecera, el branding global y la instalación como app nativa.
-
-## Solución propuesta
-
-- Usar `src/assets/logo.png` como activo principal para:
-  - splash screen,
-  - header,
-  - cabecera de páginas principales,
-  - favicon del navegador,
-  - manifest PWA / icono de instalación.
-- Mantener el texto `alXns` como complemento, no como sustituto del logo.
-- Diseñar el contenedor para que el logo conserve proporción y no se deforme en móvil.
-- Ajustar ligeramente la escala del logo para mantenerlo más compacto en la UI.
-- Usar un fondo claro (`#f5f7f4`) en el manifest y en el navegador para mejorar el contraste del logo verde.
+Usar `src/assets/logo.png` en splash, cabecera, favicon y manifest PWA, con los iconos `public/icons/logo-*.png`. El texto `alXns` queda como complemento. El contenedor conserva proporción en móvil y el fondo claro `#f5f7f4` mejora el contraste del logo verde.
 
 ## Criterios de aceptación
 
-- El splash muestra el logo real y no una letra o marca temporal.
-- El header usa el mismo logo y mantiene coherencia visual.
-- El logo se adapta bien a tamaños pequeños y grandes sin distorsionar.
-- La marca se ve consistente en todas las vistas principales.
-- La instalación PWA ofrece los iconos `logo-*.png` desde `/icons/` y usa el fondo claro de la aplicación.
+- [x] El splash muestra el logo real.
+- [x] La cabecera usa el mismo logo.
+- [x] El logo no se deforma en tamaños pequeños ni grandes.
+- [x] La instalación PWA ofrece los iconos de `/icons/` con el fondo claro.
 
-## Pendiente
+## Verificación
 
-Validar si el asset requiere versión dark/light o si se va a reutilizar con un fondo transparente y contenedor específico.
+`npm run lint` y `npm run build` OK. Validación visual manual en la entrega original.
+
+## Impacto documental
+
+Sin cambio posterior.
+
+## Pendientes
+
+- [ ] Decidir si hace falta una versión dark/light del logo cuando exista el tema oscuro → backlog (preferencias).

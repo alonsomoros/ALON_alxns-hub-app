@@ -12,13 +12,13 @@ El cliente React renderiza un shell PWA inmediato orientado a una primera impres
 
 ## Persistencia personal
 
-La propuesta de `REQ-018` mantiene la ausencia de login en la UI, pero no deja la base de datos anónimamente expuesta. La primera alternativa a evaluar es una API personal en la Raspberry, almacenamiento SQLite con backups y acceso desde los dispositivos mediante una red privada. La PWA usa caché local y estados `OFFLINE`/`UNREACHABLE`; el detalle de recursos, conflictos y decisiones pendientes vive en [persistencia-personal.md](persistencia-personal.md).
+`REQ-018` mantiene la ausencia de login en la UI sin dejar la base de datos expuesta: API personal en la Raspberry (`server/index.js`), SQLite con volumen Docker y acceso por red privada Tailscale. La PWA usa caché local y muestra el estado de sincronización; el detalle de recursos, conflictos y pendientes vive en [persistencia-personal.md](persistencia-personal.md).
 
 ## Estado verificado
 
-- Implementado: shell PWA, splash, navegacion Inicio/Retos/Enlaces, estado local React y fallback de cita.
+- Implementado: shell PWA, splash, navegacion Inicio/Retos/Enlaces, estado React, fallback de cita, adaptador de persistencia con timeout de 1.5 s y cache, API SQLite y Docker Compose (`REQ-018`).
 - Preparado: manifest/service worker PWA y contratos/documentacion para preferencias.
-- Pendiente: adaptadores n8n/Grafana, healthchecks reales, persistencia `REQ-018` y tests E2E.
+- Pendiente: despliegue de la API en la Raspberry, backups, HTTPS, adaptadores n8n/Grafana, healthchecks reales y tests E2E.
 
 ## Diagramas
 

@@ -1,33 +1,34 @@
-# Propuesta: logos de Mis sitios
+# Logos de "Tus sitios"
 
-## Estado
-
-Implementado en la UI. Requisito cubierto: `REQ-010`.
+- **Estado:** Hecho
+- **REQ:** REQ-010
+- **Tipo:** feat
+- **Área:** `src/components/ui/BrandLogo.tsx`, `src/components/home/HomeView.tsx`
+- **GitHub:** —
+- **Actualizada:** 2026-11-11
 
 ## Problema
 
-La sección `Tus sitios` usa iconos Lucide fijos, aunque cada servicio apunta a una web concreta y debería mostrar su logo cuando esté disponible, con fallback coherente.
+La sección de servicios usaba iconos Lucide fijos aunque cada servicio apunta a una web concreta y debía mostrar su logo con un fallback coherente.
 
-## Decisión adoptada
+## Decisión
 
-Se centraliza la carga de branding en `BrandLogo`, reutilizable por servicios y enlaces:
+`BrandLogo` es el componente único para servicios y enlaces: prioriza `logoUrl`, luego el favicon del dominio mediante el resolver compartido (`REQ-015`), y cae al icono Lucide si falla. El tile mantiene tamaño estable durante la carga. El indicador `online`/`offline` es independiente del logo y la etiqueta accesible incluye nombre y estado. Los healthchecks reales quedan fuera.
 
-- se prioriza `logoUrl` explícito cuando existe;
-- si no existe, se obtiene el favicon del dominio mediante el resolver compartido;
-- la carga tiene estado loading sin cambiar el tamaño del tile o botón;
-- si la imagen falla, se muestra el icono Lucide definido por servicio/enlace;
-- indicador `online`/`offline` separado del logo;
-- `alt`/label accesible con nombre y estado del servicio.
+## Criterios de aceptación
 
-La misma política se aplica a `Tus sitios`, a los accesos de la portada y a la vista de edición de enlaces.
+- [x] El logo sustituye al icono cuando carga y Lucide permanece como fallback.
+- [x] El estado visual es independiente del logo.
+- [x] Etiqueta accesible con nombre y estado.
 
-## Decisiones
+## Verificación
 
-- El logo remoto sustituye al icono Lucide cuando carga correctamente; Lucide permanece como fallback estable.
-- `Service` y `QuickLink` admiten `logoUrl` para una futura configuración manual sin cambiar la política de carga.
-- El indicador de estado sigue siendo independiente del logo; los healthchecks reales quedan fuera de esta issue.
-- El proveedor de favicon actual es el mismo que ya usa `REQ-009`; cambiarlo requiere una decisión de privacidad independiente.
+`npm run lint` y `npm run build` OK. Carga/error del proveedor remoto: Omitido: no existe runner (`REQ-020`).
 
-## Impacto previsto
+## Impacto documental
 
-Se actualizó el modelo `Service`, el componente visual de servicios, el resolver de logos común y los estilos de dimensiones estables. La validación ejecutada es `npm run lint` y `npm run build`; no existe runner E2E en el repositorio para automatizar carga/error del proveedor remoto.
+`docs/requisitos/functional-requirements.md` (FR-04).
+
+## Pendientes
+
+- [ ] Healthchecks reales → backlog.

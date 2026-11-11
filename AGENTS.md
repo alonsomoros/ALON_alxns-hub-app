@@ -2,67 +2,100 @@
 
 ## Autoridad y lectura obligatoria
 
-Este archivo es el SOP de navegación del repositorio. Antes de leer código, proponer trabajo o editar, el agente DEBE leer completos `AGENTS.md`, `WORKFLOW.md`, `context/INDEX.md`, `context/STYLE_GUIDE.md`, `context/VISION.md`, `CODE_STANDARD.md`, `.agents/context/system-status.md` e `Issues/README.md`. Después leerá solo la documentación y el código del área afectada.
+Este archivo es el SOP de navegación del repositorio. **Antes de leer código, proponer trabajo o editar, el agente DEBE leer `AGENTS.md` y `WORKFLOW.md` completos** y seguir la lectura escalonada de `WORKFLOW.md` §1 (núcleo siempre; el resto según el área afectada). Esa sección es la única lista de lectura: no se repite en otros documentos.
 
-Las reglas de proceso viven en `WORKFLOW.md`; las convenciones de código/tests en `CODE_STANDARD.md`; los IDs y referencias en `context/STYLE_GUIDE.md`; los requisitos en `docs/requisitos/`; las tareas y problemas en `Issues/`. No duplicar hechos: enlazar al dueño.
+Cada hecho tiene un único dueño; enlazar, no duplicar:
 
-Si falta un archivo requerido o hay conflicto entre reglas, el agente debe detener la edición, nombrar el conflicto y pedir decisión. Una propuesta no es una decisión de arquitectura: se documenta en `Issues/` hasta aprobación.
+| Necesidad | Dueño |
+|---|---|
+| Proceso, trazabilidad, validación, Git y cierre | `WORKFLOW.md` |
+| Convenciones de código y tests | `CODE_STANDARD.md` |
+| Estilo, IDs y referencias | `context/STYLE_GUIDE.md` |
+| Estado técnico actual | `.agents/context/system-status.md` |
+| Tareas, propuestas y decisiones (REQ) | `Issues/` |
+| Requisitos y backlog | `docs/requisitos/` |
+| Arquitectura e integraciones | `docs/arquitectura/` |
+| Mapa del código existente | `docs/codebase/` |
+| Diagramas | `docs/diagramas/` |
 
-## Vision
-PWA rápida y privada para centralizar infraestructura self-hosted, estado de aplicaciones, accesos contextuales y objetivos personales.
+Si falta un archivo requerido o hay conflicto entre reglas, detener la edición, nombrar el conflicto y pedir decisión.
+
+## Visión
+
+PWA rápida y privada para centralizar infraestructura self-hosted, estado de aplicaciones, accesos contextuales y objetivos personales. Detalle en `context/VISION.md`.
 
 ## Stack
-- React + TypeScript + Vite
-- Tailwind CSS v4 y CSS modular para la UI cyberpunk
-- vite-plugin-pwa para manifest, precache y actualización automática
-- Lucide React para iconografía
-- Integraciones futuras mediante endpoints HTTPS de n8n y APIs ligeras
 
-## Development rules
-- Antes de procesar un prompt o cambiar comportamiento, consulta `Issues/README.md` y la nota de alcance relacionada; conserva la trazabilidad de problema, propuesta, decisión y pendientes.
-- Consulta `.agents/context/system-status.md` antes de cambiar comportamiento.
-- Para cada funcionalidad, sigue `.agents/skills/cicd-github-delivery.md`: issue de GitHub, requisito `REQ-XXX`, criterios de aceptación, tests, commit trazable, push y cierre solo con validación verde.
-- Mantén TypeScript estricto y componentes desacoplados.
-- Las peticiones externas no deben bloquear la interfaz: usa skeletons, timeouts de 1.5 s y estados `OFFLINE / UNREACHABLE`.
-- Actualiza el skill correspondiente cuando añadas endpoints, integraciones o widgets.
-- Para mapas de arquitectura, pantallas, datos o entrega, usa `.agents/skills/diagrams.md` mediante `/diagrams`; mantén SVG y Mermaid sincronizados con la realidad del código.
-- Mantén los diagramas Mermaid de `docs/diagramas/` sincronizados.
+- React + TypeScript + Vite; Tailwind CSS v4 y CSS plano para la UI.
+- `vite-plugin-pwa` para manifest, precache y actualización automática.
+- Lucide React para iconografía.
+- API de persistencia en Node 22 + SQLite (`server/`, Docker) para retos, enlaces y preferencias (`REQ-018`).
+- Integraciones futuras mediante endpoints HTTPS de n8n y APIs ligeras.
 
-## Change gates
+## Reglas de desarrollo
 
-Antes de editar, el agente DEBE identificar el problema, el requisito `REQ-XXX`, la issue, el área afectada, el check que puede falsar la hipótesis y los documentos que deben cambiar. Después de editar, DEBE actualizar el dueño correcto según `WORKFLOW.md` y no cerrar una issue sin push, CI verde y confirmación del desarrollador.
+- Mantener TypeScript estricto y componentes desacoplados (`CODE_STANDARD.md`).
+- Las peticiones externas no bloquean la UI: skeletons, timeout de 1.5 s y estados `OFFLINE`/`UNREACHABLE`.
+- No guardar secretos en el repositorio, el bundle ni `localStorage`.
+- Actualizar la skill de `.agents/skills/` cuando cambien endpoints, integraciones o widgets.
+- Para diagramas usar `/diagrams` (`.agents/skills/diagrams.md`) y mantener SVG y Mermaid sincronizados.
 
-Si la petición añade o cambia UI, datos, integración, configuración, arquitectura, CI o diagramas, revisará la matriz de impacto de `WORKFLOW.md`. Si un documento no cambia, debe dejar constancia de `Sin cambio: motivo` en la trazabilidad.
+## Ciclo de trabajo
 
-## Commands
-- `npm run dev`: servidor local
-- `npm run persistence`: API de persistencia SQLite
-- `npm run build`: typecheck y build de producción
-- `npm run lint`: lint con Oxlint
-- `npm run preview`: servir `dist`
+El detalle está en `WORKFLOW.md`. Resumen:
 
-## Delivery workflow
-Cada funcionalidad debe actualizar la nota correspondiente de `Issues/`, el backlog y los requisitos cuando proceda. Antes del commit ejecuta `npm run lint` y `npm run build`; si fallan, corrige y repite. Usa commits Conventional Commit con `(#issue)`, referencia `REQ-XXX` y evidencia de tests. El workflow `.github/workflows/ci.yml` valida push y pull request. Nunca hagas push forzado ni cierres una issue sin poder verificar el push y la CI.
+1. **Preflight:** leer, comprobar `git status`, clasificar la petición.
+2. **Nota:** localizar o crear `Issues/NNN-slug.md` (`REQ-NNN`) con criterios de aceptación.
+3. **Implementar** el cambio mínimo.
+4. **Validar:** `npm run lint` y `npm run build`, más el check específico del cambio.
+5. **Documentar:** actualizar los dueños de la matriz de impacto y marcar la nota `Hecho`.
+6. **Entregar:** commit trazable y push a `main` sin force, en el mismo cambio que la documentación.
+7. **Informar** en el chat con el informe de verificación de `WORKFLOW.md` §5.
 
-## Architecture
-La UI vive en `src/`. El dashboard actual usa datos estáticos para validar la experiencia; las fuentes n8n/Grafana se conectarán detrás de adaptadores tipados, sin acoplar widgets a la red.
+Con la validación en verde, el commit y el push se hacen directamente, sin pedir confirmación.
 
-## Repository map
+## Cuándo detenerse y preguntar
+
+- La petición es ambigua o hay varias soluciones con impacto de producto distinto.
+- Hay una decisión de arquitectura de alto impacto (se documenta como `Propuesta` en `Issues/` hasta su aprobación).
+- Se necesita una dependencia nueva, un secreto, una acción destructiva o tocar cambios ajenos.
+- La validación falla y la causa no es evidente tras diagnosticarla.
+
+## Comandos
+
+- `npm run dev`: servidor local.
+- `npm run persistence`: API de persistencia SQLite.
+- `npm run build`: typecheck (`tsc -b`) y build de producción.
+- `npm run lint`: Oxlint.
+- `npm run preview`: servir `dist`.
+
+El gestor de paquetes es npm (CI usa `npm ci` con `package-lock.json`).
+
+## Arquitectura
+
+La UI vive en `src/` y se organiza por feature (`components/`), dominio puro (`domain/`), datos de prototipo (`data/`), hooks, adaptadores (`infrastructure/`) y utilidades. Los retos y enlaces se sincronizan con la API de persistencia cuando `VITE_PERSISTENCE_API_URL` está definida; las fuentes n8n/Grafana se conectarán detrás de adaptadores tipados. Ver `docs/codebase/ARCHITECTURE.md` y `docs/arquitectura/`.
+
+## Mapa del repositorio
 
 ```text
 /AGENTS.md              SOP, mapa y enrutamiento
-/WORKFLOW.md            proceso, trazabilidad y Git
+/WORKFLOW.md            proceso, trazabilidad, validación y Git
 /CODE_STANDARD.md       convenciones de código y tests
 /context/               índice, visión y estilo de documentación
 /src/                   aplicación React/Vite
-/server/                API personal de persistencia SQLite
-/docs/                  requisitos, arquitectura y diagramas
-/Issues/                problemas y trazabilidad local
+/server/                API de persistencia SQLite (+ Dockerfile.persistence)
+/docs/requisitos/       requisitos funcionales y backlog
+/docs/arquitectura/     arquitectura, integraciones y despliegue
+/docs/codebase/         mapa del código existente
+/docs/ci-cd/            guía de despliegue y Docker Compose
+/docs/diagramas/        SVG y Mermaid
+/Issues/                notas REQ-NNN, índice y plantilla
 /.agents/               contexto y skills operativas
-/.github/               workflows y plantillas GitHub
+/.github/               CI y plantilla de issue
 ```
 
-No añadir carpetas de primer nivel sin justificarlo en la issue y actualizar este mapa.
+No añadir carpetas de primer nivel sin justificarlo en la nota y actualizar este mapa.
 
-## Product context
-La primera iteración prioriza una experiencia personal sencilla y responsive con las vistas Inicio, Retos y Enlaces. La configuración de tema, citas, orden de servicios y métricas está preparada pero la pantalla de preferencias queda pospuesta. Los enlaces admiten hasta 10 elementos y se reordenan mediante arrastre; su persistencia y las integraciones reales siguen pendientes.
+## Contexto de producto
+
+La primera iteración prioriza una experiencia personal sencilla y responsive con Inicio, Retos y Enlaces. Los enlaces admiten hasta 10 elementos y se reordenan por arrastre o teclado. La configuración de tema, citas, orden de servicios y métricas está preparada, pero la pantalla de preferencias queda pospuesta. Métricas reales, healthchecks y despliegue de la persistencia en la Raspberry siguen pendientes (`.agents/context/system-status.md`).

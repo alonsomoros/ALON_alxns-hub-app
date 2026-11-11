@@ -1,57 +1,44 @@
-# Propuesta: retos, racha y edición
+# Retos, racha y edición
 
-## Estado
-
-Implementado en memoria. Requisito: `REQ-008`.
+- **Estado:** Hecho
+- **REQ:** REQ-008
+- **Tipo:** feat
+- **Área:** `src/domain/goals.ts`, `src/components/goals/`, `src/types/dashboard.ts`
+- **GitHub:** —
+- **Actualizada:** 2026-11-11
 
 ## Problema
 
-En Inicio, la racha aparece junto a un porcentaje (`68%`), aunque una racha es una magnitud acumulada y no un progreso porcentual. Además, el botón de nuevo reto no crea nada y el botón de ajustes todavía no edita el reto.
+En Inicio la racha aparecía junto a un porcentaje, aunque una racha es una magnitud acumulada y no un progreso. Además, "Nuevo reto" no creaba nada y el botón de ajustes no editaba el reto.
 
-## Propuesta
+## Decisión
 
-### Racha
+- La racha (`12 días seguidos`) se muestra junto al título de la tarjeta, sin porcentaje; sigue estática en esta fase.
+- El reto guarda `current`, `target` y `unit`; el porcentaje se deriva (`current / target`) y se limita visualmente al 100 %, aunque el actual puede superar el objetivo.
+- El mismo formulario crea y edita. Validación: título obligatorio, objetivo positivo y actual no negativo.
+- Categorías iniciales: Lectura, Movimiento y Aprendizaje.
+- Al editar actual u objetivo se conserva un snapshot en `history`.
+- Archivar está incluido; eliminar y duplicar quedan fuera.
+- Alternativas descartadas: porcentaje editable (permite estados incoherentes) y rango como texto libre (difícil de validar).
 
-Separar visual y semánticamente la racha del progreso: mostrar `12 días seguidos` pegado al título de la tarjeta de retos, sin porcentaje asociado. El porcentaje debe pertenecer solo al progreso de un reto concreto.
+## Criterios de aceptación
 
-### Modelo de reto
+- [x] Racha sin porcentaje junto al título.
+- [x] Alta, edición y archivo de retos.
+- [x] Porcentaje derivado y limitado al 100 %.
+- [x] Snapshot en el historial al editar.
+- [x] Persistencia de retos e historial con la API configurada (`REQ-018`).
+- [ ] Tests de caja negra y restauración de historial → `REQ-020`.
 
-```ts
-interface HabitGoal {
-  id: string
-  title: string
-  description: string
-  category: GoalCategory
-  current: number
-  target: number
-  progress: number
-}
-```
+## Verificación
 
-`progress` debería derivarse de `current / target`, limitarse entre 0 y 100 y no editarse manualmente. `category` debería salir de un registro cerrado de categorías con icono, color y etiqueta accesible.
+`npm run lint` y `npm run build` OK en la entrega original. Tests de caja negra: Omitido: no existe runner (`REQ-020`).
 
-### Alta y edición
+## Impacto documental
 
-- `Nuevo reto` abre un formulario/modal con título, descripción, categoría, valor actual y objetivo/rango.
-- El botón de ajustes abre el mismo formulario precargado.
-- Validar título obligatorio, objetivo positivo, actual no negativo y actual no mayor que objetivo.
-- Mantener la edición local primero; persistencia y sincronización quedan fuera hasta decidir el store.
+`docs/requisitos/functional-requirements.md` (FR-05, FR-09, FR-13); `.agents/skills/habit-tracker-logic.md`.
 
-## Alternativas
+## Pendientes
 
-1. Porcentaje editable: simple, pero permite estados incoherentes con el rango.
-2. Porcentaje derivado de actual/objetivo: más consistente y recomendado.
-3. Rango como texto libre: flexible, pero difícil de validar y representar.
-4. Rango numérico con unidad: más accesible para barras y métricas.
-
-## Decisiones adoptadas
-
-- El rango usa número actual, objetivo y unidad libre; las categorías iniciales son Lectura, Movimiento y Aprendizaje.
-- Se permite superar el objetivo; la barra y el porcentaje visual se limitan a 100%.
-- Al editar actual/objetivo se conserva un snapshot en el historial en memoria.
-- Se incluye archivar; eliminar y duplicar quedan fuera.
-- La racha permanece temporal/estática en esta fase y aparece junto al título, sin porcentaje.
-
-## Impacto previsto
-
-Actualizados `src/App.tsx` y `src/index.css` con modelo, alta, edición, archivado, categorías, historial en memoria y porcentaje derivado. Pendiente añadir tests de caja negra y persistencia local; no crear ADR hasta decidir el store.
+- [ ] Tests de `src/domain/goals.ts` con `REQ-008` en el nombre → `REQ-020`.
+- [ ] Racha derivada de registros diarios → backlog.

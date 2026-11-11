@@ -2,39 +2,27 @@
 
 ## Objetivo
 
-Aplicar una revisión funcional y técnica del proyecto antes de cerrar una tarea, con foco en consistencia, mantenibilidad, accesibilidad y alineación con la arquitectura y los requisitos del repositorio.
+Revisión funcional y técnica antes de cerrar una tarea, con foco en consistencia, mantenibilidad, accesibilidad y alineación con la arquitectura y los requisitos.
 
-## Flujo recomendado
+## Flujo
 
-1. Revisar la historia del cambio, la issue y el requisito asociado.
-2. Validar si la solución respeta la arquitectura declarada en `AGENTS.md` y `.agents/context/system-status.md`.
-3. Comprobar consistencias visibles del producto: branding, estado hardcodeado, nombres, lógica de datos y estilos.
-4. Revisar accesibilidad y compatibilidad móvil: foco, tamaño de controles, textos, scroll horizontal, contraste y navegación por teclado.
-5. Evaluar si el código cumple el principio de responsabilidad simple: componentes demasiado grandes, lógica mezclada, estado duplicado o secretos de UI en archivos incorrectos.
-6. Documentar las inconsistencias encontradas junto con una recomendación priorizada y una hipótesis de riesgo.
-7. Revalidar con el check mínimo del proyecto (`npm run lint` y `npm run build`) antes de cerrar.
+1. Leer la nota `Issues/NNN-*.md` y los criterios de aceptación del cambio.
+2. Comprobar que la solución respeta `AGENTS.md` y `.agents/context/system-status.md`.
+3. Revisar el diff completo de la zona afectada con la checklist de abajo.
+4. Documentar los hallazgos priorizados en la nota (sección `Pendientes`) y corregir los que bloquean.
+5. Revalidar con `npm run lint` y `npm run build` y entregar el informe de `WORKFLOW.md` §5.
 
-## Checklist de revisión
+## Checklist
 
-- Branding y assets: usar el asset oficial del producto y evitar letras/mascotas hardcodeadas si ya existe un logo.
-- Estado y datos: no dejar valores “de muestra” como si fueran reales si la etapa del producto aún no lo soporta.
-- Requisitos y decisiones: cada cambio debe conservar la trazabilidad `REQ-XXX` y la nota de issue.
-- UI responsive: evitar overflow horizontal, card gigantes, texto truncado sin contexto y controles demasiado pequeños.
-- Accesibilidad: labels, focus-visible, aria-labels, soporte por teclado y contrastes adecuados.
-- Mantenibilidad: evitar lógica repetida, componentes demasiado complejos y estados duplicados.
-- Dependencias: favorecer un adaptador tipado y un fallback local antes de depender de servicios externos.
+- **Branding y assets:** usar el asset oficial; sin letras ni mascotas hardcodeadas.
+- **Datos:** los valores de prototipo viven en `src/data/` y no se presentan como reales.
+- **Trazabilidad:** el cambio conserva `REQ-NNN` y la nota actualizada.
+- **Responsive:** sin overflow horizontal, tarjetas gigantes, texto truncado sin contexto ni controles pequeños.
+- **Accesibilidad:** labels, `focus-visible`, `aria-label`, teclado y contraste.
+- **Mantenibilidad:** sin lógica repetida, componentes complejos ni estado duplicado; lógica pura en `src/domain/`.
+- **Red y secretos:** adaptador tipado con timeout de 1.5 s y fallback local; sin secretos en el cliente.
+- **Git:** sin `dist/`, secretos ni cambios ajenos en el commit.
 
-## Salida esperada
+## Salida
 
-El resultado de la revisión debe quedar documentado en la issue o en una nota local del alcance con:
-
-- Hallazgos prioritarios.
-- Riesgos funcionales o de UX.
-- Mejora propuesta con criterio de impacto.
-- Estado de validación y evidencia.
-
-## Evidencia mínima
-
-- `npm run lint`
-- `npm run build`
-- Revisión del diff de la zona afectada
+Hallazgos prioritarios, riesgos funcionales o de UX, mejora propuesta y evidencia de validación, dentro de la nota del cambio.

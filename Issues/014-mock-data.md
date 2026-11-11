@@ -1,24 +1,34 @@
 # Separar datos mock y configuración real
 
+- **Estado:** Hecho (implementado con `REQ-016`)
+- **REQ:** REQ-014
+- **Tipo:** refactor
+- **Área:** `src/data/dashboardData.ts`
+- **GitHub:** —
+- **Actualizada:** 2026-11-11
+
 ## Problema
 
-La app incluye métricas, servicios, citas, fechas y textos que parecen datos reales aunque el sistema sigue en fase de prototipo y no hay integración real con servicios externos ni persistencia.
+La app mezclaba métricas, servicios, citas y textos de ejemplo con la lógica de render, lo que oculta el estado real del producto y dificulta pasar a APIs reales.
 
-Esto puede confundir el estado real del producto y dificultar la transición a backend o APIs reales.
+## Decisión
 
-## Solución propuesta
-
-- Aislar los datos de ejemplo en un módulo dedicado, por ejemplo `mockData.ts` o una carpeta `data/`.
-- Marcar claramente cuáles valores son de prototipo y cuáles son de producción.
-- Separar sincronización de configuración (`theme`, `quote`, `orderServices` ...) de la lógica de render.
+Los datos de prototipo y la configuración viven en `src/data/dashboardData.ts`, marcados con un comentario `Datos de prototipo`. Son sustituibles por adaptadores sin tocar las vistas; los retos y enlaces se sobrescriben con los datos persistidos cuando `VITE_PERSISTENCE_API_URL` está configurada (`REQ-018`).
 
 ## Criterios de aceptación
 
-- El código principal no mezcla datos de prueba con lógica de render.
-- La fuente de datos del dashboard queda documentada.
-- La transición a datos reales requiere un cambio pequeño de adaptador.
-- La app sigue funcionando sin depender de servicios externos.
+- [x] El código de render no contiene datos de prueba.
+- [x] La fuente de datos del dashboard está documentada (`docs/codebase/STRUCTURE.md`).
+- [x] La app funciona sin servicios externos.
 
-## Pendiente
+## Verificación
 
-Definir si la capa de mock data será temporal o se convertirá en un primer adaptador de dominio con contrato establecido.
+`npm run lint` y `npm run build` OK en `REQ-016`.
+
+## Impacto documental
+
+`docs/codebase/{STRUCTURE,ARCHITECTURE}.md` (entregado en `REQ-016`).
+
+## Pendientes
+
+- [ ] Decidir si los datos de prototipo se mantienen como adaptador por defecto o se eliminan cuando existan integraciones reales → junto a `REQ-004`.

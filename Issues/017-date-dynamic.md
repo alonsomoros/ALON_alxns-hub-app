@@ -1,37 +1,39 @@
 # Fecha dinámica en la pantalla principal
 
+- **Estado:** Hecho
+- **REQ:** REQ-017
+- **Tipo:** fix
+- **Área:** `src/utils/date.ts`, `src/components/home/HomeView.tsx`
+- **GitHub:** —
+- **Actualizada:** 2026-11-11
+
 ## Problema
 
-La fecha mostrada en la vista de inicio está hardcodeada (`27 de octubre de 2026`), cuando el contenido de la interfaz debería representar el momento actual del usuario.
+La fecha de Inicio estaba fija (`27 de octubre de 2026`) en lugar de reflejar el día real del usuario.
 
-## Solución propuesta
+## Decisión
 
-- Calcular la fecha del sistema con `new Date()`.
-- Formatear la fecha con `toLocaleDateString()` usando locale apropiado.
-- Mantener el texto de bienvenida como valor actual y no fijo.
+`src/utils/date.ts` formatea `Date.now()` con `Intl.DateTimeFormat('es-ES', { day, month: 'long', year })` en la zona horaria local. `HomeView` la calcula al montarse (inicializador de `useState`) para no llamar a una función impura durante el render. El locale queda fijo en `es-ES` porque la UI está en español.
 
 ## Criterios de aceptación
 
-- La fecha cambia con el día real del sistema.
-- La pantalla principal no muestra una fecha falsa o desalineada con el contexto real.
-- La UI sigue funcionando en distintas zonas horarias y locales.
+- [x] La fecha cambia con el día real del sistema.
+- [x] La pantalla no muestra una fecha falsa.
+- [x] Funciona en distintas zonas horarias.
 
-## Estado
+## Verificación
 
-Implementado (2026-11-11). Requisito: `REQ-017`. Issue de GitHub: [BLOQUEADO] `gh` no está instalado; trazabilidad local.
+| Check | Resultado |
+|---|---|
+| `npm run lint` | OK |
+| Typecheck y `vite build` | OK |
+| Visual | Inicio muestra la fecha del sistema |
+| Tests de caja negra | Omitido: no existe runner (`REQ-020`) |
 
-## Decisión adoptada
+## Impacto documental
 
-`src/utils/date.ts` formatea `Date.now()` con `Intl.DateTimeFormat('es-ES', { day, month: 'long', year })` en la zona horaria local del navegador; `HomeView` la calcula al montarse (inicializador de `useState`, para no llamar a una función impura durante el render). El idioma de la UI es español, así que el locale queda fijo en `es-ES`.
+Sin cambio: requisitos funcionales y diagramas, porque solo cambia el origen del dato.
 
-## Validación
+## Pendientes
 
-- `npm run lint` OK; `tsc 5.9.3 --noEmit` OK; `vite build` OK.
-- Visual: Inicio muestra la fecha del sistema.
-- Tests de caja negra: Omitido: no existe runner.
-- Sin cambio: requisitos funcionales y diagramas, porque solo cambia el origen del dato mostrado.
-
-## Pendiente
-
-- La fecha no se refresca sola si la app queda abierta al cambiar de día; se actualiza al volver a montar Inicio (cambiar de vista o recargar).
-- Decidir si la fecha del dashboard debe ser configurable en el futuro para entorno productivo o si se usará únicamente como dato local.
+- [ ] La fecha no se refresca sola si la app queda abierta al cambiar de día; se actualiza al volver a montar Inicio → backlog.

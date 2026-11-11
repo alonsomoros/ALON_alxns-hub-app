@@ -1,32 +1,38 @@
-# Propuesta: enlaces arrastrables y logo remoto
+# Enlaces arrastrables y logo remoto
 
-## Estado
-
-Decisión adoptada y implementada en UI: se usa un reordenado estable por `id` y un resolver de marca con favicon + fallback local. Requisito cubierto: `REQ-009`.
+- **Estado:** Hecho
+- **REQ:** REQ-009
+- **Tipo:** fix
+- **Área:** `src/components/links/`, `src/domain/links.ts`, `src/utils/brandLogo.ts`
+- **GitHub:** —
+- **Actualizada:** 2026-11-11
 
 ## Problema
 
-El drag and drop actual usa `draggable` nativo sobre la fila y puede ser inconsistente en tactil, teclado y navegadores móviles. Los enlaces usan iconos estáticos aunque el usuario quiere identificar cada web mediante su logo.
+El arrastre nativo sobre la fila era inconsistente en táctil y sin teclado, y los enlaces usaban iconos estáticos aunque se quería identificar cada web por su logo.
 
-## Decisión adoptada
+## Decisión
 
-- La identidad del arrastre se basa en `id`, no en el índice del array.
-- El reordenado se mantiene como operación pura y se puede activar por arrastre y teclado (`ArrowUp` / `ArrowDown`).
-- El icono de cada enlace intenta obtener un favicon desde el dominio con `https://www.google.com/s2/favicons?...` y cae al icono por defecto cuando falla.
-- La fila queda compacta y sin overflow horizontal en pantallas pequeñas.
+- La identidad del arrastre es el `id`, no el índice.
+- El reordenado es una operación pura (`src/domain/links.ts`) activable por arrastre y por teclado (`ArrowUp`/`ArrowDown`, `EditableLinkRow.tsx`).
+- El logo usa un favicon del dominio con fallback a icono; la resolución está centralizada en `REQ-015`.
+- Fila compacta sin overflow horizontal.
 
-## Alcance implementado
+## Criterios de aceptación
 
-- `QuickLink` acepta `logoUrl` opcional para compatibilidad con una resolución de marca futura.
-- `LinksView` usa `draggable` + reordenado estable y soporte de teclado.
-- `LinkBrand` maneja `loading`, `ready` y `fallback` sin bloquear la UI.
-- Los estilos de `.editable-link` y `.drag-handle` quitan el scrollbar horizontal y reducen el tamaño visual de la fila.
+- [x] Reordenado estable por `id` con arrastre y teclado.
+- [x] Logo remoto con estados `loading`/`ready`/`fallback` sin bloquear la UI.
+- [x] Sin scroll horizontal.
+- [ ] Validar la experiencia táctil en la PWA instalada → `REQ-020`.
 
-## Pendiente
+## Verificación
 
-- Persistir la prioridad de enlaces en almacenamiento local cuando se decida la capa de datos.
-- Definir si se quiere permitir override manual de logo o proveedor alternativo con mejor fiabilidad.
+`npm run lint` y `npm run build` OK. Tests de caja negra: Omitido: no existe runner (`REQ-020`).
 
-## Impacto previsto
+## Impacto documental
 
-Se actualizó `QuickLink`, `LinksView`, estilos y la documentación de trazabilidad. Queda pendiente la persistencia y la decisión acerca de un proveedor de logos más robusto si se requiere offline o control manual.
+`docs/requisitos/functional-requirements.md` (FR-04, FR-06).
+
+## Pendientes
+
+- [ ] Override manual de logo o proveedor alternativo; cambiar el proveedor requiere una decisión de privacidad → backlog.

@@ -17,7 +17,7 @@ index.html -> src/main.tsx -> App/SplashScreen -> Dashboard -> vista activa -> e
 3. `App` muestra splash durante 700 ms y despues `Dashboard`.
 4. `Dashboard` mantiene `activeView`, cita, enlaces y formulario con `useState`, y sincroniza retos/enlaces mediante el adaptador de persistencia cuando existe `VITE_PERSISTENCE_API_URL`.
 5. `HomeView`, `GoalsView` y `LinksView` renderizan el estado y mutan enlaces localmente.
-6. La cita hace `fetch` directo a Quotable y vuelve al fallback local si falla.
+6. `useQuote` hace `fetch` a Quotable y vuelve al fallback local si falla. `usePersistedDashboard` carga y guarda retos y enlaces con timeout de 1.5 s y cache `localStorage`.
 
 ## 3) Layer responsibilities
 
@@ -28,6 +28,7 @@ index.html -> src/main.tsx -> App/SplashScreen -> Dashboard -> vista activa -> e
 | Views | composicion de pantallas y acciones UI | persistencia real | `src/components/{home,goals,links}/` |
 | Styles | layout responsive y apariencia | datos o red | `src/index.css`, `src/App.css` |
 | Persistence adapter | carga y guardado remoto con timeout/fallback | base de datos o red en la UI | `src/infrastructure/persistence.ts`, `docs/arquitectura/persistencia-personal.md` |
+| Persistence API | esquema SQLite, validacion y versionado optimista | logica de UI | `server/index.js` |
 | Integrations future | contratos n8n/Grafana/healthchecks | implementacion actual inexistente | `docs/arquitectura/integrations-n8n-grafana.md` |
 
 ## 4) Reused patterns

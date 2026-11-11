@@ -1,8 +1,31 @@
 # Requisitos funcionales
 
+Dueño de **qué debe hacer el producto**. Cada `FR-xx` enlaza a la nota `REQ-NNN` que lo implementó (`../../Issues/README.md`); lo pendiente está en [`backlog-features.md`](backlog-features.md).
+
+## Cobertura
+
+| ID | REQ | Estado |
+|---|---|---|
+| FR-00 Trazabilidad | `REQ-005`, `REQ-007`, `REQ-019` | Implementado (sin issues de GitHub: `gh` sin autenticar) |
+| FR-01 Splash | `REQ-002` | Implementado |
+| FR-02 Inicio | `REQ-002`, `REQ-013`, `REQ-017` | Implementado; la cita no tiene timeout de 1.5 s |
+| FR-03 Infraestructura | `REQ-011` | Parcial: datos de prototipo, sin métricas reales; solo `pbar` |
+| FR-04 Servicios | `REQ-010`, `REQ-015` | Parcial: logos y fallback; el estado `online`/`offline` es de prototipo |
+| FR-05 Hábitos | `REQ-008` | Implementado |
+| FR-06 Enlaces | `REQ-001`, `REQ-009` | Implementado (falta estado vacío) |
+| FR-07 PWA | `REQ-013` | Implementado |
+| FR-08 Diagramas | `REQ-006`, `REQ-019` | Implementado |
+| FR-09 Retos | `REQ-008` | Implementado |
+| FR-10 Persistencia personal | `REQ-018` | Parcial: retos y enlaces; preferencias guardadas pero no leídas |
+| FR-11 Sincronización multidispositivo | `REQ-018` | Parcial: API lista, despliegue en Raspberry [BLOQUEADO] |
+| FR-12 Operación degradada | `REQ-018` | Implementado (caché y estado `OFFLINE` en el pie) |
+| FR-13 Integridad de dominio | `REQ-008`, `REQ-018` | Implementado; sin tests (`REQ-020`) |
+| RNF-01 a RNF-09 | `REQ-018` | RNF-03 y RNF-05 implementados; RNF-02, RNF-07 y RNF-09 pendientes de despliegue |
+| RNF-10 Pruebas | `REQ-020` | Pendiente: no existe runner |
+
 ## Trazabilidad y entrega
 
-- **FR-00:** toda funcionalidad debe estar vinculada a una issue de GitHub, un requisito `REQ-XXX`, criterios de aceptación y evidencia de tests; solo se considera cerrada después de commit trazable, push y CI verde.
+- **FR-00:** toda funcionalidad debe estar vinculada a una nota `Issues/NNN-slug.md` (`REQ-NNN`) con criterios de aceptación y evidencia de tests; solo se considera cerrada después de commit trazable y push con validación en verde (proceso en `WORKFLOW.md`).
 - **FR-08 Diagramas:** mantener diagramas SVG y Mermaid de arquitectura, pantallas, flujo de datos y entrega sincronizados con el codigo y marcar lo pendiente de forma explicita.
 
 - **FR-01 Splash:** mostrar una pantalla de bienvenida breve y pasar al dashboard sin bloquear por red.

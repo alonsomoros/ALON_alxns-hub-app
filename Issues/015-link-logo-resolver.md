@@ -1,27 +1,35 @@
 # Centralizar la resolución del logo de enlaces
 
+- **Estado:** Hecho (implementado con `REQ-016`)
+- **REQ:** REQ-015
+- **Tipo:** refactor
+- **Área:** `src/utils/brandLogo.ts`, `src/components/ui/BrandLogo.tsx`
+- **GitHub:** —
+- **Actualizada:** 2026-11-11
+
 ## Problema
 
-`QuickLink` ya contempla `logoUrl?: string`, pero la creación de enlaces y el render no usan ese campo de forma consistente. La lógica de resolución de logo se reparte entre el modelo y la visualización.
+`QuickLink` admite `logoUrl`, pero la creación y el render de enlaces no lo usaban de forma consistente y la lógica estaba repartida entre modelo y vista.
 
-Esto crea una inconsistencia: el modelo acepta override local, pero la app no lo aprovecha de forma explícita.
+## Decisión
 
-## Solución propuesta
-
-- Crear una función centralizada de resolución de marca para cada enlace.
-- Priorizar esta secuencia:
-  1. `logoUrl` explícito del enlace,
-  2. favicon por dominio,
-  3. fallback visual del icono del servicio.
-- Mantener la ruta del fallback local y hacer que el render sea más predecible.
+Función única `resolveBrandLogo(url, explicitLogoUrl)` en `src/utils/brandLogo.ts` con prioridad: `logoUrl` explícito → favicon del dominio → `null` (la vista pinta el icono de fallback).
 
 ## Criterios de aceptación
 
-- Los enlaces con `logoUrl` usan ese valor en vez del favicon genérico.
-- Si no hay override, se usa el favicon por dominio.
-- Si falla la carga, se cae al icono por defecto.
-- La lógica queda reusable y no embebida en la vista.
+- [x] Un `logoUrl` explícito sustituye al favicon.
+- [x] Sin override se usa el favicon del dominio.
+- [x] Si falla la carga se muestra el icono por defecto (`BrandLogo`).
+- [x] La lógica es reutilizable y no está embebida en la vista.
 
-## Pendiente
+## Verificación
 
-Cuando se implemente persistencia de enlaces, decidir si `logoUrl` se almacena localmente y si se permite edición manual.
+`npm run lint` y `npm run build` OK en `REQ-016`. Tests del resolver: Omitido: no existe runner (`REQ-020`).
+
+## Impacto documental
+
+Sin cambio posterior.
+
+## Pendientes
+
+- [ ] Permitir edición manual de `logoUrl` desde la UI → backlog (el modelo y la API ya lo guardan).

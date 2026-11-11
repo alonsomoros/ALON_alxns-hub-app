@@ -1,33 +1,49 @@
 # Backlog
 
-## Flujo de entrega
+Dueño de lo **pendiente**. Lo hecho vive en `Issues/README.md` (índice de notas `REQ-NNN`); los requisitos en [`functional-requirements.md`](functional-requirements.md). Proceso de entrega: [`../../WORKFLOW.md`](../../WORKFLOW.md).
 
-Toda funcionalidad nueva debe tener una issue de GitHub y un requisito `REQ-XXX` documentado en `Issues/`. Antes de cerrar una tarea se deben ejecutar `npm run lint` y `npm run build`; los fallos se corrigen antes del commit. El commit debe referenciar la issue y el requisito, y la issue solo se cierra después del push y de CI verde. Ver `.agents/skills/cicd-github-delivery.md`.
+Reglas: al empezar un ítem se crea su nota `Issues/NNN-slug.md` (siguiente número libre de `Issues/README.md`) y el ítem pasa a la tabla "En curso"; al terminar se elimina de aquí. Los ítems sin REQ aún no tienen nota.
 
-## Entregas completadas
+## En curso
 
-- [x] Skill `/diagrams` y diagramas SVG de arquitectura, pantallas, datos y CI/CD (`REQ-006`).
+| REQ | Qué falta | Bloqueo |
+|---|---|---|
+| [`REQ-018`](../../Issues/018-persistencia-personal-multidispositivo.md) | Desplegar la API en la Raspberry, ACL de Tailscale, HTTPS, backup y restauración, E2E desde dos dispositivos | [BLOQUEADO] requiere acceso a la Raspberry |
+| [`REQ-004`](../../Issues/004-arquitectura-e-integraciones.md) | Adaptadores tipados de cita, métricas, healthchecks y Grafana | Cada uno abre su propia nota |
 
-## Propuestas en debate
+## Propuestas pendientes de decisión
 
-- [x] `REQ-008`: separar racha del porcentaje y permitir alta/edición/archivo de retos con título, descripción, categoría y progreso derivado en memoria (`Issues/008-retos-y-progreso.md`).
-- [ ] Añadir tests de caja negra de retos y validar restauración de historial para `REQ-008`.
-- [x] `REQ-009`: corregir drag and drop accesible de enlaces y resolver logos remotos con fallback (`Issues/009-enlaces-drag-y-branding.md`).
-- [x] `REQ-010`: mostrar logos configurados de los sitios y enlaces con favicon compartido y fallback (`Issues/010-sitios-branding.md`).
-- [x] `REQ-013`: consolidar branding real de la app y del icono de instalación PWA con `logo.png` (`Issues/013-branding-asset.md`).
-- [ ] `REQ-011`: definir contrato y transporte de métricas Raspberry mediante push/polling o tiempo real (`Issues/011-telemetria-raspberry.md`).
-- [x] `REQ-016`: separar `App.tsx` en tipos, datos, dominio, hooks y componentes por vista sin cambiar comportamiento (`Issues/016-app-architecture.md`).
-- [x] `REQ-017`: mostrar en Inicio la fecha actual del sistema en lugar de una fija (`Issues/017-date-dynamic.md`).
-- [x] `REQ-018`: implementar persistencia personal multidispositivo sin login visible; queda despliegue y validación en Raspberry (`Issues/018-persistencia-personal-multidispositivo.md`).
+| REQ | Propuesta | Falta |
+|---|---|---|
+| [`REQ-011`](../../Issues/011-telemetria-raspberry.md) | Contrato y transporte de métricas Raspberry | Responder las preguntas abiertas y aprobar |
+| [`REQ-020`](../../Issues/020-runner-de-tests.md) | Runner de tests para dominio y API | Aprobar la dependencia |
 
-- [ ] Adaptador n8n para métricas de Raspberry Pi 5.
+## Pendiente priorizado
+
+Prioridad alta (habilitan la entrega autónoma o cierran huecos de la persistencia):
+
+- [ ] Runner de tests y tests de `src/domain/`, `src/utils/` y la API (`REQ-020`).
+- [ ] Autenticar `gh` (`gh auth login`) para issues de GitHub y lectura de CI.
+- [ ] Corregir `archived: false` fijo al enviar enlaces a la API y decidir si las preferencias se leen de vuelta (`REQ-018`).
+- [ ] Estado vacío en la tarjeta Accesos y en la vista Enlaces.
+
+Prioridad media (producto):
+
+- [ ] Adaptador de cita con timeout de 1.5 s y modos `default`, `random` y `fav`.
+- [ ] Adaptador n8n para métricas de Raspberry Pi 5 (`REQ-011`).
+- [ ] Healthchecks reales con timeout y fallback `OFFLINE`/`UNREACHABLE`.
 - [ ] Implementar `raspberryPiStatsShowcase: graph` con gráficas ligeras y accesibles.
-- [ ] Healthchecks reales con timeout y fallback offline.
-- [ ] Cliente de citas configurable: `default`, `random`, `fav`.
 - [ ] Enlace configurable a Grafana.
-- [ ] Persistencia local de hábitos con IndexedDB.
-- [ ] Persistir enlaces editables y conservar el orden del drag and drop ya implementado.
-- [ ] Crear menú de preferencias para tema, modo, cita, orden de servicios y widgets.
+- [ ] Menú de preferencias: tema, modo, cita, orden de servicios y widgets.
+- [ ] Racha derivada de registros diarios consecutivos.
+
+Prioridad baja:
+
+- [ ] Override manual de `logoUrl` desde la UI y decisión de privacidad sobre el proveedor de favicons.
+- [ ] Refrescar la fecha de Inicio al cambiar de día con la app abierta.
+- [ ] Tarjeta Raspberry sin espacio en blanco en escritorio.
 - [ ] Notificaciones de degradación de servicios.
-- [ ] Ajustes de usuario y configuración de endpoints. El perfil queda fuera de la primera iteración.
 - [ ] Pruebas de accesibilidad y flujos PWA en móvil.
+- [ ] Migraciones futuras del esquema SQLite.
+- [ ] Decidir si se elimina `pnpm-lock.yaml` (CI usa `npm ci`).
+- [ ] Perfil y ajustes de usuario (fuera de la primera iteración).

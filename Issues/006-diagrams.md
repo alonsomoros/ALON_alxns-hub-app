@@ -1,20 +1,34 @@
-# Skill de diagramas y analisis de arquitectura
+# Skill de diagramas y análisis de arquitectura
+
+- **Estado:** Hecho
+- **REQ:** REQ-006
+- **Tipo:** docs
+- **Área:** `.agents/skills/diagrams.md`, `docs/diagramas/`, `docs/codebase/`
+- **GitHub:** —
+- **Actualizada:** 2026-11-11
 
 ## Problema
 
-El repositorio tenia un unico diagrama Mermaid conceptual y no disponia de una skill operativa para analizar arquitectura, pantallas, datos y entrega manteniendo los diagramas sincronizados con el codigo.
+Solo existía un diagrama Mermaid conceptual y ninguna skill para mantener diagramas sincronizados con el código.
 
-## Solucion propuesta
+## Decisión
 
-Crear la skill `/diagrams`, generar SVG accesibles y portables, completar la documentacion verificable de `docs/codebase/` y distinguir implementado, preparado y pendiente.
+Skill `/diagrams` y SVG accesibles y portables en `docs/diagramas/` (arquitectura, pantallas, datos y entrega). Mermaid sigue como fuente textual de arquitectura. Marcado `IMPLEMENTADO`/`PREPARADO`/`PENDIENTE`. Los diagramas se sincronizaron con la persistencia en `REQ-019`.
 
-## Decision
+## Criterios de aceptación
 
-Adoptar `.agents/skills/diagrams.md`. Los artefactos viven en `docs/diagramas/`: arquitectura, pantallas, datos y entrega CI/CD. Mermaid sigue como fuente textual de arquitectura y los SVG se validan como XML.
+- [x] Cuatro SVG válidos como XML.
+- [x] Fuente Mermaid de arquitectura.
+- [x] Documentación `docs/codebase/` completada.
 
-## Requisito y estado
+## Verificación
 
-- Requisito: `REQ-006`.
-- Issue GitHub: pendiente de crear si no hay autenticacion disponible.
-- Validacion: XML de SVG, `npm run lint`, `npm run build` y diagnosticos.
-- Pendiente: automatizar render/screenshot de SVG y ampliar diagramas cuando aparezcan adaptadores reales.
+XML de los SVG, `npm run lint` y `npm run build` OK en la entrega original.
+
+## Impacto documental
+
+`docs/diagramas/README.md`.
+
+## Pendientes
+
+- [ ] Automatizar la validación XML de los SVG → `REQ-020`.

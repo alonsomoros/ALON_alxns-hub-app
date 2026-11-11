@@ -1,17 +1,37 @@
 # Enlaces responsive y ordenación
 
+- **Estado:** Hecho
+- **REQ:** REQ-001
+- **Tipo:** fix
+- **Área:** `src/components/links/`, `src/index.css`
+- **GitHub:** —
+- **Actualizada:** 2026-11-11
+
 ## Problema
 
-La vista de enlaces podía producir scroll horizontal en pantallas pequeñas. Las filas tenían demasiados controles visibles y ocupaban más espacio del necesario. El alcance admite como máximo 10 enlaces, por lo que la edición debe ser rápida y legible.
-
-## Solución propuesta
-
-Usar una fila compacta con icono, nombre, URL truncada, apertura, borrado y un único asa de arrastre. El orden se cambia arrastrando la fila completa; no se muestran flechas duplicadas.
+La vista de enlaces producía scroll horizontal en pantallas pequeñas y cada fila tenía demasiados controles. El alcance admite como máximo 10 enlaces, por lo que la edición debe ser rápida y legible.
 
 ## Decisión
 
-Adoptado el arrastre nativo de HTML en `LinksView`. Se eliminan las flechas de subir/bajar, se mantiene el asa visible también en móvil y se aplican `min-width: 0`, ancho fluido y truncado de texto para evitar desbordamientos. La reordenación vive en el estado del dashboard y no acopla la vista a la persistencia.
+Fila compacta con icono, nombre, URL truncada, apertura, borrado y un único asa de arrastre; se eliminan las flechas duplicadas. El ancho es fluido con `min-width: 0` y truncado de texto. La reordenación vive en el estado del dashboard y no acopla la vista a la persistencia. La mejora de arrastre y teclado se completó en `REQ-009`.
 
-## Pendiente
+## Criterios de aceptación
 
-Persistir el orden localmente sin bloquear el render y añadir pruebas de accesibilidad y flujo móvil.
+- [x] Sin scroll horizontal en móvil.
+- [x] Un único control de ordenación por fila.
+- [x] El orden se persiste cuando `VITE_PERSISTENCE_API_URL` está configurada (`REQ-018`).
+
+## Verificación
+
+| Check | Resultado |
+|---|---|
+| `npm run lint` / `npm run build` | OK en la entrega original |
+| Pruebas de accesibilidad y flujo móvil | Omitido: no existe runner (`REQ-020`) |
+
+## Impacto documental
+
+Sin cambio posterior: el contrato vive en `docs/requisitos/functional-requirements.md` (FR-06).
+
+## Pendientes
+
+- [ ] Pruebas de accesibilidad y flujo móvil → `REQ-020`.

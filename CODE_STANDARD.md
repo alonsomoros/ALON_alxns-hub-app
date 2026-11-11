@@ -20,7 +20,8 @@
 - Tests de caja negra deben cubrir el flujo observable y contener `REQ-XXX` en el nombre cuando exista runner.
 - Para UI: cubrir estados iniciales, interacción principal, error/fallback y viewport relevante.
 - Para integraciones: cubrir timeout, respuesta válida, respuesta inválida y estado no disponible.
-- Si no existe runner aplicable, registrar `Omitido: no existe runner` y ejecutar lint/build.
+- Si no existe runner aplicable (estado actual, `REQ-020`), registrar `Omitido: no existe runner`, ejecutar lint/build y describir una comprobación manual reproducible en la nota.
+- Cambios en `server/`: ejecutar además `node --check server/index.js`.
 
 ## Calidad
 

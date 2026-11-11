@@ -8,9 +8,10 @@
 | `src/components/` | Dashboard orquestador y vistas por feature (`home/`, `goals/`, `links/`, `layout/`, `ui/`) | `src/components/Dashboard.tsx` |
 | `src/types/`, `src/domain/`, `src/data/` | Modelos, logica pura de retos/enlaces y datos de prototipo | `src/types/dashboard.ts`, `src/domain/goals.ts` |
 | `src/hooks/`, `src/utils/`, `src/infrastructure/` | Estado con efectos (cita, persistencia), helpers y adaptadores | `src/hooks/usePersistedDashboard.ts` |
-| `public/` | Assets publicos de la PWA | `public/favicon.svg`, `public/icons.svg` |
-| `docs/` | Arquitectura, requisitos, CI/CD y diagramas | `docs/arquitectura/`, `docs/requisitos/` |
-| `Issues/` | Trazabilidad de decisiones y problemas | `Issues/README.md` |
+| `server/` | API de persistencia SQLite (`REQ-018`); imagen en `Dockerfile.persistence` | `server/index.js` |
+| `public/` | Assets publicos de la PWA | `public/favicon.svg`, `public/icons/` |
+| `docs/` | Requisitos, arquitectura, mapa del codigo, CI/CD y diagramas | `docs/arquitectura/`, `docs/requisitos/` |
+| `Issues/` | Notas `REQ-NNN`, indice y plantilla | `Issues/README.md`, `Issues/_TEMPLATE.md` |
 | `.agents/` | Contexto y skills operativas | `.agents/context/`, `.agents/skills/` |
 | `.github/` | CI y plantillas de issues | `.github/workflows/ci.yml` |
 
@@ -18,14 +19,14 @@
 
 - Runtime principal: `src/main.tsx`, seleccionado por `index.html`.
 - Configuracion de build/PWA: `vite.config.ts`.
-- No hay workers, CLI ni backend dentro de este repositorio.
+- Backend: `server/index.js` (`npm run persistence`), solo para persistencia personal. No hay workers ni CLI.
 
 ## Boundaries
 
 | Boundary | Pertenece | No debe contener |
 |---|---|---|
 | Presentacion | `App.tsx`, `src/components/`, `App.css`, `index.css` | Credenciales o logica de infraestructura futura |
-| Integracion futura | Adaptadores previstos en arquitectura | Acoplamiento directo de widgets a endpoints |
+| Integracion | `src/infrastructure/` (persistencia) y adaptadores futuros | Acoplamiento directo de widgets a endpoints |
 | Documentacion | `docs/`, `Issues/`, `.agents/` | Estado runtime de la aplicacion |
 
 ## Naming

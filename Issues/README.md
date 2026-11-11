@@ -1,30 +1,42 @@
-# Issues e ideas
+# Issues
 
-Este directorio conserva la trazabilidad funcional del proyecto. Antes de cambiar comportamiento, consultar este índice y la nota relacionada.
+Dueño de la **trazabilidad local**: cada cambio de comportamiento, arquitectura, CI o proceso tiene una nota `NNN-slug.md` en esta carpeta. El proceso para crearla, validarla y cerrarla vive en [`../WORKFLOW.md`](../WORKFLOW.md); aquí solo está el índice y las reglas de las notas.
 
-Cada nota distingue el problema observado, la solución propuesta y la decisión adoptada. Las decisiones técnicas deben respetar `AGENTS.md`, `.agents/context/system-status.md` y la arquitectura documentada.
+## Reglas
 
-## Alcance actual
+1. **`REQ-NNN` = `Issues/NNN-slug.md`.** El número de la nota es el identificador del requisito. Siguiente número libre: **021**.
+2. **GitHub:** `gh` está instalado pero sin autenticar (`gh auth login` pendiente), así que la nota local es la fuente de verdad. No se inventan números `#N`; los commits usan `Issue local: Issues/NNN-slug.md`. Si se crea una issue real, anotar su número en el campo `GitHub` de la nota.
+3. **Estados:** `Propuesta` (sin decisión) → `En curso` (decidida, en implementación) → `Hecho` (validada, commit y push hechos) · `Bloqueado` (depende de algo externo) · `Descartado`. El estado de la nota y la tabla de abajo deben coincidir.
+4. **Plantilla:** copiar [`_TEMPLATE.md`](_TEMPLATE.md). Toda nota tiene cabecera, criterios de aceptación con casillas, tabla de verificación e impacto documental.
+5. **Pendientes:** cada pendiente apunta a su destino (otra nota, backlog o `[BLOQUEADO] motivo`). No se dejan pendientes sueltos en texto histórico.
+6. **No duplicar:** requisitos funcionales en `docs/requisitos/`, arquitectura en `docs/arquitectura/`. La nota enlaza, no copia.
+7. Una nota `Hecho` no se reescribe: si el comportamiento vuelve a cambiar, se abre una nota nueva que referencia la anterior.
 
-- [Enlaces responsive y ordenación](001-enlaces-responsive.md): corregido en la UI; queda pendiente persistir el orden.
-- [Páginas y vistas](002-paginas-y-vistas.md): dashboard, retos y enlaces en primera iteración.
-- [Parámetros y preferencias](003-parametros-y-preferencias.md): configuración preparada, pantalla pospuesta.
-- [Arquitectura e integraciones](004-arquitectura-e-integraciones.md): datos estáticos ahora, adaptadores tipados después.
-- [CI/CD y trazabilidad](005-cicd-trazabilidad.md): flujo obligatorio de issue, tests, commit, push y cierre.
-- [Diagramas y arquitectura](006-diagrams.md): skill `/diagrams`, analisis y SVG sincronizados.
-- [Gobierno del flujo de agentes](007-agent-governance.md): preflight, dueños documentales y gates de entrega.
-- [Retos, racha y edición](008-retos-y-progreso.md): propuesta para crear y editar retos con progreso derivado.
-- [Enlaces arrastrables y branding](009-enlaces-drag-y-branding.md): propuesta para drag and drop accesible y logos remotos.
-- [Sitios con branding](010-sitios-branding.md): propuesta para logos de servicios con fallback.
-- [Telemetría Raspberry](011-telemetria-raspberry.md): alternativas de polling, push y tiempo real.
-- [Revisión global de código y branding](012-code-review-global.md): hallazgos de mantenimiento, UX y branding para priorizar mejora.
-- [Branding con asset real en la app](013-branding-asset.md): usar el logo oficial del producto en la UI principal.
-- [Separar datos mock y configuración real](014-mock-data.md): aislar prototipos del flujo real.
-- [Centralizar la resolución del logo de enlaces](015-link-logo-resolver.md): unificar la lógica de marcas y fallbacks.
-- [Refactor de arquitectura del archivo principal](016-app-architecture.md): implementado (`REQ-016`); `App.tsx` reducido a splash/dashboard.
-- [Fecha dinámica en la pantalla principal](017-date-dynamic.md): implementado (`REQ-017`); fecha del sistema con `Intl` es-ES.
-- [Persistencia personal multidispositivo](018-persistencia-personal-multidispositivo.md): propuesta de API privada, almacenamiento en Raspberry y sincronización sin login visible.
+## Índice
+
+| Nota | Estado | Área | Resumen |
+|---|---|---|---|
+| [001](001-enlaces-responsive.md) | Hecho | UI | Fila compacta de enlaces sin overflow, ordenación por arrastre. |
+| [002](002-paginas-y-vistas.md) | Hecho | UI | Shell con Inicio, Retos y Enlaces. |
+| [003](003-parametros-y-preferencias.md) | Hecho | Config | `DashboardConfig` tipado; pantalla de preferencias pospuesta. |
+| [004](004-arquitectura-e-integraciones.md) | En curso | Arquitectura | Marco: adaptadores tipados con timeout 1.5 s; integraciones n8n/Grafana pendientes. |
+| [005](005-cicd-trazabilidad.md) | Hecho | CI | Workflow CI, plantilla de issue y skill de entrega. |
+| [006](006-diagrams.md) | Hecho | Docs | Skill `/diagrams` y SVG de arquitectura, pantallas, datos y entrega. |
+| [007](007-agent-governance.md) | Hecho | Proceso | Dueños documentales y gates (reemplazado en parte por 019). |
+| [008](008-retos-y-progreso.md) | Hecho | UI/Dominio | Retos con progreso derivado, edición, archivo e historial. |
+| [009](009-enlaces-drag-y-branding.md) | Hecho | UI | Reordenado estable por `id` y con teclado; logo con fallback. |
+| [010](010-sitios-branding.md) | Hecho | UI | Logos de servicios con estado independiente. |
+| [011](011-telemetria-raspberry.md) | Propuesta | Integración | Contrato y transporte de métricas Raspberry (push a n8n + polling). |
+| [012](012-code-review-global.md) | Hecho | Calidad | Revisión global; hallazgos resueltos en 013-017. |
+| [013](013-branding-asset.md) | Hecho | UI/PWA | Logo oficial en splash, cabecera, favicon y manifest. |
+| [014](014-mock-data.md) | Hecho | Datos | Datos de prototipo aislados en `src/data/`. |
+| [015](015-link-logo-resolver.md) | Hecho | Dominio | Resolver único `logoUrl` → favicon → icono. |
+| [016](016-app-architecture.md) | Hecho | Arquitectura | `App.tsx` dividido en vistas, dominio, hooks y datos. |
+| [017](017-date-dynamic.md) | Hecho | UI | Fecha del sistema en Inicio. |
+| [018](018-persistencia-personal-multidispositivo.md) | En curso | Persistencia | API SQLite + caché; despliegue, backups y E2E bloqueados. |
+| [019](019-flujo-agentes-v2.md) | Hecho | Proceso | Rediseño del flujo agéntico para entrega autónoma verificable. |
+| [020](020-runner-de-tests.md) | Propuesta | Tests | Elegir runner y cubrir `src/domain/` y la API con `REQ-NNN`. |
 
 ## Entrega
 
-La skill operativa es `.agents/skills/cicd-github-delivery.md`. Toda funcionalidad debe tener issue de GitHub y requisito `REQ-XXX`; la issue solo se cierra tras validación local, push, CI verde y confirmación explícita del desarrollador.
+Ver [`../WORKFLOW.md`](../WORKFLOW.md) (proceso, informe de verificación y Git) y [`../.agents/skills/cicd-github-delivery.md`](../.agents/skills/cicd-github-delivery.md) (checklist operativa).

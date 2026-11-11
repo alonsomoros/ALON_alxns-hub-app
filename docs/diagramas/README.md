@@ -8,4 +8,4 @@ Los diagramas visuales se generan siguiendo `.agents/skills/diagrams.md` mediant
 - [Flujo de entrega](delivery-flow.svg): issue, requisito, validacion, commit, push, CI y cierre.
 - [Fuente Mermaid de arquitectura](architecture-diagrams.mmd): version textual mantenible.
 
-Verde significa implementado, amarillo preparado y rojo pendiente. Los SVG son estaticos, portables y no contienen secretos.
+Validación: cada SVG debe ser XML bien formado (ver `.agents/skills/diagrams.md`). Verde significa implementado, amarillo preparado y rojo pendiente. Los SVG son estaticos, portables y no contienen secretos.

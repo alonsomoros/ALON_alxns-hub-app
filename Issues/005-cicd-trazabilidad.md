@@ -1,22 +1,35 @@
 # CI/CD, GitHub y trazabilidad
 
+- **Estado:** Hecho (proceso actualizado en `REQ-019`)
+- **REQ:** REQ-005
+- **Tipo:** ci
+- **Área:** `.github/`, `.agents/skills/cicd-github-delivery.md`
+- **GitHub:** —
+- **Actualizada:** 2026-11-11
+
 ## Problema
 
-El repositorio no tenía un flujo explícito para pasar de una petición funcional a una issue, una implementación validada, un commit consistente, CI, push y cierre verificable.
-
-## Solución propuesta
-
-Añadir una skill local de entrega, un workflow de GitHub Actions para lint/build, una plantilla de issue y reglas en `AGENTS.md`, backlog y requisitos. Cada cambio debe tener REQ, issue, criterios de aceptación y evidencia de tests.
+No había un flujo explícito desde la petición hasta commit, CI, push y cierre verificable.
 
 ## Decisión
 
-Adoptar `.agents/skills/cicd-github-delivery.md` como procedimiento operativo. Usar `npm ci`, `npm run lint` y `npm run build` en CI. Los commits usarán Conventional Commits con issue y requisito; el cierre se hará con `Closes #N` solo después de push y CI verde.
+Workflow `.github/workflows/ci.yml` (`npm ci`, `npm run lint`, `npm run build` en Node 22 para push y PR a `main`), plantilla `.github/ISSUE_TEMPLATE/feature.yml` y skill de entrega. El proceso completo vive en `WORKFLOW.md`; la skill es solo una checklist.
 
-## Estado
+## Criterios de aceptación
 
-- Configuración local: en implementación.
-- Requisito: `REQ-005`.
-- Issue GitHub: pendiente de crear; el conector requiere autenticación y el repositorio público no muestra issues.
-- Tests requeridos: `npm run lint`, `npm run build`.
-- Push: se intentará sobre `main` sin force.
-- Cierre: bloqueado hasta disponer de un número de issue real y CI verde.
+- [x] CI ejecuta install, lint y build.
+- [x] Plantilla de issue con problema, decisión, requisitos, tests y trazabilidad.
+- [x] Commits Conventional con `REQ-XXX`.
+- [ ] Issues reales en GitHub: [BLOQUEADO] `gh` está instalado pero sin autenticar (`gh auth login`).
+
+## Verificación
+
+CI definido y activo en `main`. El estado de la última ejecución se consulta en la pestaña Actions del repositorio; sin `gh` el agente no puede leerlo desde el terminal.
+
+## Impacto documental
+
+`WORKFLOW.md`, `docs/ci-cd/`.
+
+## Pendientes
+
+- [ ] [BLOQUEADO] Ejecutar `gh auth login` para crear issues y leer el estado de CI.

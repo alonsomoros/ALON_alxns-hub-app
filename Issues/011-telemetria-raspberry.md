@@ -1,16 +1,17 @@
-# Propuesta: telemetría de Raspberry Pi
+# Telemetría de Raspberry Pi
 
-## Estado
-
-Borrador para debate. No implementado. Requisito propuesto: `REQ-011`.
+- **Estado:** Propuesta
+- **REQ:** REQ-011
+- **Tipo:** feat
+- **Área:** `docs/arquitectura/integrations-n8n-grafana.md`, futuro adaptador en `src/infrastructure/`
+- **GitHub:** —
+- **Actualizada:** 2026-11-11
 
 ## Problema
 
-La tarjeta muestra métricas estáticas, pero se quiere información cercana a tiempo real. Un navegador no puede observar directamente la Raspberry de forma fiable sin un canal intermedio, autenticación y una política de actualización.
+La tarjeta Raspberry muestra métricas estáticas, pero se quiere información cercana a tiempo real. Un navegador no puede observar la Raspberry de forma fiable sin un canal intermedio, autenticación y una política de actualización.
 
 ## Contrato de datos propuesto
-
-Usar un envelope versionado y con timestamp:
 
 ```json
 {
@@ -18,43 +19,48 @@ Usar un envelope versionado y con timestamp:
   "deviceId": "raspberry-pi-5",
   "observedAt": "2026-10-28T12:00:00Z",
   "sequence": 42,
-  "metrics": {
-    "cpuBusyPercent": 24,
-    "ramUsedPercent": 61,
-    "storageUsedPercent": 48,
-    "temperatureCelsius": 47
-  }
+  "metrics": { "cpuBusyPercent": 24, "ramUsedPercent": 61, "storageUsedPercent": 48, "temperatureCelsius": 47 }
 }
 ```
 
-Validar rangos, timestamp, `deviceId` y `schemaVersion`. La app debe conservar `lastKnownGood`, mostrar edad del dato y distinguir `loading`, `online`, `stale`, `offline` y `unreachable`.
+Validar rangos, timestamp, `deviceId` y `schemaVersion`. La app conserva `lastKnownGood`, muestra la edad del dato y distingue `loading`, `online`, `stale`, `offline` y `unreachable`.
 
 ## Opciones de transporte
 
-### A. Polling desde la app
+| Opción | Ventaja | Coste |
+|---|---|---|
+| A. Polling directo desde la app cada 60 s | Simple, se recupera tras desconexiones | No es tiempo real; tráfico sin cambios |
+| **B. Push Pi → n8n + polling web (recomendada provisional)** | Separa la Pi del navegador; n8n valida y guarda el último snapshot | Depende de n8n y de la autenticación del webhook |
+| C. SSE/WebSocket | Latencia de segundos | Conexión persistente, autenticación, reconexión y proxy |
 
-La app consulta un endpoint cada 60 segundos. Es la opción más simple, recupera tras desconexiones y encaja con el shell actual, pero no es tiempo real y despierta tráfico aunque no haya cambios.
+No usar `MutationObserver`: observa el DOM, no datos remotos.
 
-### B. Push Pi -> n8n + polling web
+## Decisión
 
-La Raspberry envía una muestra cada minuto a un webhook n8n; la app consulta el último dato cada 30-60 segundos. Separa la Pi del navegador, permite validar/almacenar y es la opción recomendada para la primera versión operativa.
+Pendiente. Recomendación provisional: opción B con polling de 60 s, timeout de 1.5 s, `lastSeen`/staleness y fallback. Si luego se necesita latencia de segundos, evolucionar el adaptador a SSE/WebSocket sin cambiar el contrato.
 
-### C. SSE/WebSocket hacia la app
+## Criterios de aceptación
 
-La Raspberry publica hacia un gateway y la app recibe eventos. Es más cercano a tiempo real, pero exige conexión persistente, autenticación, reconexión, proxy y gestión de múltiples clientes. No usar `MutationObserver`: observa el DOM, no datos remotos.
+- [ ] Decisión de transporte y de seguridad aprobada por el desarrollador.
+- [ ] Adaptador tipado con timeout de 1.5 s y estados `stale`/`offline`/`unreachable`.
+- [ ] Tests de contrato, timeout y reconexión (`REQ-011 ...`).
 
-## Recomendación provisional
+## Verificación
 
-Para una primera versión: push de la Pi cada minuto a n8n, n8n valida y conserva el último snapshot, y la app hace polling de ese snapshot cada 60 segundos con timeout de 1.5 s. Añadir `lastSeen`/staleness y fallback. Si después se necesita latencia de segundos, evolucionar el adaptador web a SSE/WebSocket sin cambiar el contrato de métricas.
+No aplica: sin implementación.
 
-## Preguntas para decidir
+## Impacto documental (al implementar)
 
-- ¿“Tiempo real” significa segundos o basta con refresco de un minuto?
+`docs/arquitectura/integrations-n8n-grafana.md`, `data-flow.svg`, `.agents/context/environment-vars.md`, `.agents/skills/n8n-api-connectors.md`.
+
+## Preguntas abiertas
+
+- ¿"Tiempo real" significa segundos o basta con un minuto?
 - ¿La Raspberry puede hacer HTTPS saliente y cómo se autentica el webhook?
-- ¿n8n debe guardar histórico o solo el último snapshot?
-- ¿Se necesita operar sin n8n mediante endpoint directo local?
-- ¿Qué retención, frecuencia y tolerancia de datos obsoletos se acepta?
+- ¿n8n guarda histórico o solo el último snapshot?
+- ¿Se necesita operar sin n8n mediante un endpoint local directo?
+- ¿Qué retención y tolerancia de datos obsoletos se acepta?
 
-## Impacto previsto
+## Pendientes
 
-Actualizar `docs/arquitectura/integrations-n8n-grafana.md`, adapters tipados, configuración de entorno, diagrama de datos y tests de contrato/timeout/reconexión. Requiere decisión de seguridad antes de implementación; no crear ADR hasta fijar la arquitectura.
+- [ ] Responder las preguntas y aprobar la decisión antes de implementar. No crear ADR hasta fijar la arquitectura.
