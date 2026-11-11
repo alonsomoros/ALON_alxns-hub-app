@@ -8,7 +8,7 @@
 - No hay tests automatizados de comportamiento ni E2E.
 - Las URLs de servicios son datos de prototipo en `src/data/dashboardData.ts`. La fecha de portada ya es dinamica (`REQ-017`).
 - La API de cita se llama desde el componente, sin adaptador ni timeout explicito de 1.5 s.
-- El requisito de healthchecks y estados `OFFLINE`/`UNREACHABLE` aun no tiene implementacion.
+- Los healthchecks de los sitios ya existen (`REQ-022`); los estados `OFFLINE`/`UNREACHABLE` de n8n y Grafana siguen sin implementar.
 - No hay login de producto: el control de acceso de la API es la red privada (Tailscale). No introducir secretos en el bundle.
 
 ## Intent versus reality

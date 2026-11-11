@@ -22,7 +22,7 @@ Esta nota sigue `En curso` mientras existan integraciones sin adaptador; cada un
 - [x] La UI no depende de la red para el primer render.
 - [x] Persistencia detrás de adaptador con timeout de 1.5 s.
 - [x] Cita detrás de adaptador con timeout de 1.5 s (`REQ-021`); el modo `fav` queda en el backlog.
-- [ ] Métricas Raspberry (`REQ-011`), healthchecks y enlace a Grafana detrás de adaptadores.
+- [ ] Métricas Raspberry (`REQ-011`), healthchecks (`REQ-022`) y enlace a Grafana detrás de adaptadores; falta Grafana.
 
 ## Verificación
 
@@ -36,5 +36,6 @@ Persistencia validada en `REQ-018`. El resto está pendiente.
 
 - [x] Adaptador de cita → `REQ-021`.
 - [ ] Adaptador n8n/Pi → `REQ-011`.
-- [ ] Healthchecks reales y Grafana → backlog.
+- [x] Healthchecks reales → `REQ-022`.
+- [ ] Enlace a Grafana → backlog.
 - [ ] Notificaciones de degradación → backlog.

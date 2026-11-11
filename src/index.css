@@ -100,3 +100,4 @@
 .empty-state-large p { margin: 0; color: var(--text-body); font-size: 14px; }
 .settings-field input[type="text"] { width: min(100%, 260px); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; color: var(--text); background: var(--surface); font-size: 13px; }
 .settings-hint { color: var(--text-faint); font-size: 11px; }
+.service-tile.unknown > i { color: var(--text-faint); }

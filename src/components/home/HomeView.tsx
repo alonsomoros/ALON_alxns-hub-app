@@ -4,6 +4,8 @@ import { ChevronDown, ChevronRight, CircleCheck, ExternalLink, Server, TriangleA
 import { prototypePiMetrics, services } from '../../data/dashboardData'
 import { goalCategoryConfig, goalProgress } from '../../domain/goals'
 import { greetingFor } from '../../domain/preferences'
+import { serviceStateFor, type SiteHealth } from '../../domain/siteHealth'
+import { persistenceEnabled } from '../../infrastructure/persistence'
 import type { ContainerInfo, HabitGoal, HomeCardPref, PiMetrics, PiMetricsStatus, QuickLink, Quote, StatsView } from '../../types/dashboard'
 import { BrandLogo } from '../ui/BrandLogo'
 import { CardTitle } from '../ui/CardTitle'
@@ -12,7 +14,7 @@ import { ProgressBar } from '../ui/ProgressBar'
 
 interface PiState { pi: PiMetrics | null; status: PiMetricsStatus; ageMinutes: number }
 
-export function HomeView({ quote, links, goals, piState, statsView, cards, displayName, onOpenGoals, onOpenLinks }: { quote: Quote; links: QuickLink[]; goals: HabitGoal[]; piState: PiState; statsView: StatsView; cards: HomeCardPref[]; displayName: string; onOpenGoals: () => void; onOpenLinks: () => void }) {
+export function HomeView({ quote, links, goals, piState, statsView, cards, displayName, siteHealth, onOpenGoals, onOpenLinks }: { quote: Quote; links: QuickLink[]; goals: HabitGoal[]; piState: PiState; statsView: StatsView; cards: HomeCardPref[]; displayName: string; siteHealth: SiteHealth | null; onOpenGoals: () => void; onOpenLinks: () => void }) {
   const today = useToday()
   return <>
     <section className="welcome">
@@ -24,7 +26,7 @@ export function HomeView({ quote, links, goals, piState, statsView, cards, displ
       {cards.filter((card) => card.visible).map((card) => {
         if (card.id === 'pi') return <PiCard {...piState} statsView={statsView} key={card.id} />
         if (card.id === 'goals') return <GoalsSummaryCard goals={goals} onOpenGoals={onOpenGoals} key={card.id} />
-        if (card.id === 'services') return <ServicesCard key={card.id} />
+        if (card.id === 'services') return <ServicesCard health={siteHealth} key={card.id} />
         return <LinksSummaryCard links={links} onOpenLinks={onOpenLinks} key={card.id} />
       })}
     </section>
@@ -91,10 +93,13 @@ function GoalsSummaryCard({ goals, onOpenGoals }: { goals: HabitGoal[]; onOpenGo
   </article>
 }
 
-function ServicesCard() {
+const serviceStateLabel = { online: 'online', offline: 'offline', unknown: 'sin comprobar' }
+
+/** Con API, el estado real de la última comprobación (`unknown` si aún no hay dato); sin API, el dato de ejemplo (`REQ-022`). */
+function ServicesCard({ health }: { health: SiteHealth | null }) {
   return <article className="card services-card">
     <CardTitle icon={<Wifi size={18} />} title="Tus sitios" meta="Ahora mismo" />
-    <div className="service-icons">{services.map((service) => <a className={`service-tile ${service.state}`} href={service.url} target="_blank" rel="noreferrer" key={service.name} aria-label={`${service.name}: ${service.state === 'online' ? 'online' : 'offline'}`}><BrandLogo url={service.url} explicitUrl={service.logoUrl} fallback={service.icon} className="service-logo" /><strong>{service.name}</strong><i /></a>)}</div>
+    <div className="service-icons">{services.map((service) => { const state = persistenceEnabled ? serviceStateFor(service.url, health) : service.state; return <a className={`service-tile ${state}`} href={service.url} target="_blank" rel="noreferrer" key={service.name} aria-label={`${service.name}: ${serviceStateLabel[state]}`}><BrandLogo url={service.url} explicitUrl={service.logoUrl} fallback={service.icon} className="service-logo" /><strong>{service.name}</strong><i /></a> })}</div>
   </article>
 }
 

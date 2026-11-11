@@ -3,6 +3,7 @@ import { dirname, resolve } from 'node:path'
 import { createServer } from 'node:http'
 import { DatabaseSync } from 'node:sqlite'
 import { getPiMetrics } from './metrics.js'
+import { getSiteHealth } from './health.js'
 import { getQuote } from './quote.js'
 
 const host = process.env.HOST ?? '0.0.0.0'
@@ -176,6 +177,7 @@ const server = createServer(async (request, response) => {
     if (request.method === 'GET' && url.pathname === '/health') return sendJson(request, response, 200, { status: 'ok', database: databasePath })
     if (request.method === 'GET' && url.pathname === '/api/state') return sendJson(request, response, 200, getState())
     if (request.method === 'GET' && url.pathname === '/api/pi/metrics') return sendJson(request, response, 200, await getPiMetrics())
+    if (request.method === 'GET' && url.pathname === '/api/sites/health') return sendJson(request, response, 200, await getSiteHealth())
     if (request.method === 'GET' && url.pathname === '/api/quote') {
       const quote = await getQuote()
       return quote ? sendJson(request, response, 200, quote) : sendJson(request, response, 503, { error: 'Quote unavailable' })
@@ -195,6 +197,7 @@ const server = createServer(async (request, response) => {
 server.listen(port, host, () => {
   console.log(`alXns persistence API listening on ${host}:${port}`)
   void getQuote() // Precalienta la cita del día: el origen tarda ~1 s y la PWA espera 1.5 s.
+  void getSiteHealth() // Precalienta las comprobaciones de sitios: pueden tardar hasta 4 s.
 })
 
 const shutdown = () => { database.close(); server.close(() => process.exit(0)) }

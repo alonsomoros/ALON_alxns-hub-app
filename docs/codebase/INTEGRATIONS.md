@@ -9,7 +9,7 @@
 | Grafana | Dashboard externo | Detalle historico futuro | URL/config futura | Baja para shell actual | `docs/arquitectura/integrations-n8n-grafana.md` |
 | Prometheus + docker-socket-proxy | HTTP privado (red de la Pi) | Métricas del host y estado de contenedores | Red privada, solo lectura | Media; la tarjeta degrada a `stale`/`OFFLINE` | `server/metrics.js`, `src/infrastructure/piMetrics.ts` |
 | API de persistencia | HTTP privado (Tailscale) | Retos, enlaces y preferencias | Perimetro de red, sin login | Media; la app funciona sin ella | `src/infrastructure/persistence.ts`, `server/index.js` |
-| Servicios publicados | HTTPS links | Sitios clicables y healthchecks futuros | No configurada | Baja para shell actual | `src/data/dashboardData.ts` |
+| Servicios publicados | HTTPS (comprobados por la API personal) | Sitios clicables y estado real (`REQ-022`) | `HEALTHCHECK_URLS` en el servidor (opcional) | Baja; sin API se muestran datos de ejemplo | `server/health.js`, `src/infrastructure/siteHealth.ts`, `src/data/dashboardData.ts` |
 
 ## Data stores
 

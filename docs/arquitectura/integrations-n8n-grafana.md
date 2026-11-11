@@ -21,7 +21,7 @@ Las métricas **no pasan por n8n** (`REQ-011`). La API personal (`server/metrics
 
 ## Healthchecks
 
-Los endpoints configurados serán `hipoglifo.es`, `el-negredo.vercel.app` y `alonsomoros.github.io`. La respuesta normalizada incluye `name`, `url`, `state`, `latencyMs` y `checkedAt`.
+El estado de los sitios (`REQ-022`) sale de `GET /api/sites/health` de la API personal, que comprueba solo las URLs de su configuración (`HEALTHCHECK_URLS`; por defecto `hipoglifo.es`, `el-negredo.vercel.app` y `alonsomoros.github.io`) con `HEAD` (y `GET` si no lo admiten), timeout de 4 s y caché de 60 s con renovación en segundo plano. La respuesta es `{ checkedAt, sites: [{ url, ok, status, ms }] }`; 2xx y 3xx cuentan como arriba. La PWA la consulta cada 60 s y muestra `online`, `offline` o «sin comprobar». `blackbox-exporter` queda como alternativa si se quiere histórico en Grafana.
 
 ## Grafana
 

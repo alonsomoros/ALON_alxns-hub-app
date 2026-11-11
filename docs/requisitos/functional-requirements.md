@@ -10,7 +10,7 @@ Dueño de **qué debe hacer el producto**. Cada `FR-xx` enlaza a la nota `REQ-NN
 | FR-01 Splash | `REQ-002` | Implementado |
 | FR-02 Inicio | `REQ-002`, `REQ-013`, `REQ-017`, `REQ-021` | Implementado; cita en español vía la API personal con timeout de 1.5 s (desplegada en la Pi) |
 | FR-03 Infraestructura | `REQ-011` | Implementado y desplegado (métricas reales con refresco de 30, 60 o 120 s y resumen de contenedores); vistas de barras, anillos y medidores (`REQ-003`) |
-| FR-04 Servicios | `REQ-010`, `REQ-015` | Parcial: logos y fallback; el estado `online`/`offline` es de prototipo |
+| FR-04 Servicios | `REQ-010`, `REQ-015`, `REQ-022` | Implementado: logos con fallback y estado real vía la API (despliegue en la Pi pendiente); sin API, estado de ejemplo |
 | FR-05 Hábitos | `REQ-008` | Implementado |
 | FR-06 Enlaces | `REQ-001`, `REQ-009`, `REQ-016` | Implementado (con estado vacío) |
 | FR-07 PWA | `REQ-013` | Implementado |

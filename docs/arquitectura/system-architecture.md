@@ -18,7 +18,7 @@ El cliente React renderiza un shell PWA inmediato orientado a una primera impres
 
 - Implementado: shell PWA, splash, navegacion Inicio/Retos/Enlaces, estado React, fallback de cita, adaptador de persistencia con timeout de 1.5 s y cache, API SQLite y Docker Compose (`REQ-018`); métricas de la Raspberry con polling de 60 s mediante `GET /api/pi/metrics` (`REQ-011`, desplegado).
 - Preparado: manifest/service worker PWA y contratos/documentacion para preferencias.
-- Pendiente: despliegue de la API en la Raspberry, backups, HTTPS, adaptadores n8n/Grafana, healthchecks reales y tests E2E.
+- Pendiente: despliegue de la API en la Raspberry, backups, HTTPS, adaptadores n8n/Grafana y tests E2E; healthchecks de sitios implementados (`REQ-022`, despliegue pendiente).
 
 ## Diagramas
 

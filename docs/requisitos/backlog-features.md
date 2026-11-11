@@ -26,7 +26,7 @@ Prioridad alta (habilitan la entrega autónoma o cierran huecos de la persistenc
 Prioridad media (producto):
 
 - [ ] Modo `fav` de la cita (los modos `default` y `random` y el timeout de 1.5 s ya existen, `REQ-021`).
-- [ ] Healthchecks reales con timeout y fallback `OFFLINE`/`UNREACHABLE` (propuesta: `blackbox-exporter` en Prometheus).
+- [ ] Histórico de disponibilidad de los sitios (`blackbox-exporter` en Prometheus); el estado actual ya sale de la API (`REQ-022`).
 - [ ] cAdvisor en Prometheus para CPU/RAM por contenedor.
 - [ ] Alertas: Alertmanager → webhook de n8n → notificación.
 - [ ] Enlace configurable a Grafana.

@@ -69,7 +69,7 @@ Actualizados: `docs/arquitectura/{integrations-n8n-grafana,system-architecture,d
 
 - [x] Desplegado y verificado en la Raspberry (2026-11-11). El contenedor actual se creó con `docker compose --env-file .env -f docs/ci-cd/docker-compose.yml` (proyecto `ci-cd`, `ALLOWED_ORIGINS` en el `.env` de la raíz del repo): recrearlo con ese mismo `--env-file`, tras copiar `/app/data` como respaldo.
 - [ ] El `.env` de la Pi conserva `ALLOWED_ORIGINS` antiguo mientras el contenedor ya acepta `https://alxns-hub.vercel.app`: igualarlo para que un `docker compose up` futuro no rompa el CORS en producción → backlog.
-- [ ] Healthchecks de los sitios con `blackbox-exporter` en Prometheus → backlog.
+- [x] Healthchecks de los sitios resueltos sin `blackbox-exporter`, en la API (`REQ-022`); el histórico con `blackbox-exporter` sigue en el backlog.
 - [ ] cAdvisor para CPU/RAM por contenedor → backlog.
 - [ ] Alertas Alertmanager → n8n → notificación → backlog.
 - [ ] Prometheus, node-exporter, Grafana y Portainer escuchan en toda la LAN; limitarlos a Tailscale/localhost → backlog.

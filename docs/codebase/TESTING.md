@@ -27,6 +27,7 @@ Los tests viven en `tests/` (fuera de `src/` y del `tsconfig`) y el nombre de ca
 | `tests/preferences.test.ts`, `themes.test.ts`, `persistedState.test.ts`, `saveQueue.test.ts`, `piStats.test.ts`, `css-tokens.test.ts` | Preferencias, temas y contraste AA, fusión tras conflicto, cola de guardado, estadísticas y CSS sin colores fijos (`REQ-003`) |
 | `tests/quote.test.ts`, `tests/quote-server.test.ts` | Cita del día: validación, caché y respaldo (`REQ-021`) |
 | `tests/date.test.ts` | Fecha de Inicio y cambio de día (`REQ-017`) |
+| `tests/health-server.test.ts`, `tests/siteHealth.test.ts` | Estado de los sitios: comprobaciones, caché, normalización y mapeo de estado (`REQ-022`) |
 | `tests/svg.test.ts` | Los SVG de `docs/diagramas/` son XML bien formado (`REQ-006`) |
 
 Reglas para que un módulo sea probable con este runner: importa sus dependencias con extensión `.ts`, no usa `import.meta.env` ni el DOM en el nivel superior y recibe por parámetro lo que toque la red o el reloj.

@@ -31,4 +31,4 @@ La sección de servicios usaba iconos Lucide fijos aunque cada servicio apunta a
 
 ## Pendientes
 
-- [ ] Healthchecks reales → backlog.
+- [x] Healthchecks reales → `REQ-022` (despliegue en la Pi pendiente).

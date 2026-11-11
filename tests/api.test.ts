@@ -188,3 +188,26 @@ describe('REQ-021 quote endpoint', () => {
     } finally { await api.stop() }
   })
 })
+
+describe('REQ-022 sites health endpoint', () => {
+  it('REQ-022 reports each configured site as up or down and ignores any URL sent by the client', async () => {
+    const up = createServer((_request, response) => { response.statusCode = 200; response.end('ok') })
+    const broken = createServer((_request, response) => { response.statusCode = 500; response.end('boom') })
+    await Promise.all([up, broken].map((server) => new Promise<void>((resolve) => server.listen(0, '127.0.0.1', () => resolve()))))
+    const urlOf = (server: Server) => `http://127.0.0.1:${(server.address() as { port: number }).port}`
+    const dead = `http://127.0.0.1:${await freePort()}`
+    const api = await startApi({ HEALTHCHECK_URLS: [urlOf(up), urlOf(broken), dead].join(',') })
+    try {
+      const response = await fetch(`${api.url}/api/sites/health?url=http://169.254.169.254/`, { headers: { Origin: allowedOrigin } })
+      assert.equal(response.status, 200)
+      assert.equal(response.headers.get('access-control-allow-origin'), allowedOrigin)
+      const body = await response.json() as { checkedAt: string; sites: { url: string; ok: boolean; status: number | null }[] }
+      assert.ok(!Number.isNaN(Date.parse(body.checkedAt)))
+      assert.deepEqual(body.sites.map((site) => [site.url, site.ok, site.status]), [[urlOf(up), true, 200], [urlOf(broken), false, 500], [dead, false, null]])
+    } finally {
+      await api.stop()
+      up.close()
+      broken.close()
+    }
+  })
+})
