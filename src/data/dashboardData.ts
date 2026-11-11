@@ -1,10 +1,9 @@
 import { BookOpen, Globe2, Heart, Link2, Sparkles } from 'lucide-react'
-import type { DashboardConfig, HabitGoal, PiMetricValues, QuickLink, Quote, Service } from '../types/dashboard'
+import type { HabitGoal, PiMetricValues, QuickLink, Quote, QuoteMode, Service } from '../types/dashboard'
 
 // Datos de prototipo (Issue 014): sustituibles por adaptadores reales sin tocar las vistas.
-export const dashboardConfig: DashboardConfig = {
-  theme: 'soft', mode: 'light', quote: 'random', orderServices: ['Hipoglifo.es', 'El Negredo', 'Portfolio'], raspberryPiStatsShowcase: 'pbar',
-}
+/** Modo de la cita (REQ-003: editable en una fase futura). */
+export const quoteMode: QuoteMode = 'random'
 
 // Métricas de ejemplo: se muestran solo sin API de persistencia configurada (REQ-011).
 export const prototypePiMetrics: PiMetricValues = { cpuBusyPercent: 24, ramUsedPercent: 61, storageUsedPercent: 48, temperatureCelsius: 47, uptimeSeconds: null, load1: null }

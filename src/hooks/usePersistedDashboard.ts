@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link2 } from 'lucide-react'
-import { dashboardConfig, defaultGoals, defaultLinks } from '../data/dashboardData'
+import { defaultGoals, defaultLinks } from '../data/dashboardData'
 import { loadPersistedState, persistenceEnabled, savePersistedState } from '../infrastructure/persistence'
 import type { PersistenceStatus } from '../types/dashboard'
 
@@ -28,7 +28,7 @@ export function usePersistedDashboard() {
     if (!isHydrated || !persistenceEnabled) return
     savePersistedState({
       version: version.current,
-      preferences: { ...dashboardConfig },
+      preferences: null, // Se sustituye por las preferencias reales en la tarea de sincronización (REQ-003).
       goals,
       links: links.map((link, position) => ({ id: link.id, label: link.label, url: link.url, logoUrl: link.logoUrl, position, archived: false })),
     }).then((persistedState) => {

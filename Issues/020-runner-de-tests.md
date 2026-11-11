@@ -26,7 +26,7 @@ Añadir una dependencia requiere aprobación (`CODE_STANDARD.md`): esta nota que
 
 ## Criterios de aceptación
 
-- [ ] `npm test` existe y pasa en local y en CI.
+- [ ] `npm test` existe y pasa en local y en CI. Avance (`REQ-003`): `npm test` ya existe con `node:test` y `--experimental-strip-types` y cubre los módulos puros de preferencias y temas; faltan los tests de `REQ-008`, `REQ-015` a `REQ-018` y el CI.
 - [ ] Tests con `REQ-008`, `REQ-015`, `REQ-016`, `REQ-017` y `REQ-018` en el nombre.
 - [ ] `docs/codebase/TESTING.md` y `CODE_STANDARD.md` actualizados; el checklist de `WORKFLOW.md` §4 incluye `npm test`.
 - [ ] Validación XML de los SVG automatizada (`REQ-006`).

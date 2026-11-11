@@ -2,16 +2,16 @@ import { useState } from 'react'
 import { ChevronDown, ChevronRight, CircleCheck, ExternalLink, Server, TriangleAlert, Trophy, Wifi, Zap } from 'lucide-react'
 import { prototypePiMetrics, services } from '../../data/dashboardData'
 import { goalCategoryConfig, goalProgress } from '../../domain/goals'
-import type { ContainerInfo, HabitGoal, PiMetrics, PiMetricsStatus, QuickLink, Quote } from '../../types/dashboard'
+import type { ContainerInfo, HabitGoal, PiMetrics, PiMetricsStatus, QuickLink, Quote, StatsView } from '../../types/dashboard'
 import { formatLongDate } from '../../utils/date'
 import { BrandLogo } from '../ui/BrandLogo'
 import { CardTitle } from '../ui/CardTitle'
-import { Metric } from '../ui/Metric'
+import { PiStats } from '../ui/PiStats'
 import { ProgressBar } from '../ui/ProgressBar'
 
 interface PiState { pi: PiMetrics | null; status: PiMetricsStatus; ageMinutes: number }
 
-export function HomeView({ quote, links, goals, piState, onOpenGoals, onOpenLinks }: { quote: Quote; links: QuickLink[]; goals: HabitGoal[]; piState: PiState; onOpenGoals: () => void; onOpenLinks: () => void }) {
+export function HomeView({ quote, links, goals, piState, statsView, onOpenGoals, onOpenLinks }: { quote: Quote; links: QuickLink[]; goals: HabitGoal[]; piState: PiState; statsView: StatsView; onOpenGoals: () => void; onOpenLinks: () => void }) {
   const [today] = useState(() => formatLongDate(Date.now()))
   return <>
     <section className="welcome">
@@ -20,16 +20,13 @@ export function HomeView({ quote, links, goals, piState, onOpenGoals, onOpenLink
       <blockquote>“{quote.content}”<cite>— {quote.author}</cite></blockquote>
     </section>
     <section className="home-grid">
-      <PiCard {...piState} />
+      <PiCard {...piState} statsView={statsView} />
       <GoalsSummaryCard goals={goals} onOpenGoals={onOpenGoals} />
       <ServicesCard />
       <LinksSummaryCard links={links} onOpenLinks={onOpenLinks} />
     </section>
   </>
 }
-
-const metricValue = (value: number | null | undefined, loading: boolean) => loading ? '…' : value === null || value === undefined ? '—' : value.toFixed(value % 1 === 0 ? 0 : 1)
-const metricProgress = (value: number | null | undefined) => value === null || value === undefined ? 0 : Math.min(100, Math.max(0, value))
 
 /** Resumen de contenedores: cuántos activos y cuántos con incidencias (reiniciando, muertos o `unhealthy`; los parados a propósito no cuentan). */
 function containersSummary(pi: PiMetrics) {
@@ -60,7 +57,7 @@ function containerBadge(item: ContainerInfo) {
   return { label: item.health === 'starting' ? `${label} · iniciando` : label, tone }
 }
 
-function PiCard({ pi, status, ageMinutes }: PiState) {
+function PiCard({ pi, status, ageMinutes, statsView }: PiState & { statsView: StatsView }) {
   const [detailOpen, setDetailOpen] = useState(false)
   const loading = status === 'loading'
   const metrics = status === 'prototype' ? prototypePiMetrics : pi?.metrics
@@ -75,9 +72,7 @@ function PiCard({ pi, status, ageMinutes }: PiState) {
   ]
   return <article className="card pi-card">
     <CardTitle icon={<Server size={18} />} title="Raspberry Pi 5" meta="Tu pequeño nodo" status={titleStatus} />
-    <div className="pi-metrics">
-      {rows.map((row) => <Metric key={row.label} label={row.label} value={metricValue(row.value, loading)} unit={row.value === null || row.value === undefined ? '' : row.unit} progress={metricProgress(row.value)} />)}
-    </div>
+    <PiStats view={statsView} rows={rows} loading={loading} />
     {detailOpen && items.length > 0 && <ul className="container-list" id="pi-containers" aria-label="Contenedores de la Raspberry">
       {items.map((item) => { const badge = containerBadge(item); return <li key={item.name}><span className="container-name">{item.name}</span><span className={`container-state ${badge.tone}`}>{badge.label}</span></li> })}
     </ul>}

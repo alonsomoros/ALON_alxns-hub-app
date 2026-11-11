@@ -50,23 +50,32 @@ interface UiPreferences {
 
 **Refresco:** `usePiMetrics` recibe el intervalo de `piRefreshSeconds`; se mantienen la pausa con la pestaña oculta y el último dato válido.
 
+**Desviaciones de implementación (fase 1):** 12 variables base (`bg, surface, text, textMuted, border, accent, accent2, accentStrong, onAccentStrong, warn, danger, info`) y el resto derivado en CSS con `color-mix()`; `soft` oscurece `textMuted` a `#5f6f65` para cumplir AA; cada tema define el par de colores de su cuadrado (`swatch`), y el del tema `dark` es negro y blanco porque sus acentos son claros; `npm test` usa `node:test` con `--experimental-strip-types` (Node 22.6 o superior).
+
 **Fases (un commit por fase):** (1) tokens CSS, `themes.ts`, Ajustes con temas y vista de stats; (2) tarjetas de Inicio, refresco y sincronización.
 
 ## Criterios de aceptación
 
-- [ ] `index.css` no contiene colores fijos: todo pasa por variables de tema.
-- [ ] Seis temas seleccionables con cuadrados de dos triángulos, navegables con teclado y aplicados sin parpadeo al recargar.
-- [ ] Cada tema cumple contraste WCAG AA (texto normal ≥ 4.5:1) para texto sobre fondo, texto sobre superficie y texto sobre acento.
-- [ ] Desplegable de vista de stats con barras, anillos y medidores, accesibles y sin librerías nuevas.
+- [x] `index.css` no contiene colores fijos: todo pasa por variables de tema (`tests/css-tokens.test.ts`).
+- [x] Seis temas seleccionables con cuadrados de dos triángulos, navegables con teclado y aplicados sin parpadeo al recargar.
+- [x] Cada tema cumple contraste WCAG AA (texto normal ≥ 4.5:1) para texto sobre fondo, texto sobre superficie y texto sobre acento (`tests/themes.test.ts`).
+- [x] Desplegable de vista de stats con barras, anillos y medidores, accesibles y sin librerías nuevas.
 - [ ] Orden y visibilidad de las tarjetas de Inicio configurables; no se puede ocultar todo (siempre queda al menos una).
 - [ ] Refresco de 30, 60 o 120 s aplicado a `usePiMetrics`.
 - [ ] Las preferencias se leen de la API y se sincronizan entre dispositivos; sin API funcionan en local.
 - [ ] Una base vacía o sin `preferences` no vacía retos ni enlaces.
-- [ ] Valores desconocidos en `preferences` recurren a los valores por defecto sin romper la app.
+- [x] Valores desconocidos en `preferences` recurren a los valores por defecto sin romper la app (`tests/preferences.test.ts`).
 
 ## Verificación
 
-Plan: `npm run lint` y `npm run build`; script de contraste WCAG por tema; Chrome (PC y móvil) con cada tema y cada vista de stats, recarga sin parpadeo y sincronización entre dos dispositivos. Tests automáticos de `parsePreferences` y `applyTheme`: Omitido mientras no exista runner (`REQ-020`).
+| Check | Resultado |
+|---|---|
+| `npm test` (`node:test`) | OK: 27 pruebas (temas y contraste AA de los seis temas, preferencias, estadísticas, CSS sin colores fijos) |
+| `npm run lint` / `npm run build` / `tsc -b` | OK |
+| Chrome, fase 1 (datos de ejemplo) | OK: engranaje abre Ajustes; los seis temas cambian al instante y se guardan; flechas del teclado recorren los temas con vuelta al principio; barras, anillos y medidores se ven en `ocean` y `dark`; la vista elegida sobrevive a la recarga; «Restablecer» vuelve a los valores por defecto; sin errores de consola |
+| Ancho de móvil | No verificado visualmente (el redimensionado de ventana no cambió el viewport) |
+
+Pendiente de la fase 2: sincronización entre dos dispositivos y comprobación de producción.
 
 ## Impacto documental
 

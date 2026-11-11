@@ -1,4 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
+import type { ThemeId } from '../themes'
 
 export interface Quote { content: string; author: string }
 export interface Service { name: string; url: string; state: 'online' | 'offline'; icon: LucideIcon; logoUrl?: string }
@@ -7,8 +8,14 @@ export interface NewLinkDraft { label: string; url: string }
 export type GoalCategory = 'reading' | 'movement' | 'learning'
 export interface GoalSnapshot { current: number; target: number; recordedAt: string }
 export interface HabitGoal { id: string; title: string; description: string; category: GoalCategory; current: number; target: number; unit: string; archived: boolean; history: GoalSnapshot[] }
-export interface DashboardConfig { theme: 'soft'; mode: 'light'; quote: 'default' | 'random' | 'fav'; orderServices: string[]; raspberryPiStatsShowcase: 'graph' | 'pbar' }
-export type DashboardView = 'home' | 'goals' | 'links'
+export type QuoteMode = 'default' | 'random' | 'fav'
+export type StatsView = 'bars' | 'rings' | 'gauges'
+export type HomeCardId = 'pi' | 'goals' | 'services' | 'links'
+export interface HomeCardPref { id: HomeCardId; visible: boolean }
+export type PiRefreshSeconds = 30 | 60 | 120
+/** Preferencias de interfaz (REQ-003): se guardan en local y se sincronizan con la API de persistencia. */
+export interface UiPreferences { schemaVersion: 1; theme: ThemeId; statsView: StatsView; piRefreshSeconds: PiRefreshSeconds; homeCards: HomeCardPref[] }
+export type DashboardView = 'home' | 'goals' | 'links' | 'settings'
 export type PersistenceStatus = 'loading' | 'online' | 'offline' | 'local'
 
 export type PiMetricsStatus = 'loading' | 'online' | 'degraded' | 'stale' | 'offline' | 'prototype'

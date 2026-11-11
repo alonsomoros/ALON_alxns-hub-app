@@ -8,6 +8,7 @@
     "persistence": "node server/index.js",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
+    "test": "node --experimental-strip-types --test \"tests/**/*.test.ts\"",
     "preview": "vite preview"
   },
   "dependencies": {
