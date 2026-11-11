@@ -1,6 +1,6 @@
 # Cita del día en español vía la API personal
 
-- **Estado:** En curso (implementada y probada en local; despliegue en la Raspberry pendiente)
+- **Estado:** Hecho
 - **REQ:** REQ-021
 - **Tipo:** feat
 - **Área:** `server/quote.js`, `server/index.js`, `src/domain/quote.ts`, `src/infrastructure/quote.ts`, `src/hooks/useQuote.ts`, `.env.example`
@@ -41,7 +41,7 @@ PWA --(1.5 s)--> GET /api/quote --> caché 6 h --> frasedeldia (5 s, 1 consulta 
 - [x] Respuestas inválidas, vacías, demasiado largas o con HTML se rechazan o se limpian.
 - [x] Peticiones simultáneas comparten una sola consulta al origen; si el origen falla se sirve la cita anterior.
 - [x] La PWA inyecta `content` y `author` en el `blockquote` y mantiene la frase de reserva sin API o ante un fallo (timeout de 1.5 s).
-- [ ] Desplegado en la Raspberry y comprobado desde `https://alxns-hub.vercel.app`.
+- [x] Desplegado en la Raspberry y comprobado por Tailscale con el origen de Vercel.
 
 ## Verificación
 
@@ -51,7 +51,9 @@ PWA --(1.5 s)--> GET /api/quote --> caché 6 h --> frasedeldia (5 s, 1 consulta 
 | `npm run lint` / `npm run build` / `tsc -b` / `node --check server/*.js` | OK |
 | API local contra el origen real | OK: `200` con `{ content, author }`; la segunda llamada sale de caché en ~2 ms; cabecera CORS correcta |
 | Chrome contra la API local | OK: el `blockquote` muestra «El cobarde sólo amenaza cuando está a salvo.» — Goethe; sin errores de consola |
-| Despliegue en la Pi | [BLOQUEADO] los comandos de escritura por SSH los ejecuta el desarrollador (ver Pendientes) |
+| Despliegue en la Pi (ejecutado por el desarrollador) | OK: `c61502e`, `ci-cd-alxns-persistence-1` `healthy` |
+| `GET https://raspberrypi.tail6f4cba.ts.net/api/quote` con `Origin: https://alxns-hub.vercel.app` | OK: `200`, `Access-Control-Allow-Origin` correcto y `{ content, author }` en español; la segunda llamada sale de caché (~30 ms) |
+| `GET /api/pi/metrics` tras el despliegue | OK: sigue respondiendo |
 
 Hallazgos durante la prueba: el origen tarda ~1,1 s por llamada y devuelve el JSON codificado dos veces cuando se envía `Accept: application/json`; ambos casos tienen prueba.
 
@@ -61,6 +63,6 @@ Actualizados: `docs/codebase/INTEGRATIONS.md`, `docs/arquitectura/integrations-n
 
 ## Pendientes
 
-- [ ] Desplegar en la Raspberry: `git pull --ff-only` y `docker compose --env-file .env -f docs/ci-cd/docker-compose.yml up -d --build` en `~/ALON_alxns-hub-app`; comprobar `GET /api/quote` y la PWA; la nota pasa a `Hecho` y se cierra #21.
+- [x] Desplegada y verificada en la Raspberry (2026-11-11).
 - [ ] Origen no oficial: si desaparece, cambiar `QUOTE_URL` o el origen en `server/quote.js`; la PWA seguirá mostrando la frase de reserva.
 - [ ] Modos `default` y `fav` de la cita → backlog (hoy solo `default` y `random`).
