@@ -1,16 +1,19 @@
+import { useState } from 'react'
 import { ChevronRight, CircleCheck, ExternalLink, Server, Trophy, Wifi, Zap } from 'lucide-react'
 import { services } from '../../data/dashboardData'
 import { goalCategoryConfig, goalProgress } from '../../domain/goals'
 import type { HabitGoal, QuickLink, Quote } from '../../types/dashboard'
+import { formatLongDate } from '../../utils/date'
 import { BrandLogo } from '../ui/BrandLogo'
 import { CardTitle } from '../ui/CardTitle'
 import { Metric } from '../ui/Metric'
 import { ProgressBar } from '../ui/ProgressBar'
 
 export function HomeView({ quote, links, goals, onOpenGoals, onOpenLinks }: { quote: Quote; links: QuickLink[]; goals: HabitGoal[]; onOpenGoals: () => void; onOpenLinks: () => void }) {
+  const [today] = useState(() => formatLongDate(Date.now()))
   return <>
     <section className="welcome">
-      <p className="date-label">27 de octubre de 2026</p>
+      <p className="date-label">{today}</p>
       <h1>Hola, Alonso.</h1>
       <blockquote>“{quote.content}”<cite>— {quote.author}</cite></blockquote>
     </section>

@@ -17,6 +17,7 @@ Toda funcionalidad nueva debe tener una issue de GitHub y un requisito `REQ-XXX`
 - [x] `REQ-013`: consolidar branding real de la app y del icono de instalación PWA con `logo.png` (`Issues/013-branding-asset.md`).
 - [ ] `REQ-011`: definir contrato y transporte de métricas Raspberry mediante push/polling o tiempo real (`Issues/011-telemetria-raspberry.md`).
 - [x] `REQ-016`: separar `App.tsx` en tipos, datos, dominio, hooks y componentes por vista sin cambiar comportamiento (`Issues/016-app-architecture.md`).
+- [x] `REQ-017`: mostrar en Inicio la fecha actual del sistema en lugar de una fija (`Issues/017-date-dynamic.md`).
 - [x] `REQ-018`: implementar persistencia personal multidispositivo sin login visible; queda despliegue y validación en Raspberry (`Issues/018-persistencia-personal-multidispositivo.md`).
 
 - [ ] Adaptador n8n para métricas de Raspberry Pi 5.

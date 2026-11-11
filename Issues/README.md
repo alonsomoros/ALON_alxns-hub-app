@@ -22,7 +22,7 @@ Cada nota distingue el problema observado, la solución propuesta y la decisión
 - [Separar datos mock y configuración real](014-mock-data.md): aislar prototipos del flujo real.
 - [Centralizar la resolución del logo de enlaces](015-link-logo-resolver.md): unificar la lógica de marcas y fallbacks.
 - [Refactor de arquitectura del archivo principal](016-app-architecture.md): implementado (`REQ-016`); `App.tsx` reducido a splash/dashboard.
-- [Fecha dinámica en la pantalla principal](017-date-dynamic.md): derivar la fecha del sistema en lugar de hardcodearla.
+- [Fecha dinámica en la pantalla principal](017-date-dynamic.md): implementado (`REQ-017`); fecha del sistema con `Intl` es-ES.
 - [Persistencia personal multidispositivo](018-persistencia-personal-multidispositivo.md): propuesta de API privada, almacenamiento en Raspberry y sincronización sin login visible.
 
 ## Entrega
