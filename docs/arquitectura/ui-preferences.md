@@ -16,7 +16,7 @@ interface UiPreferences {
 }
 ```
 
-> Contrato aprobado en [`REQ-003`](../../Issues/003-parametros-y-preferencias.md); pendiente de implementar. Sustituye al modelo anterior (`mode`, `orderServices`, `raspberryPiStatsShowcase: 'graph' | 'pbar'`). `quote` se mantiene aparte.
+> Contrato aprobado en [`REQ-003`](../../Issues/003-parametros-y-preferencias.md); implementado. Sustituye al modelo anterior (`mode`, `orderServices`, `raspberryPiStatsShowcase: 'graph' | 'pbar'`). `quote` se mantiene aparte.
 
 ## Decisiones iniciales
 

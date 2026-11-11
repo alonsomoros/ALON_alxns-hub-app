@@ -14,6 +14,10 @@
 - Estados de nota: `Propuesta`, `En curso`, `Hecho`, `Bloqueado`, `Descartado`.
 - Decisiones de arquitectura: solo ADR aprobado; una propuesta va a `Issues/` hasta aprobarse.
 
+## Interfaz
+
+- Los colores de la UI salen de variables de tema (`--bg`, `--surface`, `--text`, `--accent`…): no se escriben colores fijos en `src/index.css` (lo comprueba `npm test`). Un tema nuevo se añade en `src/themes.ts` con su par de colores `swatch` y debe cumplir contraste WCAG AA.
+
 ## Referencias
 
 Las referencias deben usar rutas relativas existentes. Cada documento de análisis incluye evidencia. Los diagramas marcan `IMPLEMENTADO`, `PREPARADO` o `PENDIENTE` y no presentan intención como hecho.

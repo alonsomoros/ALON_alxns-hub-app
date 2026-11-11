@@ -1,5 +1,7 @@
-import type { StatsView, UiPreferences } from '../../types/dashboard'
+import { refreshOptions } from '../../domain/preferences'
+import type { PiRefreshSeconds, StatsView, UiPreferences } from '../../types/dashboard'
 import { BackButton } from '../ui/BackButton'
+import { HomeCardsEditor } from './HomeCardsEditor'
 import { ThemePicker } from './ThemePicker'
 
 const statsViewOptions: { value: StatsView; label: string }[] = [
@@ -27,6 +29,19 @@ export function SettingsView({ preferences, onChange, onReset, onBack }: { prefe
           {statsViewOptions.map((option) => <option value={option.value} key={option.value}>{option.label}</option>)}
         </select>
       </label>
+    </article>
+    <article className="card settings-card">
+      <h2>Datos</h2>
+      <label className="settings-field">
+        <span>Actualizar métricas de la Raspberry cada</span>
+        <select value={preferences.piRefreshSeconds} onChange={(event) => onChange({ ...preferences, piRefreshSeconds: Number(event.target.value) as PiRefreshSeconds })}>
+          {refreshOptions.map((seconds) => <option value={seconds} key={seconds}>{seconds} s</option>)}
+        </select>
+      </label>
+    </article>
+    <article className="card settings-card">
+      <h2>Inicio</h2>
+      <HomeCardsEditor cards={preferences.homeCards} onChange={(homeCards) => onChange({ ...preferences, homeCards })} />
     </article>
   </section>
 }

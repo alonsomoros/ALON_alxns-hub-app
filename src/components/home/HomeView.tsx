@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ChevronDown, ChevronRight, CircleCheck, ExternalLink, Server, TriangleAlert, Trophy, Wifi, Zap } from 'lucide-react'
 import { prototypePiMetrics, services } from '../../data/dashboardData'
 import { goalCategoryConfig, goalProgress } from '../../domain/goals'
-import type { ContainerInfo, HabitGoal, PiMetrics, PiMetricsStatus, QuickLink, Quote, StatsView } from '../../types/dashboard'
+import type { ContainerInfo, HabitGoal, HomeCardPref, PiMetrics, PiMetricsStatus, QuickLink, Quote, StatsView } from '../../types/dashboard'
 import { formatLongDate } from '../../utils/date'
 import { BrandLogo } from '../ui/BrandLogo'
 import { CardTitle } from '../ui/CardTitle'
@@ -11,7 +11,7 @@ import { ProgressBar } from '../ui/ProgressBar'
 
 interface PiState { pi: PiMetrics | null; status: PiMetricsStatus; ageMinutes: number }
 
-export function HomeView({ quote, links, goals, piState, statsView, onOpenGoals, onOpenLinks }: { quote: Quote; links: QuickLink[]; goals: HabitGoal[]; piState: PiState; statsView: StatsView; onOpenGoals: () => void; onOpenLinks: () => void }) {
+export function HomeView({ quote, links, goals, piState, statsView, cards, onOpenGoals, onOpenLinks }: { quote: Quote; links: QuickLink[]; goals: HabitGoal[]; piState: PiState; statsView: StatsView; cards: HomeCardPref[]; onOpenGoals: () => void; onOpenLinks: () => void }) {
   const [today] = useState(() => formatLongDate(Date.now()))
   return <>
     <section className="welcome">
@@ -20,10 +20,12 @@ export function HomeView({ quote, links, goals, piState, statsView, onOpenGoals,
       <blockquote>“{quote.content}”<cite>— {quote.author}</cite></blockquote>
     </section>
     <section className="home-grid">
-      <PiCard {...piState} statsView={statsView} />
-      <GoalsSummaryCard goals={goals} onOpenGoals={onOpenGoals} />
-      <ServicesCard />
-      <LinksSummaryCard links={links} onOpenLinks={onOpenLinks} />
+      {cards.filter((card) => card.visible).map((card) => {
+        if (card.id === 'pi') return <PiCard {...piState} statsView={statsView} key={card.id} />
+        if (card.id === 'goals') return <GoalsSummaryCard goals={goals} onOpenGoals={onOpenGoals} key={card.id} />
+        if (card.id === 'services') return <ServicesCard key={card.id} />
+        return <LinksSummaryCard links={links} onOpenLinks={onOpenLinks} key={card.id} />
+      })}
     </section>
   </>
 }

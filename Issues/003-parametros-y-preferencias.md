@@ -1,6 +1,6 @@
 # Parámetros y preferencias
 
-- **Estado:** En curso (especificación aprobada; implementación pendiente)
+- **Estado:** Hecho
 - **REQ:** REQ-003
 - **Tipo:** feat
 - **Área:** `src/themes.ts`, `src/index.css`, `src/types/dashboard.ts`, `src/hooks/usePreferences.ts`, `src/components/settings/`, `src/components/home/`, `docs/arquitectura/ui-preferences.md`
@@ -60,10 +60,10 @@ interface UiPreferences {
 - [x] Seis temas seleccionables con cuadrados de dos triángulos, navegables con teclado y aplicados sin parpadeo al recargar.
 - [x] Cada tema cumple contraste WCAG AA (texto normal ≥ 4.5:1) para texto sobre fondo, texto sobre superficie y texto sobre acento (`tests/themes.test.ts`).
 - [x] Desplegable de vista de stats con barras, anillos y medidores, accesibles y sin librerías nuevas.
-- [ ] Orden y visibilidad de las tarjetas de Inicio configurables; no se puede ocultar todo (siempre queda al menos una).
-- [ ] Refresco de 30, 60 o 120 s aplicado a `usePiMetrics`.
-- [ ] Las preferencias se leen de la API y se sincronizan entre dispositivos; sin API funcionan en local.
-- [ ] Una base vacía o sin `preferences` no vacía retos ni enlaces.
+- [x] Orden y visibilidad de las tarjetas de Inicio configurables; no se puede ocultar todo (siempre queda al menos una).
+- [x] Refresco de 30, 60 o 120 s aplicado a `usePiMetrics`.
+- [x] Las preferencias se leen de la API y se sincronizan entre dispositivos; sin API funcionan en local.
+- [x] Una base vacía o sin `preferences` no vacía retos ni enlaces.
 - [x] Valores desconocidos en `preferences` recurren a los valores por defecto sin romper la app (`tests/preferences.test.ts`).
 
 ## Verificación
@@ -75,15 +75,16 @@ interface UiPreferences {
 | Chrome, fase 1 (datos de ejemplo) | OK: engranaje abre Ajustes; los seis temas cambian al instante y se guardan; flechas del teclado recorren los temas con vuelta al principio; barras, anillos y medidores se ven en `ocean` y `dark`; la vista elegida sobrevive a la recarga; «Restablecer» vuelve a los valores por defecto; sin errores de consola |
 | Ancho de móvil | No verificado visualmente (el redimensionado de ventana no cambió el viewport) |
 
-Pendiente de la fase 2: sincronización entre dos dispositivos y comprobación de producción.
+| Chrome, fase 2 (API local con base nueva y proxy de Docker simulado) | OK: ocultar y reordenar tarjetas persiste tras recargar y la última visible no se puede ocultar; con 30 s las peticiones a `/api/pi/metrics` salen a los ~30 y ~60 s y con 120 s no sale ninguna en 40 s; base vacía (`version: 0`) conserva los retos y enlaces de ejemplo y los guarda (3 y 3); el tema se recupera de la API tras borrar `localStorage`; con dos pestañas desfasadas ambos `PUT` devuelven `409` y luego `200` (gana el último cambio) y el pie sigue en «Sincronizado»; con la API parada el tema se aplica y se guarda en local y el pie muestra `OFFLINE` |
+| Producción (Vercel) | Ver el comentario de cierre de la issue #3 |
 
 ## Impacto documental
 
-A actualizar al implementar: `docs/arquitectura/ui-preferences.md`, `docs/requisitos/functional-requirements.md` (FR de preferencias), `docs/codebase/STRUCTURE.md`, `.agents/context/system-status.md`, `context/STYLE_GUIDE.md` (uso de variables de tema) y `docs/diagramas/screens-flow.svg` (vista de Ajustes).
+Actualizados: `docs/arquitectura/ui-preferences.md`, `docs/requisitos/functional-requirements.md` (FR de preferencias), `docs/codebase/STRUCTURE.md`, `.agents/context/system-status.md`, `context/STYLE_GUIDE.md` (uso de variables de tema) y `docs/diagramas/screens-flow.svg` (vista de Ajustes).
 
 ## Pendientes
 
-- [ ] Implementar la fase 1 y la fase 2 (ver Decisión).
+- [x] Implementadas las dos fases (ver Decisión).
 - [ ] Modo claro/oscuro automático según el sistema → backlog.
 - [ ] Saludo y cita editables → backlog.
 - [ ] Tests de preferencias → `REQ-020`.

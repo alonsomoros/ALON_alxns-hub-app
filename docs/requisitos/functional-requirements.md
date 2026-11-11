@@ -9,17 +9,18 @@ Dueño de **qué debe hacer el producto**. Cada `FR-xx` enlaza a la nota `REQ-NN
 | FR-00 Trazabilidad | `REQ-005`, `REQ-007`, `REQ-019` | Implementado (issues #1 a #20 en GitHub; CI [BLOQUEADO] por facturación (verificación local)) |
 | FR-01 Splash | `REQ-002` | Implementado |
 | FR-02 Inicio | `REQ-002`, `REQ-013`, `REQ-017` | Implementado; la cita no tiene timeout de 1.5 s |
-| FR-03 Infraestructura | `REQ-011` | Implementado y desplegado (métricas reales cada 60 s y resumen de contenedores); solo `pbar` |
+| FR-03 Infraestructura | `REQ-011` | Implementado y desplegado (métricas reales con refresco de 30, 60 o 120 s y resumen de contenedores); vistas de barras, anillos y medidores (`REQ-003`) |
 | FR-04 Servicios | `REQ-010`, `REQ-015` | Parcial: logos y fallback; el estado `online`/`offline` es de prototipo |
 | FR-05 Hábitos | `REQ-008` | Implementado |
 | FR-06 Enlaces | `REQ-001`, `REQ-009` | Implementado (falta estado vacío) |
 | FR-07 PWA | `REQ-013` | Implementado |
 | FR-08 Diagramas | `REQ-006`, `REQ-019` | Implementado |
 | FR-09 Retos | `REQ-008` | Implementado |
-| FR-10 Persistencia personal | `REQ-018` | Parcial: retos y enlaces; preferencias guardadas pero no leídas |
-| FR-11 Sincronización multidispositivo | `REQ-018` | Parcial: API lista, despliegue en Raspberry [BLOQUEADO] |
+| FR-10 Persistencia personal | `REQ-018`, `REQ-003` | Parcial: retos, enlaces y preferencias se guardan y se leen; `archived` fijo a `false` |
+| FR-11 Sincronización multidispositivo | `REQ-018` | Parcial: API desplegada en la Pi (HTTPS por `tailscale serve`); ACL de Tailscale y E2E de persistencia pendientes |
 | FR-12 Operación degradada | `REQ-018` | Implementado (caché y estado `OFFLINE` en el pie) |
 | FR-13 Integridad de dominio | `REQ-008`, `REQ-018` | Implementado; sin tests (`REQ-020`) |
+| FR-14 Preferencias de interfaz | `REQ-003` | Implementado (seis temas, vista de stats, tarjetas de Inicio y refresco; sincronizadas con la API) |
 | RNF-01 a RNF-09 | `REQ-018` | RNF-03 y RNF-05 implementados; RNF-02, RNF-07 y RNF-09 pendientes de despliegue |
 | RNF-10 Pruebas | `REQ-020` | Pendiente: no existe runner |
 
@@ -39,6 +40,7 @@ Dueño de **qué debe hacer el producto**. Cada `FR-xx` enlaza a la nota `REQ-NN
 - **FR-10 Persistencia personal:** guardar y recuperar preferencias, retos, historial de progreso y enlaces mediante un adaptador de persistencia, manteniendo el orden de los enlaces y el estado archivado.
 - **FR-11 Sincronización multidispositivo:** sincronizar los datos del propietario entre dispositivos mediante una API personal protegida por red privada o un perímetro equivalente, sin introducir cuentas ni login en la interfaz.
 - **FR-12 Operación degradada:** iniciar la PWA con la última caché válida, reflejar cambios confirmados localmente y mostrar `OFFLINE` o `UNREACHABLE` cuando la persistencia remota no esté disponible; nunca bloquear el shell por la red.
+- **FR-14 Preferencias de interfaz:** pantalla de Ajustes accesible desde la cabecera para elegir tema, vista de las estadísticas de la Raspberry, orden y visibilidad de las tarjetas de Inicio e intervalo de refresco; se aplican al instante, se validan con valores por defecto y se sincronizan entre dispositivos sin bloquear el render.
 - **FR-13 Integridad de dominio:** derivar el progreso de retos desde `current / target`, validar límites y conservar snapshots de edición en el historial; el cliente no puede imponer un porcentaje incoherente.
 
 ## Requisitos no funcionales

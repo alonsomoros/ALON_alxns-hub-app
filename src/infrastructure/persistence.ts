@@ -10,6 +10,9 @@ const cacheKey = 'alxns:persistence-state'
 
 export const persistenceEnabled = Boolean(persistenceUrl)
 
+/** La API rechazó el guardado porque el estado cambió desde otro dispositivo (HTTP 409). */
+export class PersistenceConflictError extends Error {}
+
 const readCachedState = (): PersistedState | null => {
   try {
     const cached = window.localStorage.getItem(cacheKey)
@@ -55,6 +58,7 @@ export const savePersistedState = async (state: PersistedState): Promise<Persist
       body: JSON.stringify(state),
       signal: controller.signal,
     })
+    if (response.status === 409) throw new PersistenceConflictError('State version conflict')
     if (!response.ok) throw new Error(`Persistence request failed: ${response.status}`)
     const persistedState = await response.json() as PersistedState
     cacheState(persistedState)

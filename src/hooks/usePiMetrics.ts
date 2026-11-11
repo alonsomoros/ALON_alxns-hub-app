@@ -1,14 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { fetchPiMetrics, piMetricsEnabled } from '../infrastructure/piMetrics'
-import type { PiMetrics, PiMetricsStatus } from '../types/dashboard'
-
-const pollIntervalMs = 60_000
+import type { PiMetrics, PiMetricsStatus, PiRefreshSeconds } from '../types/dashboard'
 
 /**
- * Métricas de la Raspberry (REQ-011): sondea cada 60 s mientras `enabled` y la pestaña es visible.
+ * Métricas de la Raspberry (REQ-011): sondea cada `intervalSeconds` (30, 60 o 120; ajustable en REQ-003) mientras `enabled` y la pestaña es visible.
  * Conserva el último dato válido: si la API falla, `status` pasa a `stale` y `ageMinutes` indica su edad.
  */
-export function usePiMetrics(enabled: boolean) {
+export function usePiMetrics(enabled: boolean, intervalSeconds: PiRefreshSeconds = 60) {
   const [snapshot, setSnapshot] = useState<PiMetrics | null>(null)
   const [status, setStatus] = useState<PiMetricsStatus>(piMetricsEnabled ? 'loading' : 'prototype')
   const [ageMinutes, setAgeMinutes] = useState(0)
@@ -33,7 +31,7 @@ export function usePiMetrics(enabled: boolean) {
       setStatus(previous ? 'stale' : 'offline')
     }
     void refresh()
-    const timer = window.setInterval(() => void refresh(), pollIntervalMs)
+    const timer = window.setInterval(() => void refresh(), intervalSeconds * 1000)
     const onVisibilityChange = () => { if (!document.hidden) void refresh() }
     document.addEventListener('visibilitychange', onVisibilityChange)
     return () => {
@@ -41,7 +39,7 @@ export function usePiMetrics(enabled: boolean) {
       window.clearInterval(timer)
       document.removeEventListener('visibilitychange', onVisibilityChange)
     }
-  }, [enabled])
+  }, [enabled, intervalSeconds])
 
   return { snapshot, status, ageMinutes }
 }
