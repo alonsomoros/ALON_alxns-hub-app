@@ -25,7 +25,7 @@ export ALLOWED_ORIGINS=http://100.x.x.x:4173
 docker compose -f docs/ci-cd/docker-compose.yml up -d --build
 ```
 
-El compose monta el volumen Docker `alxns-persistence-data` en `/app/data`, publica la API en el puerto `8787` de la Raspberry y reinicia el contenedor automáticamente. No se usa `systemd`.
+El compose monta el volumen Docker `alxns-persistence-data` en `/app/data`, publica la API solo en `127.0.0.1:8787` de la Raspberry (`REQ-023`; no es alcanzable desde la LAN, solo por `tailscale serve`) y reinicia el contenedor automáticamente. No se usa `systemd`.
 
 Para revisar el estado:
 
@@ -39,7 +39,7 @@ Para servir la PWA desde la propia Raspberry, el origen debe ser la URL que real
 En la máquina donde se construye la PWA, configurar:
 
 ```bash
-VITE_PERSISTENCE_API_URL=http://100.x.x.x:8787
+VITE_PERSISTENCE_API_URL=https://raspberrypi.tail6f4cba.ts.net
 npm run build
 ```
 
@@ -64,8 +64,10 @@ No se deben incluir credenciales de base de datos en `VITE_*`.
 Desde un dispositivo conectado a Tailscale:
 
 ```bash
-curl http://100.x.x.x:8787/health
+curl https://raspberrypi.tail6f4cba.ts.net/health
 ```
+
+Desde la propia Pi: `curl http://127.0.0.1:8787/health`. Desde otro equipo de la LAN, `http://raspberrypi.local:8787` debe rechazar la conexión.
 
 La respuesta esperada es JSON con `status: "ok"`. Después se debe abrir la PWA, crear un reto y un enlace, recargar y comprobar que siguen disponibles desde el dispositivo cliente `100.y.y.y`.
 
@@ -78,7 +80,7 @@ La API sirve `GET /api/pi/metrics` leyendo Prometheus (ya desplegado en la Pi co
 docker cp ci-cd-alxns-persistence-1:/app/data ~/backups/alxns-data-$(date +%Y%m%d-%H%M%S)
 docker compose --env-file .env -f docs/ci-cd/docker-compose.yml up -d --build
 docker compose --env-file .env -f docs/ci-cd/docker-compose.yml ps
-curl http://100.x.x.x:8787/api/pi/metrics
+curl https://raspberrypi.tail6f4cba.ts.net/api/pi/metrics
 ```
 
 Contrastar el resultado con `vcgencmd measure_temp`, `free -m`, `df -h /` y `docker ps`. Para probar la degradación, parar `prometheus` unos segundos: `sources.prometheus` pasa a `unreachable` y los contenedores siguen apareciendo.
@@ -88,6 +90,7 @@ Seguridad: el proxy solo permite `GET /containers` (`CONTAINERS=1`, `POST=0`), n
 ## Pendientes antes de producción
 
 - [x] Ejecutar el backend como contenedor Docker con reinicio automático.
+- [ ] Desplegar `REQ-023` (API solo en loopback) y comprobar que `:8787` ya no responde por la LAN.
 - [BLOQUEADO] Configurar ACL de Tailscale para permitir solo los dispositivos necesarios.
 - [BLOQUEADO] Definir backup, retención y prueba de restauración de SQLite.
 - [x] `ALLOWED_ORIGINS` del `.env` de la Pi igualado con el del contenedor (`https://alxns-hub.vercel.app,http://localhost:5173`), verificado el 2026-11-11.

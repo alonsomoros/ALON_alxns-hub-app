@@ -4,8 +4,10 @@ services:
       context: ../..
       dockerfile: Dockerfile.persistence
     ports:
-      - "8787:8787"
+      # Solo loopback (REQ-023): la PWA llega por `tailscale serve` (127.0.0.1:8787), nunca por la LAN.
+      - "127.0.0.1:8787:8787"
     environment:
+      # 0.0.0.0 es el interior del contenedor; Docker lo reenvía solo al loopback del host.
       HOST: 0.0.0.0
       PORT: 8787
       DB_PATH: /app/data/alon-hub.sqlite
