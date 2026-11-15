@@ -1,11 +1,11 @@
 # Chat de consultas con voz dentro del hub
 
-- **Estado:** Propuesta
+- **Estado:** Propuesta (diseño escrito, pendiente de aprobación)
 - **REQ:** REQ-024
 - **Tipo:** architecture
-- **Área:** `src/components/` (vista de chat), `server/` o servicio nuevo en la Pi, `docs/arquitectura/`
+- **Área:** `src/components/chat/`, `src/domain/chat.ts`, `src/infrastructure/selfbankClient.ts`, `docs/arquitectura/`
 - **GitHub:** [#24](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/24)
-- **Actualizada:** 2026-11-13
+- **Actualizada:** 2026-11-16
 
 ## Problema
 
@@ -31,23 +31,35 @@ Las consultas personales (incluido el proyecto de banca y consultas centralizado
 - **Autenticación.** Token que no vaya en el bundle ni en `localStorage` (`AGENTS.md`); límite de peticiones y registro de consultas sin contenido sensible.
 - **Voz.** Opciones a comparar: Web Speech API del navegador (sin servidor, pero el audio puede salir a un tercero según el navegador) frente a Whisper local en la Pi (`whisper.cpp`, el audio no sale de casa, más lento).
 
-## Fases propuestas
+## Fases
 
-1. Endurecer el perímetro: `REQ-023` y autenticación de la API.
-2. Chat con comandos y atajos sobre el catálogo de consultas, sin modelo (solo escritura).
-3. Interpretación de lenguaje natural con un modelo (local o API externa, a decidir) limitada al catálogo.
-4. Voz a texto.
+1. Perímetro: `REQ-023` desplegado. La autenticación la aporta el token propio de `selfbank`.
+2. Interfaz de chat (este REQ): sugerencias, escritura, interpretación visible, tabla y feedback, contra el simulado local.
+3. Despliegue y comprobación con el servicio real, cuando `selfbank` lo publique (lo hace el dueño del servicio).
+4. Voz a texto: `REQ-025`.
 
-## Decisiones abiertas (necesitan respuesta del desarrollador)
+## Decisiones (16-nov-2026)
 
-- [ ] ¿Cómo expone datos el proyecto de banca: API HTTP, base de datos o ficheros? ¿Corre en la misma Pi?
-- [ ] ¿Qué consultas se hacen hoy por WhatsApp? Con 5 o 10 ejemplos reales se decide si basta el catálogo.
-- [ ] ¿Modelo local (más privado, más limitado) o API externa (más capaz, los datos de cada consulta salen de la Pi)?
-- [ ] ¿El servicio del chat vive en esta API o aparte, con su propio contenedor?
+Respuestas del repositorio `selfbank` (`docs/hub-handoff-req-024.md`):
+
+- [x] Datos del banco: API HTTP en Python en la misma Pi, `127.0.0.1:8789`, token Bearer, contrato en `docs/api-contrato.md` de ese repo.
+- [x] Consultas: dataset de 66 preguntas reales (gasto por categoría y periodo, última transferencia, saldo, comparar meses, comercios, suscripciones).
+- [x] Modelo: **local** (`qwen2.5:3b` en Ollama); solo traduce a un catálogo cerrado; el ~79 % se resuelve por reglas en ~10 ms y el resto tarda 5–9 s. Nada sale de la Pi.
+- [x] Servicio aparte (otro proceso y otro repo). Las fases 2 y 3 las cubre `selfbank`; al hub le queda la interfaz y, después, la voz (`REQ-025`).
+- [x] **Arquitectura: directa, sin pasarela.** La PWA llama a `selfbank` por `tailscale serve` con su token Bearer en `sessionStorage`. Se descartó la pasarela del handoff porque el hub no tiene credenciales y convertiría su API en un proxy del banco para toda la tailnet, contra el `AGENTS.md` de `selfbank`. Diseño: [`docs/superpowers/specs/2026-11-16-chat-consultas-design.md`](../docs/superpowers/specs/2026-11-16-chat-consultas-design.md).
+
+Investigación de red en la Pi (solo lectura, por si se retoma la pasarela): el contenedor del hub está en `ci-cd_default` (`172.27.0.1`, IP no estable al recrear la red) y no alcanza el `127.0.0.1` del host; `host-gateway` apunta a `docker0` (`172.17.0.1`), alcanzable desde todos los contenedores; `selfbank` escuchar ahí exigiría arrancar después de Docker. Estado de la Pi: servicio real en `127.0.0.1:8789` (script, sin `systemd`), simulado en `127.0.0.1:8788` publicado en `:8443`, Ollama en `127.0.0.1:11434` como servicio de `systemd`.
 
 ## Criterios de aceptación
 
-Se definirán al aprobar el diseño (spec en `docs/superpowers/specs/`).
+Se fijarán al aprobar el diseño. Propuesta:
+
+- [ ] Vista «Consultas» con sugerencias, entrada de texto, respuesta con la interpretación visible, tabla y «no era eso».
+- [ ] Estado «pensando…» con segundos, sin bloquear el hub; `unsupported`, `needs_clarification`, `401` y `503` con su mensaje.
+- [ ] Sin token en URL, `localStorage`, bundle ni logs; preguntas y respuestas solo en memoria.
+- [ ] El service worker no cachea nada de `selfbank` (prueba automática).
+- [ ] Pruebas `node:test` con nombres `REQ-024` (dominio, cliente, privacidad) y comprobación en Chrome a ancho de móvil contra el simulado.
+- [ ] Documentación y pasos de despliegue listos; despliegue comprobado en la Pi.
 
 ## Verificación
 
@@ -59,5 +71,5 @@ Sin cambio: es una propuesta; al aprobarla se actualizarán `docs/arquitectura/`
 
 ## Pendientes
 
-- [ ] Responder las decisiones abiertas → diseño y plan.
+- [ ] Aprobación del diseño → plan de tareas → implementación y pruebas → despliegue.
 - [ ] `REQ-023` desplegado antes de empezar.
