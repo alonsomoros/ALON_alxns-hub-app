@@ -1,6 +1,6 @@
 # Chat de consultas en el hub (REQ-024): diseño
 
-- **Estado:** Borrador pendiente de aprobación (16-nov-2026)
+- **Estado:** Aprobado por el desarrollador (16-nov-2026)
 - **Nota:** `Issues/024-chat-consultas.md` · **Origen:** `ALON_centralizedselfbank/docs/hub-handoff-req-024.md` y `docs/api-contrato.md` de ese repositorio (el contrato manda).
 
 ## Intención
