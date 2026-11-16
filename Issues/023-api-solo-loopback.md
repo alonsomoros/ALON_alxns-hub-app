@@ -1,11 +1,11 @@
 # Publicar la API de persistencia solo en loopback
 
-- **Estado:** En curso (preparado y verificado en lectura; despliegue en la Raspberry pendiente)
+- **Estado:** Hecho
 - **REQ:** REQ-023
 - **Tipo:** fix
 - **Área:** `docs/ci-cd/docker-compose.yml`, `.env.example`, `docs/arquitectura/deploy-persistencia-raspberry.md`
 - **GitHub:** [#23](https://github.com/alonsomoros/ALON_alxns-hub-app/issues/23)
-- **Actualizada:** 2026-11-13
+- **Actualizada:** 2026-11-16
 
 ## Problema
 
@@ -38,9 +38,9 @@ Alternativas descartadas: firewall en la Pi (`ufw` no está instalado y filtrar�
 - [x] El compose publica la API solo en `127.0.0.1:8787`.
 - [x] Ningún servicio activo de la Pi usa el puerto por la LAN o por IP (revisión en solo lectura).
 - [x] La documentación y `.env.example` ya no recomiendan `http://100.x.x.x:8787`.
-- [ ] Desplegado en la Pi: `http://raspberrypi.local:8787` rechaza la conexión.
-- [ ] Tras el despliegue siguen funcionando `https://raspberrypi.tail6f4cba.ts.net/api/state` (200), la PWA de Vercel y el servidor de desarrollo local.
-- [ ] El contenedor recreado ya no lleva la `#` final: `Origin: http://localhost:5173` recibe `Access-Control-Allow-Origin`.
+- [x] Desplegado en la Pi: `http://raspberrypi.local:8787` rechaza la conexión.
+- [x] Tras el despliegue siguen funcionando `https://raspberrypi.tail6f4cba.ts.net/api/state` (200), la PWA de Vercel y el servidor de desarrollo local.
+- [x] El contenedor recreado ya no lleva la `#` final: `Origin: http://localhost:5173` recibe `Access-Control-Allow-Origin`.
 
 ## Verificación
 
@@ -49,7 +49,9 @@ Alternativas descartadas: firewall en la Pi (`ufw` no está instalado y filtrar�
 | `docker compose -f docs/ci-cd/docker-compose.yml config` | OK: `host_ip: 127.0.0.1`, `target: 8787` |
 | Revisión en la Pi (contenedores, puertos, proxies, Prometheus, conexiones) | OK, ver tabla de la Decisión |
 | Antes del cambio: `curl http://raspberrypi.local:8787/api/state` desde el PC | `200` (el problema) |
-| Despliegue en la Pi | Pendiente: lo ejecuta el desarrollador (ver Pendientes) |
+| Despliegue en la Pi | Hecho por el desarrollador (2026-11-16): `docker ps` muestra `127.0.0.1:8787->8787/tcp` y el contenedor `healthy` |
+| Después del despliegue, desde el PC | `http://192.168.1.64:8787/health` sin respuesta; `https://raspberrypi.tail6f4cba.ts.net/health` y `/api/state` responden 200; `Origin: http://localhost:5173` recibe `Access-Control-Allow-Origin`; el contenedor ya no tiene la `#` en `ALLOWED_ORIGINS` |
+| Otros sistemas tras el cambio | Grafana (`:3000`), Prometheus (`:9090`), Homepage (`:3001`), Pi-hole y NPM siguen igual; la revisión de «los dashboards» no encontró relación con este cambio |
 
 Tests de caja negra: `Omitido: no cubierto por el runner` (es configuración de despliegue); la comprobación es manual, tras desplegar.
 
@@ -59,7 +61,7 @@ Actualizados: `docs/arquitectura/deploy-persistencia-raspberry.md`, `.env.exampl
 
 ## Pendientes
 
-- [ ] Desplegar en la Pi, con el mismo `--env-file` con el que se creó el contenedor:
+- [x] Desplegado en la Pi, con el mismo `--env-file` con el que se creó el contenedor:
 
   ```bash
   cd ~/ALON_alxns-hub-app && git pull --ff-only
@@ -69,5 +71,5 @@ Actualizados: `docs/arquitectura/deploy-persistencia-raspberry.md`, `.env.exampl
   ```
 
   Desde el PC: `curl http://raspberrypi.local:8787/health` debe fallar, `curl https://raspberrypi.tail6f4cba.ts.net/health` debe responder y `curl -si -H "Origin: http://localhost:5173" https://raspberrypi.tail6f4cba.ts.net/health` debe incluir `Access-Control-Allow-Origin`. Hasta desplegar, el `.env` local ya apunta a la URL de `serve` y el desarrollo local fallará por CORS; para volver atrás en local basta restaurar la URL antigua. Marcha atrás: volver a `"8787:8787"` y repetir `up -d`.
-- [ ] Puertos de otros servicios de la Pi abiertos a la LAN (3000, 3001, 3002, 8080, 8181, 9000, 9090, 9100, 51821): revisar uno a uno con el desarrollador, porque otros sistemas dependen de ellos → backlog.
+- [ ] Puertos de otros servicios de la Pi abiertos a la LAN (3000, 3001, 3002, 8080, 8181, 9000, 9090, 9100, 51821): revisar uno a uno con el desarrollador, porque otros sistemas dependen de ellos → backlog (`docs/requisitos/backlog-features.md`).
 - [ ] Autenticación de la API con token fuera del bundle → `REQ-024`.

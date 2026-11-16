@@ -1,0 +1,39 @@
+# Servicio real de selfbank (REQ-026). Se instala en /etc/systemd/system/selfbank-real.service.
+# Escucha solo en 127.0.0.1:8789; se publica en la tailnet con `tailscale serve` (nunca Funnel).
+# El token se lee del fichero con permisos 600: no aparece en la línea de comandos ni en `ps`.
+# Usuario y rutas son los de la Pi de este proyecto (usuario `alonso`, código en ~/selfbank-dev).
+
+[Unit]
+Description=selfbank API real (REQ-026)
+After=network-online.target ollama.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=alonso
+WorkingDirectory=/home/alonso/selfbank-dev
+ExecStart=/usr/bin/python3 -B -m selfbank.api.serve \
+  --db /home/alonso/.selfbank/selfbank.db \
+  --token-file /home/alonso/.selfbank/api-token \
+  --port 8789 \
+  --cors-origin https://alxns-hub.vercel.app \
+  --cors-origin http://localhost:5173
+Restart=on-failure
+RestartSec=5
+
+# Endurecimiento: solo puede escribir en ~/.selfbank (base de datos y feedback) y hablar por red.
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/alonso/.selfbank
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+CapabilityBoundingSet=
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

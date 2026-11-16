@@ -32,6 +32,8 @@ Prioridad media (producto):
 - [ ] Enlace configurable a Grafana.
 - [ ] Preferencias pendientes: modo claro/oscuro automático según el sistema, cita editable y orden de los servicios (`REQ-003`).
 - [ ] Racha derivada de registros diarios consecutivos.
+- [ ] Pi (`REQ-023`): revisar uno a uno los puertos abiertos a la LAN (3000, 3001, 3002, 8080, 8181, 9000, 9090, 9100, 51821) con quien depende de ellos; Homepage (`:3001`) solo acepta `192.168.1.64:3001` y `localhost:3001` en `HOMEPAGE_ALLOWED_HOSTS` (por el nombre de Tailscale o `raspberrypi.local` carga la página pero sin datos) y `watchtower` se reinicia en bucle (cliente de Docker demasiado antiguo para el motor).
+- [ ] Chat (`REQ-024`): menores de la revisión final (lista en `Issues/024-chat-consultas.md`, Pendientes), `strict` en `tsconfig.app.json` y `Access-Control-Expose-Headers: Retry-After` en `selfbank`.
 - [ ] Chat (`REQ-024`): `Content-Security-Policy` con `connect-src` limitado a la API del hub y a `selfbank`, o servir la propia PWA desde la Pi (riesgo de entrega desde Vercel); memoria de conversación (fuera de la v1 de `selfbank`).
 - [ ] Voz a texto en el chat (`REQ-025`).
 - [ ] Activar `strict` en `tsconfig.app.json`: hoy no está activo (`AGENTS.md` dice TypeScript estricto) y sin él las uniones discriminadas por booleano no se estrechan; exige corregir los errores que aparezcan.

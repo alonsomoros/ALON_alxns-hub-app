@@ -1,6 +1,6 @@
 # Chat de consultas dentro del hub
 
-- **Estado:** En curso (implementado y verificado en local; despliegue pendiente)
+- **Estado:** Hecho
 - **REQ:** REQ-024
 - **Tipo:** architecture
 - **Área:** `src/components/chat/`, `src/domain/chat.ts`, `src/infrastructure/selfbankClient.ts`, `docs/arquitectura/`
@@ -58,7 +58,7 @@ Investigación de red en la Pi (solo lectura, por si se retoma la pasarela): el 
 - [x] El service worker no cachea nada de `selfbank` (guarda automática: sin `runtimeCaching`).
 - [x] Pruebas `node:test` con nombres `REQ-024` (dominio, cliente, estado, privacidad y contrato contra el simulado real) y comprobación en Chrome a ancho de móvil.
 - [x] Documentación y pasos de despliegue listos.
-- [ ] Desplegado y comprobado con el servicio real de `selfbank` en la Pi.
+- [x] Desplegado y comprobado con el servicio real de `selfbank` en la Pi.
 
 ## Verificación
 
@@ -68,6 +68,7 @@ Investigación de red en la Pi (solo lectura, por si se retoma la pasarela): el 
 | `npx tsc -b`, `npm run lint`, `npm run build` | OK |
 | Chrome contra el simulado de `selfbank` (ancho 390 px en un iframe del mismo origen; `resize_window` no cambió el viewport) | OK: token incorrecto (aviso) y token de pruebas; sugerencias y estado; respuesta escalar con chips y distintivos; tabla dentro de su scroll sin desbordar la página; ruta del «modelo» con «Pensando… N s»; salir de la vista mientras piensa y volver con la respuesta; `__busy__` y `__error__` con «Reintentar»; «No era eso»; tema oscuro; recarga (conversación vacía; el token sigue durante la pestaña); ni preguntas ni respuestas en `localStorage`; solo `POST /api/ask` al simulado, sin parámetros en la URL; sin errores de consola |
 | Revisión final (agente independiente), 4 hallazgos Importantes corregidos con prueba primero | Cifras de cuatro dígitos sin separador de miles (`1768,90 €` frente al `1.768,90 €` de la API): `useGrouping: 'always'`; un token con caracteres que una cabecera no admite (p. ej. espacio de ancho cero) dejaba al usuario atascado: ahora `isPlausibleToken` y «Cambiar token»; las respuestas `unsupported`/`needs_clarification` no ofrecían sugerencias; el campo fijo podía tapar el final de la última respuesta. Comprobado de nuevo en Chrome (token con espacio de ancho cero, «Cambiar token», 3 sugerencias tras una operación no soportada, 0 px tapados) |
+| Despliegue real (2026-11-16) | Servicio real de `selfbank` publicado con `tailscale serve --bg --https=8444 http://127.0.0.1:8789`; `GET /api/health` devuelve `{"ok": true}` desde el PC; `Origin: https://alxns-hub.vercel.app` recibe `Access-Control-Allow-Origin` con `Vary: Origin`; el desarrollador desplegó `VITE_SELFBANK_URL=https://raspberrypi.tail6f4cba.ts.net:8444` en Vercel y comprobó el chat con el token real, en Vercel y en local |
 | Hallazgos de la comprobación, corregidos | Un token rechazado devolvía el campo sin avisar (`tokenRejected`); el texto de ayuda del campo ocupaba dos líneas a 390 px |
 
 Tests de caja negra: `REQ-024 …` (`npm test`). Componentes y hook `useChat`: `Omitido: no cubierto por el runner` (se comprobaron en Chrome, arriba).
@@ -78,10 +79,11 @@ Actualizados: `docs/arquitectura/{system-architecture,integrations-n8n-grafana,d
 
 ## Pendientes
 
-- [ ] `selfbank` debería enviar `Access-Control-Expose-Headers: Retry-After`: hoy el aviso de «ocupado» siempre dice 10 s porque el navegador no puede leer la cabecera entre orígenes (no es un defecto del hub).
-- [ ] Menores de la revisión final, sin corregir: «Reintentar» sigue activo con el campo de token a la vista y tras `model_busy` no espera; el feedback no tiene guarda de doble clic ni avisa si falla; borrar la conversación no cancela la petición en curso; el aviso «Pensando…» se anuncia cada segundo a los lectores de pantalla y no se mueve el foco al cambiar campo y formulario de token; el campo de texto no vuelve a su altura tras un envío de varias líneas y no se deshabilita mientras espera; claves de React repetibles (chips y columnas con el mismo texto); el analizador acepta tablas sin columnas y rechaza un texto vacío que el esquema permite; el contador de «Pensando…» re-renderiza todo el `Dashboard` cada segundo; la línea «Datos hasta» sigue visible tras un 401; en iOS enfocar el campo amplía la página; la guarda de privacidad solo exige 3 archivos; en la documentación, `GET /api/health` figura como consumido (no se llama) y la fila de Chrome dice «solo `POST /api/ask`» cuando se usaron también `status`, `suggestions` y `feedback`.
-- [ ] Desplegar: lo hace el dueño del servicio `selfbank` y el desarrollador en Vercel; pasos y comprobaciones en [`deploy-persistencia-raspberry.md`](../docs/arquitectura/deploy-persistencia-raspberry.md) (sección «Chat de consultas»). Hasta entonces no se cierra #24.
-- [ ] `REQ-023` desplegado (no publica nada en la LAN) antes de abrir el servicio real.
+- [ ] `selfbank` debería enviar `Access-Control-Expose-Headers: Retry-After`: hoy el aviso de «ocupado» siempre dice 10 s porque el navegador no puede leer la cabecera entre orígenes (no es un defecto del hub) → repositorio `selfbank` (confirmado: la cabecera no aparece en la respuesta real).
+- [ ] → backlog (`docs/requisitos/backlog-features.md`). Menores de la revisión final, sin corregir: «Reintentar» sigue activo con el campo de token a la vista y tras `model_busy` no espera; el feedback no tiene guarda de doble clic ni avisa si falla; borrar la conversación no cancela la petición en curso; el aviso «Pensando…» se anuncia cada segundo a los lectores de pantalla y no se mueve el foco al cambiar campo y formulario de token; el campo de texto no vuelve a su altura tras un envío de varias líneas y no se deshabilita mientras espera; claves de React repetibles (chips y columnas con el mismo texto); el analizador acepta tablas sin columnas y rechaza un texto vacío que el esquema permite; el contador de «Pensando…» re-renderiza todo el `Dashboard` cada segundo; la línea «Datos hasta» sigue visible tras un 401; en iOS enfocar el campo amplía la página; la guarda de privacidad solo exige 3 archivos; en la documentación, `GET /api/health` figura como consumido (no se llama) y la fila de Chrome dice «solo `POST /api/ask`» cuando se usaron también `status`, `suggestions` y `feedback`.
+- [x] Desplegado (ver Verificación); pasos y comprobaciones en [`deploy-persistencia-raspberry.md`](../docs/arquitectura/deploy-persistencia-raspberry.md) (sección «Chat de consultas»).
+- [ ] Servicio de `systemd` para `selfbank` (hoy se lanza con `~/run-selfbank-real.sh` y no vuelve solo tras un reinicio) → `REQ-026`.
+- [x] `REQ-023` desplegado (no publica nada en la LAN) antes de abrir el servicio real.
 - [ ] Riesgo aceptado de la entrega desde Vercel: CSP con `connect-src` o servir la PWA desde la Pi → backlog.
 - [ ] `strict` no está activo en `tsconfig.app.json` → backlog.
 - [ ] Voz a texto → `REQ-025`.
