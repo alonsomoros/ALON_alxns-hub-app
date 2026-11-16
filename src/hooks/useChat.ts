@@ -6,6 +6,8 @@ import type { TokenStore } from '../infrastructure/selfbankToken'
 
 export interface ChatController {
   needsToken: boolean
+  /** `true` si selfbank acaba de rechazar el token (401): la interfaz lo avisa al pedirlo de nuevo. */
+  tokenRejected: boolean
   saveToken(token: string): void
   status: ChatStatus | null
   suggestions: Suggestion[]
@@ -37,6 +39,7 @@ export function useChat(client: SelfbankClient | null, tokens: TokenStore, activ
   const [state, setState] = useState<ChatState>(emptyChat)
   const [now, setNow] = useState(0)
   const [reloadKey, setReloadKey] = useState(0)
+  const [tokenRejected, setTokenRejected] = useState(false)
   const stateRef = useRef<ChatState>(emptyChat)
   const counterRef = useRef(0)
 
@@ -45,7 +48,7 @@ export function useChat(client: SelfbankClient | null, tokens: TokenStore, activ
     setState(stateRef.current)
   }, [])
 
-  const dropToken = useCallback(() => { tokens.clear(); setHasToken(false) }, [tokens])
+  const dropToken = useCallback(() => { tokens.clear(); setHasToken(false); setTokenRejected(true) }, [tokens])
 
   useEffect(() => {
     if (!client || !active || !hasToken) return
@@ -94,6 +97,7 @@ export function useChat(client: SelfbankClient | null, tokens: TokenStore, activ
   const saveToken = useCallback((token: string) => {
     tokens.set(token)
     setLoadError(null)
+    setTokenRejected(false)
     setHasToken(Boolean(tokens.get()))
   }, [tokens])
 
@@ -102,5 +106,5 @@ export function useChat(client: SelfbankClient | null, tokens: TokenStore, activ
   const pending = state.pending
   const thinkingSeconds = pending && now - pending.startedAt >= thinkingDelayMs ? elapsedSeconds(pending, now) : null
 
-  return { needsToken: client !== null && !hasToken, saveToken, status, suggestions, loadError, state, thinkingSeconds, ask, retry: ask, sendWrong, reload, clear }
+  return { needsToken: client !== null && !hasToken, tokenRejected, saveToken, status, suggestions, loadError, state, thinkingSeconds, ask, retry: ask, sendWrong, reload, clear }
 }

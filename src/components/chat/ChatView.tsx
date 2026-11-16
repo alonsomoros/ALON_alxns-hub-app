@@ -28,6 +28,6 @@ export function ChatView({ chat }: { chat: ChatController }) {
         <SuggestionChips suggestions={suggestions} disabled={pending} onPick={chat.ask} />
       </div>
       : <MessageList state={state} thinkingSeconds={thinkingSeconds} onRetry={chat.retry} onWrong={chat.sendWrong} />}
-    {needsToken ? <TokenGate onSubmit={chat.saveToken} /> : <Composer disabled={pending} onSend={chat.ask} />}
+    {needsToken ? <TokenGate onSubmit={chat.saveToken} rejected={chat.tokenRejected} /> : <Composer disabled={pending} onSend={chat.ask} />}
   </section>
 }

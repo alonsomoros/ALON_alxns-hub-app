@@ -16,7 +16,7 @@ export function Composer({ disabled, onSend }: { disabled: boolean; onSend: (que
     send()
   }
   return <form className="chat-composer" onSubmit={(event) => { event.preventDefault(); send() }}>
-    <textarea aria-label="Escribe tu pregunta" placeholder="Pregunta por tus gastos, ingresos o saldo…" rows={1} maxLength={maxQuestionLength} value={value}
+    <textarea aria-label="Escribe tu pregunta" placeholder="Pregunta por tus gastos o saldo…" rows={1} maxLength={maxQuestionLength} value={value}
       onChange={(event) => { setValue(event.target.value); event.target.style.height = 'auto'; event.target.style.height = `${event.target.scrollHeight}px` }} onKeyDown={onKeyDown} />
     <button className="chat-send" type="submit" aria-label="Enviar pregunta" disabled={disabled || !value.trim()}><SendHorizontal size={18} aria-hidden="true" /></button>
   </form>
