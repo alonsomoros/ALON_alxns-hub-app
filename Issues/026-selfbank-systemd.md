@@ -1,6 +1,6 @@
 # selfbank real como servicio systemd
 
-- **Estado:** En curso (unidad preparada y validada; instalación en la Pi pendiente)
+- **Estado:** En curso (instalada y activa en la Pi; falta comprobar el arranque tras un reinicio)
 - **REQ:** REQ-026
 - **Tipo:** chore
 - **Área:** `docs/ci-cd/selfbank-real.service`, `docs/arquitectura/deploy-persistencia-raspberry.md`
@@ -19,7 +19,7 @@ Unidad de `systemd` del sistema (`/etc/systemd/system/selfbank-real.service`), u
 
 - [x] La unidad existe en el repositorio y `systemd-analyze verify` no da avisos (exposición de seguridad 4.6 «OK»).
 - [x] La documentación explica qué es, cómo se instala, cómo se comprueba y la marcha atrás, y documenta el token (dónde está, uso, rotación).
-- [ ] Instalada en la Pi: `systemctl is-active selfbank-real` da `active` y `curl http://127.0.0.1:8789/api/health` da `{"ok": true}`.
+- [x] Instalada en la Pi: `systemctl is-active selfbank-real` da `active` y `curl http://127.0.0.1:8789/api/health` da `{"ok": true}`.
 - [ ] Tras un reinicio de la Pi el servicio vuelve solo y la pestaña «Consultas» responde.
 
 ## Verificación
@@ -27,7 +27,8 @@ Unidad de `systemd` del sistema (`/etc/systemd/system/selfbank-real.service`), u
 | Check | Resultado |
 |---|---|
 | `systemd-analyze verify` sobre una copia temporal en la Pi (borrada después) | Sin avisos; `systemd-analyze security --offline`: 4.6 OK |
-| Instalación y reinicio en la Pi | Pendiente: la ejecuta el desarrollador (necesita `sudo`) |
+| Instalación en la Pi (2026-11-16, la ejecutó el desarrollador con `sudo`) | `is-active` → `active`, `is-enabled` → `enabled`, 0 reinicios, un solo proceso `selfbank.api.serve` (el del script ya no está), escucha solo en `127.0.0.1:8789`, `/api/health` → `{"ok": true}`, el diario muestra el arranque |
+| Reinicio de la Pi | Pendiente: no se ha reiniciado (afecta a todos los servicios de la Pi); `enabled` indica que arrancará solo |
 
 Tests de caja negra: `Omitido: no cubierto por el runner` (es configuración de despliegue); la comprobación es manual, tras instalar.
 
@@ -37,5 +38,5 @@ Actualizados: `docs/arquitectura/deploy-persistencia-raspberry.md` (sección `sy
 
 ## Pendientes
 
-- [ ] Instalar la unidad (pasos en la sección «`selfbank` como servicio de `systemd`» del documento de despliegue) y comprobar el reinicio.
+- [ ] Comprobar el arranque tras el próximo reinicio de la Pi (`systemctl is-active selfbank-real`); entonces la nota pasa a `Hecho` y se cierra #26.
 - [ ] Sincronización periódica de los datos bancarios → repositorio `selfbank`.

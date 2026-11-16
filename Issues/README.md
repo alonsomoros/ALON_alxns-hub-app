@@ -35,7 +35,7 @@ Dueño de la **trazabilidad local**: cada cambio de comportamiento, arquitectura
 | [017](017-date-dynamic.md) | Hecho | UI | Fecha del sistema en Inicio. |
 | [018](018-persistencia-personal-multidispositivo.md) | En curso | Persistencia | API SQLite + caché; despliegue, backups y E2E bloqueados. |
 | [019](019-flujo-agentes-v2.md) | Hecho | Proceso | Rediseño del flujo agéntico para entrega autónoma verificable. |
-| [026](026-selfbank-systemd.md) | En curso | Despliegue | `selfbank` real como servicio de `systemd` (arranque y reinicio automáticos). Unidad preparada; instalación en la Pi pendiente. |
+| [026](026-selfbank-systemd.md) | En curso | Despliegue | `selfbank` real como servicio de `systemd` (arranque y reinicio automáticos). Instalada y activa; falta comprobar el arranque tras un reinicio. |
 | [025](025-voz-a-texto.md) | Propuesta | Funcionalidad | Dictado por voz en el chat: Web Speech API frente a Whisper local en la Pi. Depende de `REQ-024`. |
 | [024](024-chat-consultas.md) | Hecho | Arquitectura | Chat de consultas con `selfbank`: la PWA habla directo con su API por `tailscale serve`. Desplegado en Vercel y la Pi. |
 | [023](023-api-solo-loopback.md) | Hecho | Seguridad | La API de persistencia se publica solo en `127.0.0.1` (antes escuchaba en toda la LAN). Desplegado en la Pi. |
