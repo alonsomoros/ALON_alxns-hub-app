@@ -1,5 +1,5 @@
 import {
-  normalizeQuestion, parseApiErrorCode, parseAskResponse, parseStatus, parseSuggestions,
+  isPlausibleToken, normalizeQuestion, parseApiErrorCode, parseAskResponse, parseStatus, parseSuggestions,
   type ChatAnswer, type ChatError, type ChatStatus, type Result, type Suggestion,
 } from '../domain/chat.ts'
 
@@ -46,7 +46,7 @@ export const createSelfbankClient = (options: SelfbankClientOptions): SelfbankCl
 
   const call = async <T>(path: string, timeoutMs: number, parse: (raw: unknown) => T | null, body?: unknown): Promise<Result<T>> => {
     const token = options.getToken()
-    if (!token) return failure({ code: 'unauthorized' })
+    if (!token || !isPlausibleToken(token)) return failure({ code: 'unauthorized' })
     const controller = new AbortController()
     const timer = setTimeout(() => controller.abort(), timeoutMs)
     try {

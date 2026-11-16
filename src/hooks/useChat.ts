@@ -9,6 +9,8 @@ export interface ChatController {
   /** `true` si selfbank acaba de rechazar el token (401): la interfaz lo avisa al pedirlo de nuevo. */
   tokenRejected: boolean
   saveToken(token: string): void
+  /** Olvida el token guardado y vuelve a pedirlo (sin marcarlo como rechazado). */
+  changeToken(): void
   status: ChatStatus | null
   suggestions: Suggestion[]
   /** Fallo al cargar el estado o las sugerencias (no de una pregunta). */
@@ -101,10 +103,11 @@ export function useChat(client: SelfbankClient | null, tokens: TokenStore, activ
     setHasToken(Boolean(tokens.get()))
   }, [tokens])
 
+  const changeToken = useCallback(() => { tokens.clear(); setTokenRejected(false); setHasToken(false) }, [tokens])
   const clear = useCallback(() => commit(() => clearChat()), [commit])
   const reload = useCallback(() => setReloadKey((key) => key + 1), [])
   const pending = state.pending
   const thinkingSeconds = pending && now - pending.startedAt >= thinkingDelayMs ? elapsedSeconds(pending, now) : null
 
-  return { needsToken: client !== null && !hasToken, tokenRejected, saveToken, status, suggestions, loadError, state, thinkingSeconds, ask, retry: ask, sendWrong, reload, clear }
+  return { needsToken: client !== null && !hasToken, tokenRejected, saveToken, changeToken, status, suggestions, loadError, state, thinkingSeconds, ask, retry: ask, sendWrong, reload, clear }
 }

@@ -151,3 +151,11 @@ test('REQ-024 client: feedback posts answer_id and verdict, omits an undefined c
   reply = (_request, response) => json(response, 200, { stored: false })
   assert.deepEqual(await client().feedback(answerId, 'wrong'), { ok: false, error: { code: 'invalid_response' } })
 })
+
+test('REQ-024 client: a token a header cannot carry is unauthorized and never reaches the network', async () => {
+  for (const token of ['abc\u200bdef', 'ñandú', 'con espacio']) {
+    assert.deepEqual(await client({ getToken: () => token }).ask('¿Saldo?'), { ok: false, error: { code: 'unauthorized' } }, JSON.stringify(token))
+    assert.deepEqual(await client({ getToken: () => token }).status(), { ok: false, error: { code: 'unauthorized' } })
+  }
+  assert.equal(seen.length, 0)
+})

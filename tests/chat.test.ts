@@ -1,7 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import {
-  consentWarning, formatCell, messageForError, normalizeQuestion, parseApiErrorCode, parseAskResponse, parseStatus, parseSuggestions,
+  consentWarning, formatCell, isPlausibleToken, messageForError, normalizeQuestion, parseApiErrorCode, parseAskResponse, parseStatus, parseSuggestions,
   type ChatErrorCode,
 } from '../src/domain/chat.ts'
 
@@ -167,7 +167,7 @@ test('REQ-024 messageForError: every code has a clear Spanish message with no le
 test('REQ-024 formatCell: formats money, counts, dates and text in es-ES', () => {
   const money = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' })
   assert.equal(flat(formatCell(-42.5, 'money')), flat(money.format(-42.5)))
-  assert.equal(flat(formatCell(1768.9, 'money')), flat(money.format(1768.9)))
+  assert.equal(flat(formatCell(1768.9, 'money')), '1.768,90 €', 'el valor esperado es literal: comparar con el mismo Intl no puede fallar')
   assert.equal(formatCell(1234567, 'count'), new Intl.NumberFormat('es-ES').format(1234567))
   const date = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
   assert.equal(formatCell('2026-10-31', 'date'), date.format(new Date('2026-10-31T00:00:00Z')))
@@ -176,4 +176,18 @@ test('REQ-024 formatCell: formats money, counts, dates and text in es-ES', () =>
   assert.equal(formatCell(null, 'money'), '—')
   assert.equal(formatCell('n/d', 'money'), 'n/d')
   assert.equal(formatCell('no es fecha', 'date'), 'no es fecha')
+})
+
+test('REQ-024 formatCell: groups thousands the way the API text does, even for four digits', () => {
+  assert.equal(flat(formatCell(1768.9, 'money')), '1.768,90 €')
+  assert.equal(flat(formatCell(-1234, 'money')), '-1.234,00 €')
+  assert.equal(formatCell(1234, 'count'), '1.234')
+  assert.equal(formatCell(1234567, 'count'), '1.234.567')
+  assert.equal(flat(formatCell(42.5, 'money')), '42,50 €')
+})
+
+test('REQ-024 isPlausibleToken: accepts visible ASCII and rejects what a header cannot carry', () => {
+  assert.equal(isPlausibleToken('dev-token'), true)
+  assert.equal(isPlausibleToken('aB3_-.~+/=xyz'), true)
+  for (const bad of ['', 'con espacio', 'tab\there', 'zero\u200bwidth', 'ñandú', 'emoji😀', 'salto\nlinea']) assert.equal(isPlausibleToken(bad), false, JSON.stringify(bad))
 })

@@ -164,6 +164,9 @@ export const parseApiErrorCode = (raw: unknown): string | null => {
   return typeof raw.error.code === 'string' ? raw.error.code : null
 }
 
+/** Un token solo puede ser ASCII visible sin espacios: otra cosa (p. ej. un espacio de ancho cero pegado) haría fallar `fetch` al construir la cabecera. */
+export const isPlausibleToken = (token: string): boolean => /^[\x21-\x7e]+$/.test(token)
+
 /** Pregunta lista para enviar (recortada, de 1 a 500 caracteres) o `null`. */
 export const normalizeQuestion = (input: string): string | null => {
   const question = input.trim()
@@ -190,8 +193,9 @@ export const consentWarning = (daysLeft: number | null): string | null => {
   return `El consentimiento bancario caduca en ${daysLeft} ${daysLeft === 1 ? 'día' : 'días'}: reautoriza pronto.`
 }
 
-const moneyFormat = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' })
-const countFormat = new Intl.NumberFormat('es-ES')
+// `useGrouping: 'always'`: es-ES omite el separador de miles en cifras de cuatro dígitos y la API escribe `1.768,90 €` en su texto.
+const moneyFormat = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', useGrouping: 'always' })
+const countFormat = new Intl.NumberFormat('es-ES', { useGrouping: 'always' })
 const dateFormat = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
 const isoDate = /^\d{4}-\d{2}-\d{2}$/
 

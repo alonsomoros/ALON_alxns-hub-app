@@ -151,4 +151,7 @@
 .token-gate input { flex: 1; min-width: 0; min-height: 44px; border: 1px solid var(--border); border-radius: 12px; padding: 0 14px; color: var(--text-body); background: var(--surface); outline: none; }
 .chat-view button:focus-visible, .chat-view [tabindex]:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .thinking-dots span { animation: none; opacity: .7; } }
+.chat-end { scroll-margin-bottom: 96px; }
+.chat-followups { justify-self: start; }
+.chat-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 4px 14px; }
 /* chat:end */

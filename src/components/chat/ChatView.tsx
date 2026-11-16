@@ -1,4 +1,4 @@
-import { Trash2 } from 'lucide-react'
+import { KeyRound, Trash2 } from 'lucide-react'
 import { consentWarning, formatCell, messageForError } from '../../domain/chat'
 import type { ChatController } from '../../hooks/useChat'
 import { Composer } from './Composer'
@@ -14,7 +14,10 @@ export function ChatView({ chat }: { chat: ChatController }) {
   return <section className="subview chat-view">
     <div className="subview-heading">
       <div><p className="date-label">Tus cuentas</p><h1>Consultas</h1></div>
-      {state.messages.length > 0 && <button className="quiet-text-button" type="button" onClick={chat.clear}><Trash2 size={13} aria-hidden="true" /> Borrar conversación</button>}
+      <div className="chat-tools">
+        {state.messages.length > 0 && <button className="quiet-text-button" type="button" onClick={chat.clear}><Trash2 size={13} aria-hidden="true" /> Borrar conversación</button>}
+        {!needsToken && <button className="quiet-text-button" type="button" onClick={chat.changeToken}><KeyRound size={13} aria-hidden="true" /> Cambiar token</button>}
+      </div>
     </div>
     {status && <p className="chat-meta">
       {status.dataThrough && <span>Datos hasta {formatCell(status.dataThrough, 'date')}</span>}
@@ -27,7 +30,7 @@ export function ChatView({ chat }: { chat: ChatController }) {
         <p>Pregunta en lenguaje normal. Siempre te enseño cómo he entendido la pregunta.</p>
         <SuggestionChips suggestions={suggestions} disabled={pending} onPick={chat.ask} />
       </div>
-      : <MessageList state={state} thinkingSeconds={thinkingSeconds} onRetry={chat.retry} onWrong={chat.sendWrong} />}
+      : <MessageList state={state} thinkingSeconds={thinkingSeconds} onRetry={chat.retry} onWrong={chat.sendWrong} suggestions={suggestions} onPick={chat.ask} />}
     {needsToken ? <TokenGate onSubmit={chat.saveToken} rejected={chat.tokenRejected} /> : <Composer disabled={pending} onSend={chat.ask} />}
   </section>
 }
