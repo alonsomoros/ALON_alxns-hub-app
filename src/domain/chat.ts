@@ -100,7 +100,8 @@ const parseAnswerData = (kind: unknown, data: unknown): AnswerData | null => {
 export const parseAskResponse = (raw: unknown): ChatAnswer | null => {
   if (!isRecord(raw) || typeof raw.id !== 'string' || !answerIdPattern.test(raw.id)) return null
   if (typeof raw.question !== 'string' || !oneOf(raw.status, statuses) || !oneOf(raw.source, sources)) return null
-  if (!('reason' in raw) || (raw.reason !== null && !oneOf(raw.reason, reasons))) return null
+  const reason = raw.reason === null ? null : oneOf(raw.reason, reasons) ? raw.reason : undefined
+  if (reason === undefined) return null
   if (!(typeof raw.timing_ms === 'number' && Number.isInteger(raw.timing_ms) && raw.timing_ms >= 0)) return null
   if (raw.mock !== undefined && typeof raw.mock !== 'boolean') return null
   const interpretation = raw.interpretation
@@ -115,7 +116,7 @@ export const parseAskResponse = (raw: unknown): ChatAnswer | null => {
     id: raw.id,
     question: raw.question,
     status: raw.status,
-    reason: raw.reason,
+    reason,
     source: raw.source,
     interpretation: { title: interpretation.title, chips: [...interpretation.chips as string[]], text: interpretation.text },
     text: answer.text,
@@ -138,8 +139,8 @@ export const parseStatus = (raw: unknown): ChatStatus | null => {
   if (lastSync === undefined || dataThrough === undefined) return null
   if (!isRecord(consent)) return null
   const validUntil = textOrNull(consent.valid_until)
-  const daysLeft = consent.days_left
-  if (validUntil === undefined || !(daysLeft === null || (typeof daysLeft === 'number' && Number.isInteger(daysLeft)))) return null
+  const daysLeft = consent.days_left === null ? null : typeof consent.days_left === 'number' && Number.isInteger(consent.days_left) ? consent.days_left : undefined
+  if (validUntil === undefined || daysLeft === undefined) return null
   return {
     mode: raw.mode, modelName: model.name, modelLoaded: model.loaded, lastSync, dataThrough, accounts: data.accounts,
     consentValidUntil: validUntil, consentDaysLeft: daysLeft,
