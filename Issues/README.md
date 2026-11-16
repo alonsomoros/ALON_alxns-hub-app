@@ -38,7 +38,7 @@ Dueño de la **trazabilidad local**: cada cambio de comportamiento, arquitectura
 | [026](026-selfbank-systemd.md) | En curso | Despliegue | `selfbank` real como servicio de `systemd` (arranque y reinicio automáticos). Instalada y activa; falta comprobar el arranque tras un reinicio. |
 | [025](025-voz-a-texto.md) | Propuesta | Funcionalidad | Dictado por voz en el chat: Web Speech API frente a Whisper local en la Pi. Depende de `REQ-024`. |
 | [024](024-chat-consultas.md) | Hecho | Arquitectura | Chat de consultas con `selfbank`: la PWA habla directo con su API por `tailscale serve`. Desplegado en Vercel y la Pi. |
-| [023](023-api-solo-loopback.md) | En curso | Seguridad | La API de persistencia se publica solo en `127.0.0.1` (antes escuchaba en toda la LAN). Desplegado en la Pi; falta actualizar la URL en Vercel. |
+| [023](023-api-solo-loopback.md) | Hecho | Seguridad | La API de persistencia se publica solo en `127.0.0.1` (antes escuchaba en toda la LAN). Desplegado en la Pi y en Vercel. |
 | [022](022-healthchecks-sitios.md) | Hecho | Integración | Estado real de «Tus sitios»: `GET /api/sites/health` en la API personal, con caché y estado «sin comprobar». Desplegado en la Pi. |
 | [021](021-cita-via-api.md) | Hecho | Integración | Cita del día en español: `GET /api/quote` en la API personal, con caché y frase de reserva. Desplegada en la Pi. |
 | [020](020-runner-de-tests.md) | Hecho | Tests | `npm test` con `node:test` (sin dependencias): dominio, API, preferencias, cita y SVG; nombres con `REQ-NNN`. |

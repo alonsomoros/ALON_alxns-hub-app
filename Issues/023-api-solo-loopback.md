@@ -1,6 +1,6 @@
 # Publicar la API de persistencia solo en loopback
 
-- **Estado:** En curso (Pi desplegada y verificada; falta cambiar `VITE_PERSISTENCE_API_URL` en Vercel)
+- **Estado:** Hecho
 - **REQ:** REQ-023
 - **Tipo:** fix
 - **Área:** `docs/ci-cd/docker-compose.yml`, `.env.example`, `docs/arquitectura/deploy-persistencia-raspberry.md`
@@ -40,7 +40,7 @@ Alternativas descartadas: firewall en la Pi (`ufw` no está instalado y filtrar�
 - [x] La documentación y `.env.example` ya no recomiendan `http://100.x.x.x:8787`.
 - [x] Desplegado en la Pi: `http://raspberrypi.local:8787` rechaza la conexión.
 - [x] Tras el despliegue sigue funcionando `https://raspberrypi.tail6f4cba.ts.net/api/state` (200, también `/api/pi/metrics` y `/api/sites/health`, con `Access-Control-Allow-Origin` para Vercel).
-- [ ] La PWA de Vercel vuelve a mostrar la tarjeta de la Pi y el estado de los sitios: su compilación sigue llevando `http://100.86.103.96:8787` (se comprobó en el `.js` publicado) y hay que poner `VITE_PERSISTENCE_API_URL=https://raspberrypi.tail6f4cba.ts.net` en Vercel y redesplegar. Se cerró #23 sin comprobar esto; se reabre.
+- [x] La PWA de Vercel vuelve a mostrar la tarjeta de la Pi y el estado de los sitios: su compilación sigue llevando `http://100.86.103.96:8787` (se comprobó en el `.js` publicado) y hay que poner `VITE_PERSISTENCE_API_URL=https://raspberrypi.tail6f4cba.ts.net` en Vercel y redesplegar. Se cerró #23 sin comprobar esto; se reabre.
 - [x] El contenedor recreado ya no lleva la `#` final: `Origin: http://localhost:5173` recibe `Access-Control-Allow-Origin`.
 
 ## Verificación
@@ -53,6 +53,7 @@ Alternativas descartadas: firewall en la Pi (`ufw` no está instalado y filtrar�
 | Despliegue en la Pi | Hecho por el desarrollador (2026-11-16): `docker ps` muestra `127.0.0.1:8787->8787/tcp` y el contenedor `healthy` |
 | Después del despliegue, desde el PC | `http://192.168.1.64:8787/health` sin respuesta; `https://raspberrypi.tail6f4cba.ts.net/health` y `/api/state` responden 200; `Origin: http://localhost:5173` recibe `Access-Control-Allow-Origin`; el contenedor ya no tiene la `#` en `ALLOWED_ORIGINS` |
 | PWA de Vercel (2026-11-16, tras avisar el desarrollador de que los dashboards no cargaban en móvil ni PC) | Fallo esperado del cambio: las peticiones van a `http://100.86.103.96:8787/api/pi/metrics` y `/api/sites/health`, ya cerrado a la red. La URL nueva responde 200 con CORS para Vercel; solo falta la variable en Vercel |
+| Tras redesplegar Vercel (2026-11-16) | El `.js` publicado ya no contiene `100.86.103.96` y sí `https://raspberrypi.tail6f4cba.ts.net`; el desarrollador confirmó que los dashboards cargan |
 | Otros sistemas tras el cambio | Grafana (`:3000`), Prometheus (`:9090`), Homepage (`:3001`), Pi-hole y NPM siguen igual; la revisión de «los dashboards» no encontró relación con este cambio |
 
 Tests de caja negra: `Omitido: no cubierto por el runner` (es configuración de despliegue); la comprobación es manual, tras desplegar.
@@ -63,7 +64,7 @@ Actualizados: `docs/arquitectura/deploy-persistencia-raspberry.md`, `.env.exampl
 
 ## Pendientes
 
-- [ ] Cambiar `VITE_PERSISTENCE_API_URL` en Vercel a `https://raspberrypi.tail6f4cba.ts.net`, redesplegar y comprobar que la tarjeta de la Pi y los sitios cargan en móvil y PC (entonces `Hecho` y se cierra #23).
+- [x] Cambiado `VITE_PERSISTENCE_API_URL` en Vercel a `https://raspberrypi.tail6f4cba.ts.net`, redesplegar y comprobar que la tarjeta de la Pi y los sitios cargan en móvil y PC (entonces `Hecho` y se cierra #23).
 - [x] Desplegado en la Pi, con el mismo `--env-file` con el que se creó el contenedor:
 
   ```bash

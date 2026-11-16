@@ -134,7 +134,7 @@ Comprobación completa: `sudo reboot` y, al volver la Pi, `systemctl is-active s
 
 - [x] Ejecutar el backend como contenedor Docker con reinicio automático.
 - [x] Desplegar `REQ-023` (API solo en loopback) y comprobar que `:8787` ya no responde por la LAN (2026-11-16).
-- [ ] Vercel: `VITE_PERSISTENCE_API_URL=https://raspberrypi.tail6f4cba.ts.net` (no la IP `100.x` con `:8787`, que ya no responde) y redesplegar, porque se incrusta al compilar (`REQ-023`).
+- [x] Vercel (hecho 2026-11-16): `VITE_PERSISTENCE_API_URL=https://raspberrypi.tail6f4cba.ts.net` (no la IP `100.x` con `:8787`, que ya no responde) y redesplegar, porque se incrusta al compilar (`REQ-023`).
 - [BLOQUEADO] Configurar ACL de Tailscale para permitir solo los dispositivos necesarios.
 - [BLOQUEADO] Definir backup, retención y prueba de restauración de SQLite.
 - [x] `ALLOWED_ORIGINS` del `.env` de la Pi igualado con el del contenedor (`https://alxns-hub.vercel.app,http://localhost:5173`), verificado el 2026-11-11.
