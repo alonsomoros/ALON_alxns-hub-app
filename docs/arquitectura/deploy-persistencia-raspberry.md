@@ -91,7 +91,7 @@ Seguridad: el proxy solo permite `GET /containers` (`CONTAINERS=1`, `POST=0`), n
 
 El chat habla directo con `selfbank` (otro repositorio): este repositorio no despliega nada en la Pi para él. Lo que tiene que existir, y lo hace el dueño del servicio:
 
-1. Servicio real de `selfbank` en `127.0.0.1:8789`, token en un fichero con permisos 600 y sincronización periódica. Corre como servicio de `systemd` (reinicio automático): ver [`REQ-026`](../../Issues/026-selfbank-systemd.md) y la sección siguiente; `~/run-selfbank-real.sh` queda solo como marcha atrás.
+1. Servicio real de `selfbank` en `127.0.0.1:8789`, token en un fichero con permisos 600; la sincronización periódica de datos la despliega `selfbank` (su `docs/despliegue-sync.md`). Corre como servicio de `systemd` (reinicio automático): ver [`REQ-026`](../../Issues/026-selfbank-systemd.md) y la sección siguiente; `~/run-selfbank-real.sh` queda solo como marcha atrás.
 2. Publicarlo en su propio puerto de `tailscale serve` (propuesta: `tailscale serve --bg --https=8444 http://127.0.0.1:8789`; el 8443 es el simulado de desarrollo). Sin Funnel.
 3. Arrancarlo con `--cors-origin https://alxns-hub.vercel.app --cors-origin http://localhost:5173` y hacer que sus respuestas lleven `Access-Control-Expose-Headers: Retry-After`: sin esa cabecera el navegador no puede leer `Retry-After` entre orígenes y el aviso de «ocupado» usa siempre 10 s (no impide usar el chat).
 4. Vercel: variable `VITE_SELFBANK_URL=https://raspberrypi.tail6f4cba.ts.net:8444` y redeploy (se incrusta al compilar; es una URL pública, no un secreto).

@@ -39,4 +39,4 @@ Actualizados: `docs/arquitectura/deploy-persistencia-raspberry.md` (sección `sy
 ## Pendientes
 
 - [ ] Comprobar el arranque tras el próximo reinicio de la Pi (`systemctl is-active selfbank-real`); entonces la nota pasa a `Hecho` y se cierra #26.
-- [ ] Sincronización periódica de los datos bancarios → repositorio `selfbank`.
+- [ ] Sincronización periódica de los datos bancarios: implementada en el repositorio `selfbank` el 2026-11-16 (`selfbank/sync.py`, `deploy/selfbank-sync.{service,timer}`, `docs/despliegue-sync.md`; 237 pruebas) y pendiente de desplegar en la Pi. No es parte de `REQ-026`; seguimiento en ese repositorio.
