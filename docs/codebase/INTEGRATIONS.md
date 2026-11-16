@@ -10,6 +10,7 @@
 | Prometheus + docker-socket-proxy | HTTP privado (red de la Pi) | Métricas del host y estado de contenedores | Red privada, solo lectura | Media; la tarjeta degrada a `stale`/`OFFLINE` | `server/metrics.js`, `src/infrastructure/piMetrics.ts` |
 | API de persistencia | HTTP privado (Tailscale) | Retos, enlaces y preferencias | Perimetro de red, sin login | Media; la app funciona sin ella | `src/infrastructure/persistence.ts`, `server/index.js` |
 | Servicios publicados | HTTPS (comprobados por la API personal) | Sitios clicables y estado real (`REQ-022`) | `HEALTHCHECK_URLS` en el servidor (opcional) | Baja; sin API se muestran datos de ejemplo | `server/health.js`, `src/infrastructure/siteHealth.ts`, `src/data/dashboardData.ts` |
+| selfbank (chat de consultas) | HTTPS por `tailscale serve`, llamado desde el navegador | Consultas bancarias en lenguaje natural (`REQ-024`) | Token Bearer propio en `sessionStorage`; `VITE_SELFBANK_URL` (pública) | Alta por los datos; sin la variable la pestaña no aparece | `src/infrastructure/selfbankClient.ts`, `src/domain/chat.ts`, `docs/api-contrato.md` del repositorio selfbank |
 
 ## Data stores
 

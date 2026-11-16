@@ -27,6 +27,10 @@ El estado de los sitios (`REQ-022`) sale de `GET /api/sites/health` de la API pe
 
 El dashboard enlaza a Grafana para detalle histórico; las credenciales y URLs viven en variables de entorno, nunca en el bundle.
 
+## Consultas bancarias (selfbank)
+
+El chat de `REQ-024` consume la API HTTP de `selfbank` (contrato v1 en `docs/api-contrato.md` de ese repositorio): `GET /api/status`, `GET /api/suggestions`, `POST /api/ask`, `POST /api/feedback` y `GET /api/health`. El navegador la llama directamente (no pasa por n8n, Vercel ni la API del hub) con `Authorization: Bearer <token>`. Tiempos de espera del cliente: 1,5 s para `status` y `suggestions`; 100 s para `ask` y `feedback` (la cola del modelo local puede tardar hasta ~95 s en el peor caso). Una respuesta que no es `answered` nunca lleva cifras. Validadores en `src/domain/chat.ts`; cliente en `src/infrastructure/selfbankClient.ts`.
+
 ## Citas
 
 La primera frase (`REQ-021`) sale de `GET /api/quote` de la API personal, que pide la frase del día en español a un origen externo sin CORS (`QUOTE_URL`, por defecto `frasedeldia.azurewebsites.net`), la valida y la guarda en caché; el contrato es `{ content, author }` y la PWA lo inyecta en el `blockquote` de Inicio con timeout de 1.5 s y frase de reserva local. Los modos `default` y `random` están implementados; `fav` queda en el backlog. La cita no debe impedir el render inicial.

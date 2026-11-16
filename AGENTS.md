@@ -98,4 +98,4 @@ No añadir carpetas de primer nivel sin justificarlo en la nota y actualizar est
 
 ## Contexto de producto
 
-La primera iteración prioriza una experiencia personal sencilla y responsive con Inicio, Retos y Enlaces. Los enlaces admiten hasta 10 elementos y se reordenan por arrastre o teclado. La configuración de tema, citas, orden de servicios y métricas está preparada, pero la pantalla de preferencias queda pospuesta. Healthchecks y la configuración final de la persistencia (`REQ-018`) siguen pendientes (`.agents/context/system-status.md`).
+La primera iteración prioriza una experiencia personal sencilla y responsive con Inicio, Retos y Enlaces; la vista Consultas (`REQ-024`) habla directo con `selfbank` y solo aparece si `VITE_SELFBANK_URL` está definida. Los enlaces admiten hasta 10 elementos y se reordenan por arrastre o teclado. La configuración de tema, citas, orden de servicios y métricas está preparada, pero la pantalla de preferencias queda pospuesta. Healthchecks y la configuración final de la persistencia (`REQ-018`) siguen pendientes (`.agents/context/system-status.md`).

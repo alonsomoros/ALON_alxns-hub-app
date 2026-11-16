@@ -36,7 +36,7 @@ Dueño de la **trazabilidad local**: cada cambio de comportamiento, arquitectura
 | [018](018-persistencia-personal-multidispositivo.md) | En curso | Persistencia | API SQLite + caché; despliegue, backups y E2E bloqueados. |
 | [019](019-flujo-agentes-v2.md) | Hecho | Proceso | Rediseño del flujo agéntico para entrega autónoma verificable. |
 | [025](025-voz-a-texto.md) | Propuesta | Funcionalidad | Dictado por voz en el chat: Web Speech API frente a Whisper local en la Pi. Depende de `REQ-024`. |
-| [024](024-chat-consultas.md) | Propuesta | Arquitectura | Chat de consultas con voz dentro del hub, servido desde la Pi, solo lectura y por fases. |
+| [024](024-chat-consultas.md) | En curso | Arquitectura | Chat de consultas con `selfbank`: la PWA habla directo con su API por `tailscale serve`. Implementado y probado en local; despliegue pendiente. |
 | [023](023-api-solo-loopback.md) | En curso | Seguridad | La API de persistencia se publica solo en `127.0.0.1` (antes escuchaba en toda la LAN). Despliegue pendiente. |
 | [022](022-healthchecks-sitios.md) | Hecho | Integración | Estado real de «Tus sitios»: `GET /api/sites/health` en la API personal, con caché y estado «sin comprobar». Desplegado en la Pi. |
 | [021](021-cita-via-api.md) | Hecho | Integración | Cita del día en español: `GET /api/quote` en la API personal, con caché y frase de reserva. Desplegada en la Pi. |

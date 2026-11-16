@@ -87,6 +87,25 @@ Contrastar el resultado con `vcgencmd measure_temp`, `free -m`, `df -h /` y `doc
 
 Seguridad: el proxy solo permite `GET /containers` (`CONTAINERS=1`, `POST=0`), no publica puertos y monta `docker.sock` en solo lectura. Endurecimiento opcional posterior: unir la API a la red `monitorizacion_monitor-net` y dejar de publicar `:9090` en la LAN.
 
+## Chat de consultas (`REQ-024`)
+
+El chat habla directo con `selfbank` (otro repositorio): este repositorio no despliega nada en la Pi para él. Lo que tiene que existir, y lo hace el dueño del servicio:
+
+1. Servicio real de `selfbank` en `127.0.0.1:8789`, con unidad `systemd` (reinicio automático), token en un fichero con permisos 600 y sincronización periódica.
+2. Publicarlo en su propio puerto de `tailscale serve` (propuesta: `tailscale serve --bg --https=8444 http://127.0.0.1:8789`; el 8443 es el simulado de desarrollo). Sin Funnel.
+3. Arrancarlo con `--cors-origin https://alxns-hub.vercel.app --cors-origin http://localhost:5173`.
+4. Vercel: variable `VITE_SELFBANK_URL=https://raspberrypi.tail6f4cba.ts.net:8444` y redeploy (se incrusta al compilar; es una URL pública, no un secreto).
+
+Comprobaciones desde un dispositivo de la tailnet (sin pegar el token en chats ni commits):
+
+```bash
+curl -s https://raspberrypi.tail6f4cba.ts.net:8444/api/health                     # {"ok": true}, sin token
+curl -s -o /dev/null -w "%{http_code}\n" https://raspberrypi.tail6f4cba.ts.net:8444/api/status   # 401 sin token
+curl -si -H "Origin: https://alxns-hub.vercel.app" https://raspberrypi.tail6f4cba.ts.net:8444/api/health | grep -i access-control-allow-origin
+```
+
+Después, abrir la PWA de Vercel, entrar en «Consultas», escribir el token, pulsar una sugerencia y comprobar que la interpretación se ve y que «No era eso» responde. Marcha atrás: `tailscale serve --https=8444 off` y quitar `VITE_SELFBANK_URL` (la pestaña desaparece).
+
 ## Pendientes antes de producción
 
 - [x] Ejecutar el backend como contenedor Docker con reinicio automático.

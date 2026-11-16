@@ -1,6 +1,6 @@
-# Chat de consultas con voz dentro del hub
+# Chat de consultas dentro del hub
 
-- **Estado:** Propuesta (diseño escrito, pendiente de aprobación)
+- **Estado:** En curso (implementado y verificado en local; despliegue pendiente)
 - **REQ:** REQ-024
 - **Tipo:** architecture
 - **Área:** `src/components/chat/`, `src/domain/chat.ts`, `src/infrastructure/selfbankClient.ts`, `docs/arquitectura/`
@@ -52,24 +52,33 @@ Investigación de red en la Pi (solo lectura, por si se retoma la pasarela): el 
 
 ## Criterios de aceptación
 
-Se fijarán al aprobar el diseño. Propuesta:
-
-- [ ] Vista «Consultas» con sugerencias, entrada de texto, respuesta con la interpretación visible, tabla y «no era eso».
-- [ ] Estado «pensando…» con segundos, sin bloquear el hub; `unsupported`, `needs_clarification`, `401` y `503` con su mensaje.
-- [ ] Sin token en URL, `localStorage`, bundle ni logs; preguntas y respuestas solo en memoria.
-- [ ] El service worker no cachea nada de `selfbank` (prueba automática).
-- [ ] Pruebas `node:test` con nombres `REQ-024` (dominio, cliente, privacidad) y comprobación en Chrome a ancho de móvil contra el simulado.
-- [ ] Documentación y pasos de despliegue listos; despliegue comprobado en la Pi.
+- [x] Vista «Consultas» con sugerencias, entrada de texto, respuesta con la interpretación visible, tabla y «No era eso».
+- [x] Estado «Pensando… N s» sin bloquear el hub; `unsupported`, `needs_clarification`, `401` y `503` con su mensaje y «Reintentar».
+- [x] Sin token en URL, `localStorage`, bundle ni logs; preguntas y respuestas solo en memoria.
+- [x] El service worker no cachea nada de `selfbank` (guarda automática: sin `runtimeCaching`).
+- [x] Pruebas `node:test` con nombres `REQ-024` (dominio, cliente, estado, privacidad y contrato contra el simulado real) y comprobación en Chrome a ancho de móvil.
+- [x] Documentación y pasos de despliegue listos.
+- [ ] Desplegado y comprobado con el servicio real de `selfbank` en la Pi.
 
 ## Verificación
 
-No aplica todavía.
+| Check | Resultado |
+|---|---|
+| `npm test` | OK: 160 pruebas; las del chat: `chat` (14), `chatState` (8), `selfbank-client` (12), `selfbank-token` (4), `selfbank-contract` (6, contra el simulado real), `chat-privacy` (6) |
+| `npx tsc -b`, `npm run lint`, `npm run build` | OK |
+| Chrome contra el simulado de `selfbank` (ancho 390 px en un iframe del mismo origen; `resize_window` no cambió el viewport) | OK: token incorrecto (aviso) y token de pruebas; sugerencias y estado; respuesta escalar con chips y distintivos; tabla dentro de su scroll sin desbordar la página; ruta del «modelo» con «Pensando… N s»; salir de la vista mientras piensa y volver con la respuesta; `__busy__` y `__error__` con «Reintentar»; «No era eso»; tema oscuro; recarga (conversación vacía; el token sigue durante la pestaña); ni preguntas ni respuestas en `localStorage`; solo `POST /api/ask` al simulado, sin parámetros en la URL; sin errores de consola |
+| Hallazgos de la comprobación, corregidos | Un token rechazado devolvía el campo sin avisar (`tokenRejected`); el texto de ayuda del campo ocupaba dos líneas a 390 px |
+
+Tests de caja negra: `REQ-024 …` (`npm test`). Componentes y hook `useChat`: `Omitido: no cubierto por el runner` (se comprobaron en Chrome, arriba).
 
 ## Impacto documental
 
-Sin cambio: es una propuesta; al aprobarla se actualizarán `docs/arquitectura/`, `docs/requisitos/` y `.agents/context/system-status.md`.
+Actualizados: `docs/arquitectura/{system-architecture,integrations-n8n-grafana,deploy-persistencia-raspberry}.md`, `docs/diagramas/{data-flow.svg,architecture-diagrams.mmd,README.md}`, `docs/requisitos/{functional-requirements,backlog-features}.md`, `docs/codebase/{INTEGRATIONS,STRUCTURE,TESTING}.md`, `.agents/context/{system-status,environment-vars}.md`, `.env.example`, `AGENTS.md` (contexto de producto), `Issues/README.md`. Sin cambio: `docs/diagramas/{architecture,screens-flow}.svg` (no se rehacen en este cambio), skills de `.agents/skills/` (no cambian endpoints del hub).
 
 ## Pendientes
 
-- [ ] Aprobación del diseño → plan de tareas → implementación y pruebas → despliegue.
-- [ ] `REQ-023` desplegado antes de empezar.
+- [ ] Desplegar: lo hace el dueño del servicio `selfbank` y el desarrollador en Vercel; pasos y comprobaciones en [`deploy-persistencia-raspberry.md`](../docs/arquitectura/deploy-persistencia-raspberry.md) (sección «Chat de consultas»). Hasta entonces no se cierra #24.
+- [ ] `REQ-023` desplegado (no publica nada en la LAN) antes de abrir el servicio real.
+- [ ] Riesgo aceptado de la entrega desde Vercel: CSP con `connect-src` o servir la PWA desde la Pi → backlog.
+- [ ] `strict` no está activo en `tsconfig.app.json` → backlog.
+- [ ] Voz a texto → `REQ-025`.

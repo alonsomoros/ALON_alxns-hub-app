@@ -17,3 +17,5 @@ flowchart LR
   PA -. prepared: deploy pending .-> API[Personal API server/index.js]
   API -. Tailscale .-> DB[SQLite volume - backups pending]
   UI -. detail .-> G[Grafana]
+  UI -. prepared REQ-024 token Bearer + tailscale serve .-> SB[selfbank API en la Pi]
+  SB -.-> SBDB[SQLite + Ollama local]

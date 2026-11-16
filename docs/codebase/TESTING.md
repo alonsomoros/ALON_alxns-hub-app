@@ -29,6 +29,10 @@ Los tests viven en `tests/` (fuera de `src/` y del `tsconfig`) y el nombre de ca
 | `tests/date.test.ts` | Fecha de Inicio y cambio de día (`REQ-017`) |
 | `tests/health-server.test.ts`, `tests/siteHealth.test.ts` | Estado de los sitios: comprobaciones, caché, normalización y mapeo de estado (`REQ-022`) |
 | `tests/svg.test.ts` | Los SVG de `docs/diagramas/` son XML bien formado (`REQ-006`) |
+| `tests/chat.test.ts`, `tests/chatState.test.ts` | Chat de consultas: validadores del contrato, mensajes de error, formato de celdas y estado de la conversación (`REQ-024`) |
+| `tests/selfbank-client.test.ts`, `tests/selfbank-token.test.ts` | Cliente de `selfbank` contra un servidor HTTP falso (cabeceras, tiempos de espera, errores) y almacén del token (`REQ-024`) |
+| `tests/selfbank-contract.test.ts` | Arranca el simulado real del repositorio `selfbank` (`SELFBANK_REPO`, por defecto `../ALON_centralizedselfbank`; se omite si no existe) y comprueba que los validadores aceptan sus respuestas (`REQ-024`) |
+| `tests/chat-privacy.test.ts` | Guardas: el chat no usa `localStorage` ni `console`, el token no va en URLs y `vite.config.ts` no tiene `runtimeCaching` (`REQ-024`) |
 
 Reglas para que un módulo sea probable con este runner: importa sus dependencias con extensión `.ts`, no usa `import.meta.env` ni el DOM en el nivel superior y recibe por parámetro lo que toque la red o el reloj.
 
@@ -38,7 +42,7 @@ Reglas para que un módulo sea probable con este runner: importa sus dependencia
 |---|---|---|---|
 | Unit | Sí | `src/domain/`, `src/utils/date.ts`, `src/themes.ts`, `server/quote.js` | `node:test` |
 | Integration | Sí | `server/index.js` con dobles de Prometheus y del origen de la cita | procesos reales, base temporal |
-| Componentes React y hooks | No | vistas y hooks | se comprueban a mano en Chrome; candidato a Vitest con jsdom |
+| Componentes React y hooks | No | vistas y hooks | se comprueban a mano en Chrome (el chat, contra el simulado de `selfbank`); candidato a Vitest con jsdom |
 | E2E | No | Inicio, Retos, Enlaces y PWA en móvil | backlog |
 
 ## Mocking and isolation

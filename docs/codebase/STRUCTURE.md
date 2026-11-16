@@ -5,7 +5,7 @@
 | Path | Purpose | Evidence |
 |---|---|---|
 | `src/` | Entry point, React views, CSS y assets de la UI | `src/main.tsx`, `src/App.tsx`, `src/index.css` |
-| `src/components/` | Dashboard orquestador y vistas por feature (`home/`, `goals/`, `links/`, `settings/`, `layout/`, `ui/`) | `src/components/Dashboard.tsx` |
+| `src/components/` | Dashboard orquestador y vistas por feature (`home/`, `goals/`, `links/`, `settings/`, `chat/`, `layout/`, `ui/`) | `src/components/Dashboard.tsx` |
 | `src/types/`, `src/domain/`, `src/data/`, `src/themes.ts` | Modelos, logica pura de retos/enlaces/preferencias/estadísticas, temas como datos y datos de prototipo | `src/types/dashboard.ts`, `src/domain/preferences.ts`, `src/themes.ts` |
 | `src/hooks/`, `src/utils/`, `src/infrastructure/` | Estado con efectos (cita, persistencia, métricas Pi), helpers y adaptadores | `src/hooks/usePersistedDashboard.ts`, `src/hooks/usePreferences.ts` |
 | `tests/` | Pruebas `node:test` (`npm test`) de los módulos puros (temas y contraste, preferencias, estadísticas) y del CSS sin colores fijos | `tests/themes.test.ts` |

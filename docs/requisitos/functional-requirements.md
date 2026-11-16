@@ -21,8 +21,9 @@ Dueño de **qué debe hacer el producto**. Cada `FR-xx` enlaza a la nota `REQ-NN
 | FR-12 Operación degradada | `REQ-018` | Implementado (caché y estado `OFFLINE` en el pie) |
 | FR-13 Integridad de dominio | `REQ-008`, `REQ-018` | Implementado y probado (`tests/goals.test.ts`, `tests/api.test.ts`) |
 | FR-14 Preferencias de interfaz | `REQ-003` | Implementado (seis temas, vista de stats, tarjetas de Inicio y refresco; sincronizadas con la API) |
+| FR-15 Consultas bancarias | `REQ-024`, `REQ-025` | Implementado y probado en local contra el simulado de `selfbank` (escritura, interpretación visible, tablas y feedback); despliegue con el servicio real pendiente; voz propuesta (`REQ-025`) |
 | RNF-01 a RNF-09 | `REQ-018` | RNF-03 y RNF-05 implementados; RNF-02, RNF-07 y RNF-09 pendientes de despliegue |
-| RNF-10 Pruebas | `REQ-020` | Implementado: `npm test` (`node:test`) cubre dominio, API, preferencias, cita y SVG; faltan componentes React y E2E |
+| RNF-10 Pruebas | `REQ-020` | Implementado: `npm test` (`node:test`) cubre dominio, API, preferencias, cita, SVG y el chat (validadores, cliente, privacidad y contrato contra el simulado de `selfbank`); faltan componentes React y E2E |
 
 ## Trazabilidad y entrega
 
